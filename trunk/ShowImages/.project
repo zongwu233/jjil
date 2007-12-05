@@ -3,6 +3,7 @@
 	<name>ShowImages</name>
 	<comment></comment>
 	<projects>
+		<project>jjil</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
