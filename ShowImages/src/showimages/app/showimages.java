@@ -16,6 +16,7 @@
 
 package showimages.app;
 
+import jjil.android.CameraDeviceFile;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
