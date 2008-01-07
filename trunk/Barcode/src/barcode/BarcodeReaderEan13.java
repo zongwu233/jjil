@@ -554,6 +554,39 @@ public class BarcodeReaderEan13 implements BarcodeReader {
         return wGoodness;
     }
     
+    /** 
+     * Read a UPC barcode in an image. The image must be an 8-bit gray image.
+     * The returned barcode is the most likely barcode seen based on a series
+     * of tests that take into account the blur in the image. The returned
+     * String object will always pass the check digit test. Also returned
+     * is a "goodness" which measures how well the returned barcode's
+     * image accounts for the image provided.
+     *
+     * @param image the input image
+     * @param szCode the returned barcode
+     * @return the "goodness" of the barcode
+     * @throws IllegalArgumentException if image is not an 8-bit gray image 
+     */
+    
+    public int Decode( 
+    		Image image, 
+    		int cYLeft, 
+    		int cYRight, 
+    		int wSlopeLeft, 
+    		int wSlopeRight) 
+        throws IllegalArgumentException {
+        if (!(image instanceof Gray8Image)) {
+            throw new IllegalArgumentException(image.toString() +
+                    " should be a gray 8-bit image");
+        }
+        Gray8Image gray = (Gray8Image) image;
+        // estimate the barcodes on the left and right side
+        // for each row in the image and store them into hash
+        // tables
+        EstimateBarcodes(gray, cYLeft, cYRight, wSlopeLeft, wSlopeRight);
+        return 0;
+    }
+
     /**
      * Does complete barcode estimation for a given image. In each row of the
      * image we compute an estimate of the left edge of the image by convolving
@@ -584,7 +617,12 @@ public class BarcodeReaderEan13 implements BarcodeReader {
         	// estimate position of left edge of barcode
         	// this will be the position of the first 1 in the
         	// string "00001010"
-            int dLeftOffset = EstimateLeftEdge(image, dRow);
+            int dLeftOffset = EstimateLeftEdge(
+            		image, 
+            		dRow,
+            		0,
+            		image.getWidth() / 8,
+            		image.getWidth());
             if (dLeftOffset < 0) {
                 return false;
             }
@@ -592,14 +630,25 @@ public class BarcodeReaderEan13 implements BarcodeReader {
             // estimate position of the middle of the barcode
             // this will be the position of the first 1 in the
             // string "0101010"
-            int dMidOffset = EstimateMiddle(image, dRow);
+            int dMidOffset = EstimateMiddle(
+            		image, 
+            		dRow,
+            		image.getWidth() * 7 / 16,
+            		image.getWidth() * 9 / 16,
+            		image.getWidth());
             if (dMidOffset < 0 || dMidOffset <= dLeftOffset) {
             	return false;
             }
             // estimate position of the right of the barcode.
             // this will be the position of the first 1 in the
             // string "1010000"
-            int dRightOffset = EstimateRightEdge(image, dRow);
+            int dRightOffset = 
+            	EstimateRightEdge(
+            			image, 
+            			dRow,
+            			image.getWidth() * 7 / 8,
+            			image.getWidth() - 1,
+            			image.getWidth());
             if (dRightOffset < 0 || dRightOffset <= dMidOffset) {
             	return false;
             }
@@ -649,7 +698,127 @@ public class BarcodeReaderEan13 implements BarcodeReader {
         return true;
     }
     
-     /** Estimates the barcode for the left-side half of a EAN-13 barcode, in the
+    /**
+     * Does complete barcode estimation for a given image. In each row of the
+     * image we compute an estimate of the left edge of the image by convolving
+     * with a mask based on the left, middle, and right-side patterns. Then
+     * we use this position to estimate the left side barcode, then the
+     * right side barcode. The best matching barcodes in each row are added
+     * to hash tables (this.chLeft and this.chRight) for later inspection
+     * that takes into account the complete effect of blur and the check 
+     * digit.
+     * <p>
+     * Creates this.chLeft and this.chRight.
+     *
+     * @param image the input image.
+     */
+    private boolean EstimateBarcodes(
+    		Gray8Image image,
+    		int cYLeft,
+    		int cYRight,
+    		int wSlopeLeft,
+    		int wSlopeRight) {
+    	{
+    		Gray2Rgb g2r = new Gray2Rgb();
+    		g2r.Push(image);
+    		Debug debug = new Debug();
+    		debug.toFile((RgbImage) g2r.Front(), "barcode.png");
+    	}
+        this.chLeft = new CodeHash();
+        this.chRight = new CodeHash();
+        int wSumLeftEdge = 0;
+        int wSumRightEdge = 0;
+        for (int dRow = 0; dRow<image.getHeight(); dRow++) {
+        	int nLeft = cYLeft + (wSlopeLeft * dRow) / 256;
+        	int nRight = cYRight + (wSlopeRight * dRow) / 256;
+        	int nWidth = nRight - nLeft;
+        	// estimate position of left edge of barcode
+        	// this will be the position of the first 1 in the
+        	// string "00001010"
+            int dLeftOffset = 
+            	EstimateLeftEdge(
+            			image, 
+            			dRow, 
+            			nLeft, 
+            			nLeft + nWidth / 8,
+            			nWidth);
+            if (dLeftOffset < 0) {
+                return false;
+            }
+            wSumLeftEdge += dLeftOffset;
+            // estimate position of the middle of the barcode
+            // this will be the position of the first 1 in the
+            // string "0101010"
+            int dMidOffset = 
+            	EstimateMiddle(
+            			image, 
+            			dRow,
+            			nLeft + (nWidth * 7) / 16,
+            			nLeft + (nWidth * 9) / 16,
+            			nWidth);
+            if (dMidOffset < 0 || dMidOffset <= dLeftOffset) {
+            	return false;
+            }
+            // estimate position of the right of the barcode.
+            // this will be the position of the first 1 in the
+            // string "1010000"
+            int dRightOffset = 
+            	EstimateRightEdge(
+            			image, 
+            			dRow,
+            			nRight - nWidth / 4,
+            			nRight,
+            			nWidth);
+            if (dRightOffset < 0 || dRightOffset <= dMidOffset) {
+            	return false;
+            }
+            wSumRightEdge += dRightOffset;
+            byte bData[] = new byte[image.getWidth()];
+            System.arraycopy(
+                    image.getData(), 
+                    dRow * image.getWidth(), 
+                    bData, 
+                    0, 
+                    image.getWidth());
+            // stretch the left and right sides of the barcode so the
+            // pixels are an exact multiple of the number of elementary
+            // bars between the measured positions
+            byte bLeft[] = Stretch(
+            		bData, 
+            		dLeftOffset, 
+            		dMidOffset, 
+            		LeftWidth + LeftDigits * DigitWidth + 2);
+            byte bRight[] = Stretch(
+            		bData, 
+            		dMidOffset, 
+            		dRightOffset, 
+            		3 + RightDigits * DigitWidth + 1);
+            // if we know the implied first digit we can call a different
+            // version of EstimateLeftCode that takes that digits as
+            // the last parameter. This will significantly improve accuracy
+            // because the search for the implied digit requires us to
+            // consider two encodings for each digit in the left side
+            // of the barcode, doubling the chance of error at each
+            // digit. We could get the digit from the country information.
+            // However, experience shows that this isn't enough, at least
+            // with conventional cellphone optics and resolution. The only
+            // option is to use better optics or get more pixels and
+            // greater distance to the barcode, given better focus.
+            String code =  EstimateLeftCode(bLeft);
+            if (code == null) {
+                continue; // parity test didn't work out
+            }
+            int c = this.chLeft.get(code);
+            this.chLeft.put(code, c+1);
+            code = EstimateRightCode(bRight);
+            c = this.chRight.get(code);
+            this.chRight.put(code, c+1);
+        }
+        this.dAvgLeftEdge = wSumLeftEdge / image.getHeight();
+        return true;
+    }
+
+    /** Estimates the barcode for the left-side half of a EAN-13 barcode, in the
      * given row of image data, starting in the given column. The barcode
      * estimation is done as a slightly broadened greedy search. The degree
      * of match of all possible digit pairs is first estimated. For each first
@@ -838,24 +1007,31 @@ public class BarcodeReaderEan13 implements BarcodeReader {
      * @param image the input image.
      * @param dRow the row where we are estimating the barcode position.
      */
-    private int EstimateLeftEdge(Gray8Image image, int dRow) {
-        int cWidth = image.getWidth();
+    private int EstimateLeftEdge(
+    		Gray8Image image, 
+    		int dRow,
+    		int nLeft,
+    		int nRight,
+    		int cWidth) {
+    	int nImageWidth = image.getWidth();
         // number of pixels per bar, rounded
         int cExp = (cWidth + TotalWidth/2) / TotalWidth;
         // shift the barcode across the image
         int wBestConv = Integer.MIN_VALUE;
         int dBestPos = -1;
         byte[] in = image.getData();
-        for (int dCol = 0; dCol < cWidth / 8; dCol++) {
+        nLeft = Math.max(0, nLeft - cExp);
+        for (int dCol = nLeft + cExp; dCol < nRight; dCol++) {
             int wConv = 0;
             for (int j=0; j<cExp; j++) {
                 int dOffset = j + dCol;
                 // left pattern is 1, 0, 1, surrounded by 0's
                 wConv += 
-                        - in[dRow*cWidth + dOffset + 0 * cExp] // dark
-                        + in[dRow*cWidth + dOffset + 1 * cExp] // light
-                        - in[dRow*cWidth + dOffset + 2 * cExp] // dark
-                        + in[dRow*cWidth + dOffset + 3 * cExp] // light
+                    	+ (int) in[dRow*nImageWidth + dOffset - (1 * cWidth) / TotalWidth] // dark
+                    	- (int) in[dRow*nImageWidth + dOffset + (0 * cWidth) / TotalWidth] // dark
+                        + (int) in[dRow*nImageWidth + dOffset + (1 * cWidth) / TotalWidth] // light
+                        - (int) in[dRow*nImageWidth + dOffset + (2 * cWidth) / TotalWidth] // dark
+                        + (int) in[dRow*nImageWidth + dOffset + (3 * cWidth) / TotalWidth] // light
                       ;
             }
             if (wConv > wBestConv) {
@@ -866,27 +1042,31 @@ public class BarcodeReaderEan13 implements BarcodeReader {
         return dBestPos;
     }
     
-    private int EstimateMiddle(Gray8Image image, int dRow) {
-        int cWidth = image.getWidth();
-     // number of pixels per bar, rounded
+    private int EstimateMiddle(
+    		Gray8Image image, 
+    		int dRow,
+    		int nLeft,
+    		int nRight,
+    		int cWidth) {
+    	int nImageWidth = image.getWidth();
+    	// number of pixels per bar, rounded
         int cExp = (cWidth + TotalWidth/2) / TotalWidth; 
         // shift the barcode across the image
         int wBestConv = Integer.MIN_VALUE;
         int dBestPos = -1;
         byte[] in = image.getData();
-        for (int dCol = cWidth * 3 / 8; dCol < cWidth * 5 / 8; dCol++) {
+        for (int dCol = nLeft; dCol < nRight; dCol++) {
             int wConv = 0;
             for (int j=0; j<cExp; j++) {
                 int dOffset = j + dCol;
                 // mid pattern is 1, 0, 1, 0, 1, surrounded by 0's
                 wConv += 
-                        - in[dRow*cWidth + dOffset - 3 * cExp] // dark
-                        + in[dRow*cWidth + dOffset - 2 * cExp] // light
-                        - in[dRow*cWidth + dOffset - 1 * cExp] // dark
-                        + in[dRow*cWidth + dOffset + 0 * cExp] // light
-                        - in[dRow*cWidth + dOffset + 1 * cExp] // dark
-                        + in[dRow*cWidth + dOffset + 2 * cExp] // light
-                        - in[dRow*cWidth + dOffset + 3 * cExp] // dark
+                        - (int) in[dRow*nImageWidth + dOffset - (3 * cWidth) / TotalWidth] // dark
+                        + (int) in[dRow*nImageWidth + dOffset - (2 * cWidth) / TotalWidth] // light
+                        - (int) in[dRow*nImageWidth + dOffset - (1 * cWidth) / TotalWidth] // dark
+                        + (int) in[dRow*nImageWidth + dOffset + (0 * cWidth) / TotalWidth] // light
+                        - (int) in[dRow*nImageWidth + dOffset + (1 * cWidth) / TotalWidth] // dark
+                        + (int) in[dRow*nImageWidth + dOffset + (2 * cWidth) / TotalWidth] // light
                       ;
             }
             if (wConv > wBestConv) {
@@ -897,25 +1077,30 @@ public class BarcodeReaderEan13 implements BarcodeReader {
         return dBestPos;
     }
     
-    private int EstimateRightEdge(Gray8Image image, int dRow) {
-        int cWidth = image.getWidth();
+    private int EstimateRightEdge(
+    		Gray8Image image, 
+    		int dRow,
+    		int nLeft,
+    		int nRight,
+    		int cWidth) {
+    	int nImageWidth = image.getWidth();
         // number of pixels per bar, rounded
         int cExp = (cWidth + TotalWidth/2) / TotalWidth; 
         // shift the barcode across the image
         int wBestConv = Integer.MIN_VALUE;
         int dBestPos = -1;
         byte[] in = image.getData();
-        for (int dCol = cWidth - 1 - cExp * 4; dCol > cWidth * 3 / 4; dCol--) {
+        for (int dCol = nRight - cExp * 3; dCol > nLeft; dCol--) {
             int wConv = 0;
             for (int j=0; j<cExp; j++) {
                 int dOffset = j + dCol;
-                wConv +=
+                wConv = wConv
                         // right pattern is 1, 0, 1, followed by 0's
-                        - in[dRow*cWidth + dOffset - 1 * cExp] // dark
-                        + in[dRow*cWidth + dOffset + 0 * cExp] // light
-                        - in[dRow*cWidth + dOffset + 1 * cExp] // dark
-                        + in[dRow*cWidth + dOffset + 2 * cExp] // light
-                        - in[dRow*cWidth + dOffset + 3 * cExp] // dark
+                        + (int) in[dRow*nImageWidth + dOffset + (-2 * cWidth) / TotalWidth] // light
+                        - (int) in[dRow*nImageWidth + dOffset + (-1 * cWidth) / TotalWidth] // dark
+                        + (int) in[dRow*nImageWidth + dOffset + (0 * cWidth) / TotalWidth] // light
+                        - (int) in[dRow*nImageWidth + dOffset + (1 * cWidth) / TotalWidth] // dark
+                        + (int) in[dRow*nImageWidth + dOffset + (2 * cWidth) / TotalWidth] // light
                ;
             }
             if (wConv > wBestConv) {
