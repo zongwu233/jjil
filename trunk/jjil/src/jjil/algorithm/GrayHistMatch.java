@@ -23,7 +23,10 @@
  */
 
 package jjil.algorithm;
-import jjil.core.*;
+import jjil.core.Gray8Image;
+import jjil.core.Image;
+import jjil.core.PipelineStage;
+import jjil.core.RgbVal;
 
 /**
  * Pipeline stage modifies a gray image's pixel values to make its histogram

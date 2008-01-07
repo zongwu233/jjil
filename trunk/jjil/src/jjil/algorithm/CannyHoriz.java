@@ -23,10 +23,9 @@
  */
 
 package jjil.algorithm;
-import java.lang.Object.*;
-import java.lang.Math;
-import java.util.*;
-import jjil.core.*;
+import jjil.core.Gray8Image;
+import jjil.core.Image;
+import jjil.core.PipelineStage;
 
 /**
  * Computes the horizontal Canny operator for an input gray image. The sigma

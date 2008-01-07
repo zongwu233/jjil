@@ -23,7 +23,9 @@
  */
 
 package jjil.algorithm;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.Vector;
+
 import jjil.core.Point;
 
 /**

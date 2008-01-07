@@ -23,8 +23,10 @@
  */
 
 package jjil.algorithm;
-import java.util.*;
-import jjil.core.*;
+import java.util.Enumeration;
+import java.util.Vector;
+
+import jjil.core.Gray8Image;
 
 /**
  * Computes an array of zero crossing positions in the input gray image.

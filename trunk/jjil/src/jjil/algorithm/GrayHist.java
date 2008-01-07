@@ -23,7 +23,7 @@
  */
 
 package jjil.algorithm;
-import jjil.core.*;
+import jjil.core.Gray8Image;
 
 /**
  * Computes the histogram of a gray image. Not a pipeline stage!

@@ -23,7 +23,7 @@
  */
 
 package jjil.algorithm;
-import jjil.core.*;
+import jjil.core.Gray8Image;
 /**
  * Provides point spread functions for use in inverse filtering.
  * @author webb

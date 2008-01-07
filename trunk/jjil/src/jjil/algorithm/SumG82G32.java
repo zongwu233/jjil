@@ -15,7 +15,12 @@
  */
 
 package jjil.algorithm;
-import jjil.core.*;
+import jjil.core.Gray32Image;
+import jjil.core.Gray32SubImage;
+import jjil.core.Gray8Image;
+import jjil.core.Gray8SubImage;
+import jjil.core.Image;
+import jjil.core.PipelineStage;
 
 /**
  *

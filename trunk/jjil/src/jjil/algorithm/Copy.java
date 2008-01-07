@@ -23,7 +23,8 @@
  */
 
 package jjil.algorithm;
-import jjil.core.*;
+import jjil.core.Image;
+import jjil.core.PipelineStage;
 /**
  * Copies an input image to the output. This is not a deep copy, so if anything
  * modifies the image contents the copy will be modified too.

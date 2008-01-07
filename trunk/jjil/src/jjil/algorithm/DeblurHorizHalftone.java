@@ -23,7 +23,9 @@
  */
 
 package jjil.algorithm;
-import jjil.core.*;
+import jjil.core.Gray8Image;
+import jjil.core.Image;
+import jjil.core.PipelineStage;
 /**
  * Uses deconvolution to remove blur from a Gray8Image. The blur removed is a 
  * horizontal Gaussian blur with a given standard deviation. The background noise

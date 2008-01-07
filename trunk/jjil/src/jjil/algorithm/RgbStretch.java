@@ -27,7 +27,11 @@
  */
 
 package jjil.algorithm;
-import jjil.core.*;
+import jjil.core.Gray8Image;
+import jjil.core.Image;
+import jjil.core.PipelineStage;
+import jjil.core.RgbImage;
+import jjil.core.Sequence;
 /**
  * Stretches a color (RgbImage) to a given size. Each band is shrunk independently.
  * The output image must be greater than or equal to the size of the 

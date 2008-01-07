@@ -23,7 +23,10 @@
  */
 package jjil.algorithm;
 
-import jjil.core.*;
+import jjil.core.Image;
+import jjil.core.PipelineStage;
+import jjil.core.RgbImage;
+import jjil.core.RgbVal;
 
 /**
  * Pipeline stage performs a 3x3 RGB average of the input.

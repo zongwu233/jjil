@@ -22,8 +22,15 @@ package jjil.algorithm;
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-import java.io.*;
-import jjil.core.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
+import jjil.core.Gray8Image;
+import jjil.core.Gray8MaskedImage;
+import jjil.core.Gray8SubImage;
+import jjil.core.Image;
+import jjil.core.PipelineStage;
 
 /**
  * DetectHaar applies a Haar cascade at multiple locations and multiple scales

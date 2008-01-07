@@ -22,7 +22,9 @@
 package jjil.algorithm;
 
 import java.util.Vector;
-import jjil.core.*;
+
+import jjil.core.Complex;
+import jjil.core.MathPlus;
 
 /**
  * Computes 1-dimensional FFT of a complex array.

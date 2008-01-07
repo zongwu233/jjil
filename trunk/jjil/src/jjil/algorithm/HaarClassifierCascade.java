@@ -23,8 +23,12 @@
  */
 
 package jjil.algorithm;
-import java.io.*;
-import jjil.core.*;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+import jjil.core.Gray32Image;
+import jjil.core.Gray8Image;
+import jjil.core.Image;
 /**
  * HaarClassifierCascade implements a Haar classifier, which is a trainable
  * image processing tool for detecting the presence of a feature or class of

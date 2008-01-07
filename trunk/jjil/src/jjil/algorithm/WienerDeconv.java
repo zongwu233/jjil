@@ -23,7 +23,13 @@
  */
 
 package jjil.algorithm;
-import jjil.core.*;
+import jjil.core.Complex;
+import jjil.core.Complex32Image;
+import jjil.core.Gray32Image;
+import jjil.core.Gray8Image;
+import jjil.core.Image;
+import jjil.core.MathPlus;
+import jjil.core.PipelineStage;
 /**
  *
  * @author webb

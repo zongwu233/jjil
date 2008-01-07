@@ -32,7 +32,11 @@
  */
 
 package jjil.algorithm;
-import jjil.core.*;
+import jjil.core.Gray32MaskedImage;
+import jjil.core.Gray32SubImage;
+import jjil.core.Gray8SubImage;
+import jjil.core.Image;
+import jjil.core.PipelineStage;
 
 /**
  * Generates subimages from a source Gray8Image, using a mask. In a normal
