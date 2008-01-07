@@ -23,7 +23,7 @@
  */
 
 package jjil.algorithm;
-import jjil.core.*;
+import jjil.core.Gray8Image;
 
 /**
  * Forms the one-dimensional vector that is the vertical average

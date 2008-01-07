@@ -30,7 +30,10 @@
  */
 
 package jjil.algorithm;
-import jjil.core.*;
+import jjil.core.Gray8Image;
+import jjil.core.Gray8SubImage;
+import jjil.core.Image;
+import jjil.core.PipelineStage;
 
 /**
  * Generates sub images (cropped images positioned regularly across the input image) 

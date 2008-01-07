@@ -23,7 +23,11 @@
  */
 
 package jjil.algorithm;
-import jjil.core.*;
+import jjil.core.Gray8Image;
+import jjil.core.Image;
+import jjil.core.PipelineStage;
+import jjil.core.RgbImage;
+import jjil.core.RgbVal;
 
 /**
  * <p>

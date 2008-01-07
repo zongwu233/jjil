@@ -23,7 +23,9 @@
  */
 
 package jjil.algorithm;
-import jjil.core.*;
+import jjil.core.Gray8Image;
+import jjil.core.Image;
+import jjil.core.PipelineStage;
 
 /**
  * This PipelineStage warps a trapezoid in the input gray image into a 

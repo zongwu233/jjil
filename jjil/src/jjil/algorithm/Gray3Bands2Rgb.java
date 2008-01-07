@@ -25,7 +25,8 @@
  */
 
 package jjil.algorithm;
-import jjil.core.*;
+import jjil.core.Gray8Image;
+import jjil.core.RgbImage;
 /** Gray3Bands2Rgb converts an 8-bit gray image to RGB by replicating the 
  * gray values into R, G, and B. The signed byte values in the gray
  * image are changed into unsigned byte values in the ARGB word.

@@ -23,7 +23,9 @@
  */
 
 package jjil.algorithm;
-import jjil.core.*;
+import jjil.core.Gray8Image;
+import jjil.core.Image;
+import jjil.core.Ladder;
 
 /**
  * Subtracts one gray image from another. To be used as a join operation in a 

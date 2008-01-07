@@ -23,7 +23,10 @@
  */
 
 package jjil.algorithm;
-import jjil.core.*;
+import jjil.core.Gray32Image;
+import jjil.core.Gray8Image;
+import jjil.core.Image;
+import jjil.core.PipelineStage;
 /** Gray82Gray32 converts an 8-bit gray image to a 32-bit
  *  gray image.
  *

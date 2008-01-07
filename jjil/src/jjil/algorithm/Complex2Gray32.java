@@ -23,7 +23,11 @@
  */
 
 package jjil.algorithm;
-import jjil.core.*;
+import jjil.core.Complex;
+import jjil.core.Complex32Image;
+import jjil.core.Gray32Image;
+import jjil.core.Image;
+import jjil.core.PipelineStage;
 /**
  * Converts a Complex32Image to a Gray32Image by taking the complex magnitude of
  * each pixel.

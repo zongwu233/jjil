@@ -24,7 +24,9 @@
  */
 
 package jjil.algorithm;
-import jjil.core.*;
+import jjil.core.Gray8Image;
+import jjil.core.Image;
+import jjil.core.Ladder;
 
 /**
  * Computes linear combination of two Gray8Images. Result is 

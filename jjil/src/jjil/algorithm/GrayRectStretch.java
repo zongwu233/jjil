@@ -23,7 +23,9 @@
  */
 
 package jjil.algorithm;
-import jjil.core.*;
+import jjil.core.Gray8Image;
+import jjil.core.Image;
+import jjil.core.PipelineStage;
 
 /** Pipeline stage stretches an image to a larger rectangular size with 
  * bilinear interpolation. For more information on this and other image

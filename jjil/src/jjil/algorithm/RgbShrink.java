@@ -27,7 +27,11 @@
  */
 
 package jjil.algorithm;
-import jjil.core.*;
+import jjil.core.Gray8Image;
+import jjil.core.Image;
+import jjil.core.PipelineStage;
+import jjil.core.RgbImage;
+import jjil.core.Sequence;
 /**
  * Shrinks a color (RgbImage) to a given size. Each band is shrunk independently.
  * The pixels that each pixel maps to are averaged. There is no between-target-pixel

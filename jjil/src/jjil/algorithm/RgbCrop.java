@@ -23,7 +23,9 @@
  */
 
 package jjil.algorithm;
-import jjil.core.*;
+import jjil.core.Image;
+import jjil.core.PipelineStage;
+import jjil.core.RgbImage;
 
 /**
  * Pipeline stage crops a gray image to a given rectangular cropping window.

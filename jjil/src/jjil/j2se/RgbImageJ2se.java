@@ -1,0 +1,162 @@
+package jjil.j2se;
+
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.awt.image.DataBufferInt;
+import java.awt.image.DirectColorModel;
+import java.awt.image.ImageConsumer;
+import java.awt.image.ImageProducer;
+import java.awt.image.Raster;
+import java.awt.image.WritableRenderedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.Hashtable;
+
+import javax.imageio.ImageIO;
+
+import jjil.core.RgbImage;
+
+public class RgbImageJ2se implements jjil.debug.Show {
+	static private Graphics graphics = null;
+	
+	public RgbImageJ2se(Graphics graphics) {
+		RgbImageJ2se.graphics = graphics;
+	}
+	
+	public RgbImageJ2se() {
+	}
+	
+	public synchronized void toDisplay(RgbImage rgb) {
+		if (RgbImageJ2se.graphics != null) {
+			WritableRenderedImage im = RgbImageJ2se.toImage(rgb);
+			RgbImageJ2se.graphics.drawImage((Image) im, 0, 0, null);
+		}
+	}
+	
+	public void toFile(RgbImage rgb, String szFile) {
+		WritableRenderedImage im = RgbImageJ2se.toImage(rgb);
+		String szSuffix = "JPG";
+		if (szFile.contains(".")) {
+			int nSuffix = szFile.lastIndexOf('.');
+			szSuffix = szFile.substring(nSuffix + 1);
+		}
+		File f = new File(szFile);
+		try {
+			ImageIO.write(im, szSuffix, f);
+		} catch (IOException ex) {
+			
+		}
+	}
+	
+	private static WritableRenderedImage toImage(RgbImage rgb) {
+		WritableRenderedImage im = new BufferedImage(
+				rgb.getWidth(), 
+				rgb.getHeight(), 
+				BufferedImage.TYPE_INT_RGB);
+		DataBufferInt dbi = new DataBufferInt(
+				rgb.getData(),
+				rgb.getHeight() * rgb.getWidth());
+		int bandOffsets[] = {0};
+		Raster r = Raster.createRaster(
+				im.getSampleModel(),
+				dbi, 
+				null);
+		im.setData(r);
+		return im;
+	}
+	
+	static public RgbImage toRgbImage(Image im) {
+		 class getImageData implements ImageConsumer {
+			boolean bComplete = false;
+			ImageProducer ip;
+			RgbImage rgb;
+			
+			getImageData(ImageProducer ip) {
+				this.ip = ip;
+			}
+			
+			public boolean getComplete() {
+				return this.bComplete;
+			}
+			
+			synchronized public RgbImage getRgbImage() {
+				return this.rgb;
+			}
+			public void setHints(int hintflags) {
+				
+			}
+			public void setPixels(
+					int x, 
+					int y, 
+					int w, 
+					int h, 
+					ColorModel model, 
+					int[] pixels, 
+					int off, 
+					int scansize) {
+				if (model instanceof DirectColorModel) {
+					// see if we can just directly copy the data because its
+					// already laid out the way we want
+					DirectColorModel dcm = (DirectColorModel) model;
+					if (dcm.getBlueMask()  == 0x000000ff &
+						dcm.getGreenMask() == 0x0000ff00 &
+						dcm.getRedMask()   == 0x00ff0000) {
+						int[] nData = this.rgb.getData();
+						for (int i=0; i<h; i++) {
+							System.arraycopy(
+									pixels, 
+									i*scansize + off, 
+									nData, 
+									(i+y)*this.rgb.getWidth() + x, 
+									w);
+						}
+						return;
+					}	
+				}
+				// can't just copy. Use color conversion
+				int[] nData = this.rgb.getData();
+				for (int i = 0; i<h; i++) {
+					for (int j=0; j<w; j++) {
+						int nRgb = model.getRGB(pixels[j+off + i*scansize]);
+						nData[(i+y) * this.rgb.getWidth() + (j+x)] = nRgb;
+					}
+				}
+			}
+			
+			public void setPixels(int x, int y, int w, int h, ColorModel model, byte[] pixels, int off, int scansize) {
+				// can't just copy. Use color conversion
+				int[] nData = this.rgb.getData();
+				for (int i = 0; i<h; i++) {
+					for (int j=0; j<w; j++) {
+						int nRgb = model.getRGB(pixels[j+off + i*scansize]);
+						nData[(i+y) * this.rgb.getWidth() + (j+x)] = nRgb;
+					}
+				}				
+			}
+			
+			public void setColorModel(ColorModel model) {
+				
+			}
+			public void setProperties(Hashtable props) {
+				
+			}
+			public  void setDimensions(int nWidth, int nHeight) {
+				this.rgb = new RgbImage(nWidth, nHeight);
+			}
+			public void imageComplete(int status) {
+				this.bComplete = true;
+				this.ip.removeConsumer(this);
+			}
+		}	
+		 
+		ImageProducer ip = im.getSource();
+		getImageData ic = new getImageData(ip);
+		ip.startProduction(ic);
+		while (!ic.getComplete()) {
+			Thread.yield();
+		}
+		return ic.getRgbImage();
+	}
+}

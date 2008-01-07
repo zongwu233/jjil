@@ -23,7 +23,11 @@
  */
 
 package jjil.algorithm;
-import jjil.core.*;
+import jjil.core.Complex;
+import jjil.core.Complex32Image;
+import jjil.core.Gray8Image;
+import jjil.core.Image;
+import jjil.core.PipelineStage;
 
 /**
  * Takes the fast Fourier transform of the input Gray8Image. The output image

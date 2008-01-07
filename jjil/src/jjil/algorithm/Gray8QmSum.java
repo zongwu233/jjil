@@ -23,7 +23,10 @@
  */
 
 package jjil.algorithm;
-import jjil.core.*;
+import jjil.core.Gray32Image;
+import jjil.core.Gray8Image;
+import jjil.core.Image;
+import jjil.core.PipelineStage;
 /**
  * Gray8QmSum forms the cumulative sum of an image.
  * <blockquote> Output(i,j) = Sum(Input(k,l), k &le; i, l &le; j). </blockquote>

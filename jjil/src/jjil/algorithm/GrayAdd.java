@@ -23,7 +23,9 @@
  */
 
 package jjil.algorithm;
-import jjil.core.*;
+import jjil.core.Gray8Image;
+import jjil.core.Image;
+import jjil.core.Ladder;
 
 /**
  * Adds two gray images. To be used as a join operation in a Ladder operation.

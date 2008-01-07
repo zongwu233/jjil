@@ -23,7 +23,9 @@
  */
 
 package jjil.algorithm;
-import jjil.core.*;
+import jjil.core.Gray32Image;
+import jjil.core.Image;
+import jjil.core.PipelineStage;
 
 /**
  * Divides a Gray32Image by a constant.

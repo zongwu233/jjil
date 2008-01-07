@@ -23,7 +23,9 @@
  */
 
 package jjil.algorithm;
-import jjil.core.*;
+import jjil.core.Gray8Image;
+import jjil.core.Image;
+import jjil.core.MathPlus;
 
 /**
  * Gray8Statistics is used to measure the mean and variance of a gray
