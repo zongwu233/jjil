@@ -343,7 +343,7 @@ public class ReadBarcode {
         if (this.dBestLeftPos == -1 || this.dBestRightPos == -1) {
             return;
         }
-        BarcodeReader reader = new BarcodeReaderEan13();
+        BarcodeReaderEan13 reader = new BarcodeReaderEan13();
         GrayCrop gc = new GrayCrop(dBestLeftPos, 
         		0,
         		dBestRightPos - dBestLeftPos,
@@ -357,7 +357,7 @@ public class ReadBarcode {
         	debug.toFile((RgbImage) g2r.Front(), "rectCropped.png");
         	
         }
-        int wGoodness = reader.Decode(this.imageCropped);
+        int wGoodness = reader.Decode(this.imageCropped, this.cYLeft, this.cYRight, this.wSlopeLeft, this.wSlopeRight);
 		if (reader.getCode() != null && wGoodness > this.wBestMatch) {
 		    this.szBestCode = reader.getCode();
 		    this.wBestMatch = wGoodness;
