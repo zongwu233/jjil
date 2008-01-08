@@ -18,16 +18,40 @@ import javax.imageio.ImageIO;
 
 import jjil.core.RgbImage;
 
+/**
+ * RgbImageJ2se is the interface between jjil's RgbImage and java.awt.Image
+ * objects. It provides an implementation of the Show interface for use
+ * with the Debug object, which allows images to be displayed and sent
+ * to files without being aware of the underlying architecture.<br>
+ * It also provides methods for transforming java.awt.Image
+ * objects to and from jjil.core.RgbImage objects.<br>
+ * @author webb
+ *
+ */
 public class RgbImageJ2se implements jjil.debug.Show {
 	static private Graphics graphics = null;
 	
+	/**
+	 * Creates a new instance of RgbImageJ2se. The graphics object
+	 * will be used to display images in all subsequently created instances
+	 * of RgbImageJ2se.
+	 * @param graphics: the graphics object to use for all image displays.
+	 */
 	public RgbImageJ2se(Graphics graphics) {
 		RgbImageJ2se.graphics = graphics;
 	}
 	
+	/**
+	 * Creates an instance of RgbImageJ2se which will use the common graphics
+	 * object for image display.
+	 */
 	public RgbImageJ2se() {
 	}
 	
+	/**
+	 * Sends an RgbImage to the current graphics object.
+	 * @param rgb: the image to display.
+	 */
 	public synchronized void toDisplay(RgbImage rgb) {
 		if (RgbImageJ2se.graphics != null) {
 			WritableRenderedImage im = RgbImageJ2se.toImage(rgb);
@@ -35,6 +59,13 @@ public class RgbImageJ2se implements jjil.debug.Show {
 		}
 	}
 	
+	/**
+	 * Sends an RgbImage to a file.
+	 * @param rgb: the RgbImage to send to the file.
+	 * @param szFile: the path of the file to save the image in. The
+	 * file suffix is used to determine the image type (JPEG or PNG).
+	 * Storage is in JPEG by default.
+	 */
 	public void toFile(RgbImage rgb, String szFile) {
 		WritableRenderedImage im = RgbImageJ2se.toImage(rgb);
 		String szSuffix = "JPG";
@@ -67,6 +98,13 @@ public class RgbImageJ2se implements jjil.debug.Show {
 		return im;
 	}
 	
+	/**
+	 * Transforms an input java.awt.Image to a jjil.core.RgbImage.
+	 * The image is read from the ImageProducer until the entire image is
+	 * received, and the result is stored into the returned RgbImage.
+	 * @param im: the input java.awt.Image object.
+	 * @return a jjil.core.RgbImage with the same contents as the input im.
+	 */
 	static public RgbImage toRgbImage(Image im) {
 		 class getImageData implements ImageConsumer {
 			boolean bComplete = false;
