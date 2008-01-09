@@ -8,5 +8,7 @@ Below are some sample outputs, created by running the face detector on images ra
 
 http://jjil.googlecode.com/files/image004.jpg
 http://jjil.googlecode.com/files/image006.jpg
+http://jjil.googlecode.com/files/image008.jpg
+http://jjil.googlecode.com/files/image010.jpg
 
 This application demonstrates that it is possible to do interesting image processing on currently-available cellphones. It also shows the potential as cellphones gain in processing power. The exponential increase in processing power which applied to desktop computers is also in progress for cellphones. As processing power increases, more and more sensory capabilities will be added to cellphones, since inherent limitations on size and the need for easy to use interfaces will require the cellphones themselves to become more intelligent. Already speech understanding for voice dialing is a standard feature; soon, image processing and computer vision will be integrated. JJIL provides a path for integrating existing image processing and computer vision algorithms into cellphone software by providing a consistent image processing architecture and a core set of useful algorithms. 
