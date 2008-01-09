@@ -26,6 +26,8 @@ For each scale, starting at the coarsest:
 
 The final output is an image showing the positions where a face was found. The result is shown as a masked image with the background dimmed and turned to grayscale, and the face shown in color. Note that the method described here can find multiple faces in the same image, as shown in the screenshot below:
 
+http://jjil.googlecode.com/files/image002.jpg
+
 Note that the use of a mask image as output makes it easy to display the result, but may require further processing for some applications, such as face tracking. Adding connected components extraction after face detection would make it possible to track faces in the image.
 
 The JJIL implementation of face detection can be broken down into four components:
