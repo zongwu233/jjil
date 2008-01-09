@@ -138,4 +138,4 @@ This class can be used as follows to convert an 8-bit signed image to a 32-bit i
     Image imGray32 = (Gray32Image) imResult;
     /* ... use imGray32 ... */
 }}}
- 
+Once you are familiar with image processing algorithms you will want to combine them using [SequencesAndLadders Sequences and Ladders] to make image processing pipelines.
