@@ -1,0 +1,25 @@
+#summary Introduction to JJIL
+
+= Introduction =
+
+JJIL consists of an image processing architecture and a significant library of well-known image processing routines. The library is freely available as open source under the Lesser GPL. It is designed for efficient (both in space and time) use on cellphones implementing Mobile Independent Device Profile 2.0 (MIDP 2.0) and Connected Limited Device Configuration 1.0 (CLDC 1.0), which is a widely-supported platform. These profiles impose certain significant restrictions on the library: in particular, they do not support floating-point computation, and certain useful features of the Java language, such as generic types, are not supported.
+
+There are two core concepts in JJIL, defined in jjil.core: Image and PipelineStage. An Image is an object that stores image data and which has a definite width and height. Images also support access to their data as an array. There are a number of different types of images: gray (8-bit, 16-bit, and 32-bit); color (8-bit pixel), complex (32-bit pixel). There are also more specialized images, such as a sub-image type for taking a portion of an input image and keeping track of the location of that portion.
+
+All Image types support these methods: 
+
+  The constructor `Image(int cWidth, int cHeight)` creates a new image of the given width and height.
+
+  `Image Clone()`: returns a “deep” copy of the image, i.e., one that actually creates a copy of the image pixels. Note that images processed in pipeline stages are usually passed using a “shallow” copy, allowing reuse of their pixels, for efficiency in space.
+
+  `int getHeight()`: returns the image height.
+
+  `int getWidth()`: returns the image width.
+
+
+= Details =
+
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
