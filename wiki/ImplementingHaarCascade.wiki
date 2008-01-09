@@ -22,6 +22,28 @@ Haar features always have two or three such regions. The exact regions to be sum
 }}}
 Specifies two rectangles: one starting at (3,7) and extending 14 pixels in width and 4 in height, which is multiplied by -1; the other starts at (3,9) and extends 14 pixels in width and 2 in height, and is multiplied by 2. It will be seen that the two rectangles overlap and form a horizontal edge detector as shown below:
 
+|| || || || || || || || || || || || || || || || || || || || ||
+|| || || || || || || || || || || || || || || || || || || || ||
+|| || || || || || || || || || || || || || || || || || || || ||
+|| || || || || || || || || || || || || || || || || || || || ||
+|| || || || || || || || || || || || || || || || || || || || ||
+|| || || || || || || || || || || || || || || || || || || || ||
+|| || || || || || || || || || || || || || || || || || || || ||
+|| || || || -1 || -1|| -1 || -1 || -1 || -1 || -1 || -1 || -1 || -1 || -1 || -1 || -1 || -1 || || || ||
+|| || || || -1 || -1|| -1 || -1 || -1 || -1 || -1 || -1 || -1 || -1 || -1 || -1 || -1 || -1 || || || ||
+|| || || || +2-1=+1|| +2-1=+1|| +2-1=+1|| +2-1=+1|| +2-1=+1|| +2-1=+1|| +2-1=+1|| +2-1=+1|| +2-1=+1|| +2-1=+1|| +2-1=+1|| +2-1=+1|| +2-1=+1|| +2-1=+1|| || || ||
+|| || || || +2-1=+1|| +2-1=+1|| +2-1=+1|| +2-1=+1|| +2-1=+1|| +2-1=+1|| +2-1=+1|| +2-1=+1|| +2-1=+1|| +2-1=+1|| +2-1=+1|| +2-1=+1|| +2-1=+1|| +2-1=+1|| || || ||
+|| || || || || || || || || || || || || || || || || || || || ||
+|| || || || || || || || || || || || || || || || || || || || ||
+|| || || || || || || || || || || || || || || || || || || || ||
+|| || || || || || || || || || || || || || || || || || || || ||
+|| || || || || || || || || || || || || || || || || || || || ||
+|| || || || || || || || || || || || || || || || || || || || ||
+|| || || || || || || || || || || || || || || || || || || || ||
+|| || || || || || || || || || || || || || || || || || || || ||
+|| || || || || || || || || || || || || || || || || || || || ||
+
+
 The key optimization in computing these rectangular sums is to form a cumulative sum of the image from top to bottom and left to right. Then any rectangular sum can be found by two add and two subtract operations.
 
 That is, given an input image I(i,j) we form the image
