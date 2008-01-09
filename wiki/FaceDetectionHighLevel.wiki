@@ -1,4 +1,4 @@
-#summary High-level explanation of How JJIL Implements Face Detection
+#summary Highest-level Explanation of How JJIL Actually Implements Face Detection
 
 = Face Detection =
 
