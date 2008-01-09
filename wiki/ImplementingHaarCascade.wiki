@@ -64,6 +64,7 @@ One final complication in computing the Haar feature comes from a boundary condi
         abstract class HaarRect {
             protected abstract int eval(Gray32Image i);
         }
+
         // HaarRectNone implements the case of a null rectangle
         class HaarRectNone extends HaarRect {
             public HaarRectNone() {
@@ -72,6 +73,7 @@ One final complication in computing the Haar feature comes from a boundary condi
                 return 0;
             }
         }
+
         // HaarRectAny implements the case of an interior rectangle
         class HaarRectAny extends HaarRect {
             ...
@@ -84,6 +86,7 @@ One final complication in computing the Haar feature comes from a boundary condi
                     data[this.n3] - data[this.n4] );
             }
         };
+
         // HaarRectLeft implements the case of rectangle at the left
         class HaarRectLeft extends HaarRect {
             public HaarRectLeft(int tly, int w, int h, int weight) {
@@ -93,6 +96,7 @@ One final complication in computing the Haar feature comes from a boundary condi
                 return weight * ( data[this.n2] - data[this.n3] );
             }
         };
+
         // HaarRectTop implements the case of a rectangle at the top
         class HaarRectTop extends HaarRect {
             public HaarRectTop(int tlx, int w, int h, int weight) {
@@ -102,6 +106,7 @@ One final complication in computing the Haar feature comes from a boundary condi
                 return weight * ( data[this.n2] - data[this.n4] );
             }
         };
+
         // HaarRectTopLeft implements the case of a rectangle
         // at the top left
         class HaarRectTopLeft extends HaarRect {
@@ -112,6 +117,7 @@ One final complication in computing the Haar feature comes from a boundary condi
                 return weight * ( data[this.n2] );
             }
         };
+
         // Private variables in HaarFeature
         private boolean bTilted;
         private HaarRect rect[];
