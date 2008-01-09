@@ -4,7 +4,7 @@
 
 JJIL consists of an image processing architecture and a significant library of well-known image processing routines. The library is freely available as open source under the Lesser GPL. It is designed for efficient (both in space and time) use on cellphones implementing Mobile Independent Device Profile 2.0 (MIDP 2.0) and Connected Limited Device Configuration 1.0 (CLDC 1.0), which is a widely-supported platform. These profiles impose certain significant restrictions on the library: in particular, they do not support floating-point computation, and certain useful features of the Java language, such as generic types, are not supported.
 
-There are two core concepts in JJIL, defined in jjil.core: Image and PipelineStage. An Image is an object that stores image data and which has a definite width and height. Images also support access to their data as an array. There are a number of different types of images: gray (8-bit, 16-bit, and 32-bit); color (8-bit pixel), complex (32-bit pixel). There are also more specialized images, such as a sub-image type for taking a portion of an input image and keeping track of the location of that portion.
+There are two core concepts in JJIL, defined in jjil.core: Image and PipelineStage. An Image is an object that stores image data and which has a definite width and height. mages also support access to their data as an array. There are a number of different types of images: gray (8-bit, 16-bit, and 32-bit); color (8-bit pixel), complex (32-bit pixel). There are also more specialized images, such as a sub-image type for taking a portion of an input image and keeping track of the location of that portion.
 
 All Image types support these methods: 
 
@@ -48,144 +48,94 @@ This method is used in the common case where a Push() operation returns a single
 
 A complete example (from jjil.algorithm) of a simple PipelineStage is shown below. It implements a conversion operation, converting a signed byte image (a Gray8Image) into a 32-bit image (a Gray32Image):
 {{{
-public class Gray82Gray32 extends PipelineStage {
+    public class Gray82Gray32 extends PipelineStage {
+        /** Creates a new instance of Gray82Gray32 */
+        public Gray82Gray32() {
+        }
 
-/** Creates a new instance of Gray82Gray32 */
-
-public Gray82Gray32() {
-
-}
-
-/** Converts an 8-bit gray image into a 32-bit image by replicating
-
-* changing the data range of the bytes from -128->127 to 0->255.
-
-*
-
-* @param image the input image.
-
-* @throws IllegalArgumentException if the input is not a
-
-* Gray8Image
-
-*/
-
-public void Push(Image image) throws IllegalArgumentException {
-
-if (!(image instanceof Gray8Image)) {
-
-throw new IllegalArgumentException(image.toString() + "" +
-
-" should be a Gray8Image, but isn't");
-
-}
-
-Gray8Image gray = (Gray8Image) image;
-
-byte[] grayData = gray.getData();
-
-Gray32Image gray32 =
-
-new Gray32Image(image.getWidth(), image.getHeight());
-
-int[] gray32Data = gray32.getData();
-
-for (int i=0; i<gray.getWidth() * gray.getHeight(); i++) {
-
-/* Convert from signed byte value to unsigned byte for
-
-* storage in the 32-bit image.
-
-*/
-
-int grayUnsigned = ((int)grayData[i]) - Byte.MIN_VALUE;
-
-/* Assign 32-bit output */
-
-gray32Data[i] = grayUnsigned;
-
-}
-
-super.setOutput(gray32);
-
-}
-
-}
+        /** Converts an 8-bit gray image into a 32-bit image by replicating
+         * changing the data range of the bytes from -128->127 to 0->255.
+         *
+         * @param image the input image.
+         * @throws IllegalArgumentException if the input is not a
+         * Gray8Image
+         */
+        public void Push(Image image) throws IllegalArgumentException {
+            if (!(image instanceof Gray8Image)) {
+                throw new IllegalArgumentException(image.toString() + "" +
+                    " should be a Gray8Image, but isn't");
+            }
+            Gray8Image gray = (Gray8Image) image;
+            byte[] grayData = gray.getData();
+            Gray32Image gray32 = new Gray32Image(image.getWidth(), image.getHeight());
+            int[] gray32Data = gray32.getData();
+            for (int i=0; i<gray.getWidth() * gray.getHeight(); i++) {
+                /* Convert from signed byte value to unsigned byte for
+                 * storage in the 32-bit image.
+                 */
+               int grayUnsigned = ((int)grayData[i]) - Byte.MIN_VALUE;
+               /* Assign 32-bit output */
+               gray32Data[i] = grayUnsigned;
+            }
+            super.setOutput(gray32);
+        }
+    }
 }}}
 This PipelineStage implements only the Push() method. It relies on the default implementations of Empty() and Front().
 
 The first step in Push() is to verify that the argument is of the right type. This test has to be done at runtime because all PipelineStage’s take Image parameters:
 {{{
-if (!(image instanceof Gray8Image)) {
-
-throw new IllegalArgumentException(image.toString() + "" +
-
-" should be a Gray8Image, but isn't");
-
-}
+    if (!(image instanceof Gray8Image)) {
+        throw new IllegalArgumentException(image.toString() + "" +
+            " should be a Gray8Image, but isn't");
+    }
 }}}
 After this test we can safely get a pointer to the input parameter as a Gray8Image:
 {{{
-Gray8Image gray = (Gray8Image) image;
+    Gray8Image gray = (Gray8Image) image;
 }}}
 Having the Gray8Image pointer gives us the ability to access the data (pixels) in the image:
 {{{
-byte[] grayData = gray.getData();
+    byte[] grayData = gray.getData();
 }}}
 We will need an output image to store the result. If the output was also a Gray8Image the normal thing to do would be to reuse the input (to save on memory, PipelineStage’s are allowed to modify their input. Callers should not assume the input will not be modified and must use Clone() to make a copy of the input if they need to keep the original data.) But this output is a Gray32Image, not a Gray8Image. So we must create a new image to hold the result:
 {{{
-Gray32Image gray32 =
-
-new Gray32Image(image.getWidth(), image.getHeight());
+    Gray32Image gray32 = new Gray32Image(image.getWidth(), image.getHeight());
 }}}
 We can get a pointer to the output data just as we did with the input image:
 {{{
-int[] gray32Data = gray32.getData();
+    int[] gray32Data = gray32.getData();
 }}}
 Now we will set the output pixels. The loop used iterates over all pixels by treating them as one large array. This is simpler than doing the arithmetic needed for a two-dimensional array:
 {{{
-for (int i=0; i<gray.getWidth() * gray.getHeight(); i++) {
+    for (int i=0; i<gray.getWidth() * gray.getHeight(); i++) {
 }}}
 The actual conversion of an 8-bit signed value to a 32-bit integer adds an offset so the minimum value in the signed pixel (i.e., -128) maps to 0. This is a matter of convenience. Some image processing operations treat 0 differently from all other pixel values. It simplifies some algorithms to map that special value to and from the minimum byte value:
 {{{
-int grayUnsigned = ((int)grayData[i]) - Byte.MIN_VALUE;
-
-/* Assign 32-bit output */
-
-gray32Data[i] = grayUnsigned;
+    int grayUnsigned = ((int)grayData[i]) - Byte.MIN_VALUE;
+    /* Assign 32-bit output */
+    gray32Data[i] = grayUnsigned;
 }}}
 Note that Byte.MIN_VALUE = -128 so the subtraction in the first statement above actually adds 128 to the signed byte value after it is converted to integer.
 
 The final step in the algorithm is to provide the output to the caller. This is done using PipelineStage’s protected setOutput method:
 {{{
-super.setOutput(gray32);
+    super.setOutput(gray32);
 }}}
 This class can be used as follows to convert an 8-bit signed image to a 32-bit integer image:
 {{{
-Gray8Image imGray8 = new Gray8Image(cWidth, cHeight);
-
-/* ... initialize imGray8... */
-
-Gray82Gray32 g8232 = new Gray82Gray32();
-
-g8232.Push(imGray8);
-
-if (g8232.Empty()) {
-
-/* error, this should never happen */
-
-}
-
-Image imResult = g8232.Front();
-
-if (!(imResult instanceof Gray32Image)) {
-
-/* error, Gray82Gray32 returned wrong type */
-
-}
-
-Image imGray32 = (Gray32Image) imResult;
-
-/* ... use imGray32 ... */
+    Gray8Image imGray8 = new Gray8Image(cWidth, cHeight);
+    /* ... initialize imGray8... */
+    Gray82Gray32 g8232 = new Gray82Gray32();
+    g8232.Push(imGray8);
+    if (g8232.Empty()) {
+        /* error, this should never happen */
+    }
+    Image imResult = g8232.Front();
+    if (!(imResult instanceof Gray32Image)) {
+        /* error, Gray82Gray32 returned wrong type */
+    }
+    Image imGray32 = (Gray32Image) imResult;
+    /* ... use imGray32 ... */
 }}}
  
