@@ -15,8 +15,11 @@ The overall structure of the face detection algorithm as implemented using JJIL 
 For each scale, starting at the coarsest:
  # Reduce the image to this scale.
  # For each position in the reduced image:
+
  If a face has not previously been detected at this position:
+
  Apply the Haar classifier to the reduced image at this position.
+
  If a face is found, mark the image as having a face at this position.
 
 (Note: this is somewhat different from the implementation in the OpenCV, which starts at the finest resolution and then aggregates detections. I believe the approach described here is simpler, more efficient, and leads to at least as good results as the approach in the OpenCV.)
