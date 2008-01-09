@@ -4,6 +4,8 @@
 
 A single image processing algorithm is fine, but real image processing algorithms consist of multiple steps. JJIL supports the construction of multiple-step image processing algorithms through two classes (both in jjil.core): Sequence and Ladder.
 
+==Sequence==
+
 A Sequence is just what its name implies, a sequence of image processing algorithms, in other words, a sequence of PipelineStages. Sequence is itself a PipelineStage. So Images can be passed through a series of image processing algorithms simply by constructing the Sequence, and then using Push() on the Sequence.
 
 An example is shown below. This sequence (from a barcode reading system) converts a color image to gray by selecting the green component, crops the gray image, and then applies a horizontal Canny edge detection operation to the result:
@@ -20,6 +22,8 @@ An example is shown below. This sequence (from a barcode reading system) convert
     Image imageResult = seq.Front();
 }}}
 Once a Sequence is constructed, it can be used over and over to process images. And the logic in the Sequence class’s implementation of Push() handles Empty() and Front() properly so that if a PipelineStage produces more than one output, each output will be passed to later stages in the Sequence, so that a Sequence can produce as many outputs as are provided by the PipelineStages it is made from.
+
+==Ladder==
 
 Some image processing pipelines are more complex than a simple linear order: they combine multiple images to produce a result. Ladder provides a simple mechanism for combining two PipelineStages (which may, of course, be Sequences) into a new PipelineStage. It takes the two PipelineStage objects as well as a special class derived from Ladder.Join. It is constructed as follows:
 
