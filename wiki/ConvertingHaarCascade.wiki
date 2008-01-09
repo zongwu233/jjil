@@ -1,7 +1,6 @@
-#summary One-sentence summary of this page.
+#summary Converting OpenCV's Haar Cascade XML File So It Will Fit on a Cellphone
 
-= Introduction =
-Converting the Haar cascade
+= Converting the Haar cascade =
 
 The Haar cascades generate by the OpenCV are XML files containing a tree structure and floating-point weights denoting the constants resulting from each stage of the cascade. Several files are provided with the OpenCV in the directory data/haarcascades. File sizes in that directory run from several hundred kilobytes to a few megabytes.
 
