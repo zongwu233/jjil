@@ -4,7 +4,9 @@
 
 JJIL consists of an image processing architecture and a significant library of well-known image processing routines. The library is freely available as open source under the Lesser GPL. It is designed for efficient (both in space and time) use on cellphones implementing Mobile Independent Device Profile 2.0 (MIDP 2.0) and Connected Limited Device Configuration 1.0 (CLDC 1.0), which is a widely-supported platform. These profiles impose certain significant restrictions on the library: in particular, they do not support floating-point computation, and certain useful features of the Java language, such as generic types, are not supported.
 
-There are two core concepts in JJIL, defined in jjil.core: Image and PipelineStage. An Image is an object that stores image data and which has a definite width and height. mages also support access to their data as an array. There are a number of different types of images: gray (8-bit, 16-bit, and 32-bit); color (8-bit pixel), complex (32-bit pixel). There are also more specialized images, such as a sub-image type for taking a portion of an input image and keeping track of the location of that portion.
+==Image==
+
+There are two core concepts in JJIL, defined in jjil.core: Image and PipelineStage. An Image is an object that stores image data and which has a definite width and height. Images also support access to their data as an array. There are a number of different types of images: gray (8-bit, 16-bit, and 32-bit); color (8-bit pixel), complex (32-bit pixel). There are also more specialized images, such as a sub-image type for taking a portion of an input image and keeping track of the location of that portion.
 
 All Image types support these methods: 
 
@@ -19,6 +21,8 @@ All Image types support these methods:
 Image types also support a method for accessing their pixels. In order to make this as efficient as possible the image data can be accessed directly as a one-dimensional array. This method is called getData(). For example, Gray8Image (an image supporting signed 8-bit image pixels) implements this method:
 
  `byte[] getData()`
+
+==PipelineStage==
 
 A PipelineStage is a single image processing algorithm. It takes a single image as a parameter and produces another image as output. Other parameters must be supplied through the constructor or auxiliary methods. The input and output types of PipelineStage are both Image; this makes it easier to compose multiple stages into a sequence (especially in the absence of generic types) but makes it necessary to check parameter types at runtime.
 
