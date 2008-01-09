@@ -85,7 +85,7 @@ One final complication in computing the Haar feature comes from a boundary condi
                 return weight * ( data[this.n1] + data[this.n2] -
                     data[this.n3] - data[this.n4] );
             }
-        };
+        }
 
         // HaarRectLeft implements the case of rectangle at the left
         class HaarRectLeft extends HaarRect {
@@ -95,7 +95,7 @@ One final complication in computing the Haar feature comes from a boundary condi
                 int data[] = image.getData();
                 return weight * ( data[this.n2] - data[this.n3] );
             }
-        };
+        }
 
         // HaarRectTop implements the case of a rectangle at the top
         class HaarRectTop extends HaarRect {
@@ -105,7 +105,7 @@ One final complication in computing the Haar feature comes from a boundary condi
                 int data[] = image.getData();
                 return weight * ( data[this.n2] - data[this.n4] );
             }
-        };
+        }
 
         // HaarRectTopLeft implements the case of a rectangle
         // at the top left
@@ -116,7 +116,7 @@ One final complication in computing the Haar feature comes from a boundary condi
                 int data[] = image.getData();
                 return weight * ( data[this.n2] );
             }
-        };
+        }
 
         // Private variables in HaarFeature
         private boolean bTilted;
