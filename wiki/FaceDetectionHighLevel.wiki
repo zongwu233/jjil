@@ -32,9 +32,9 @@ Note that the use of a mask image as output makes it easy to display the result,
 
 The JJIL implementation of face detection can be broken down into four components:
 
- # [ImplementingHaarCascade Implement Haar cascade.]
- # [CaptureToDisplay Capture image, preprocess, and display results.]
+ 1. [ImplementingHaarCascade Implement Haar cascade.]
+ 2. [CaptureToDisplay Capture image, preprocess, and display results.]
 
 We will also need to address
 
- 3. Converting and transferring a Haar cascade to a J2ME-enabled device. 
+ 3. [ConvertingHaarCascade Converting and transferring a Haar cascade] to a J2ME-enabled device. 
