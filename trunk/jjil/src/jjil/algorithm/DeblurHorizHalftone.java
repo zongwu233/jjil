@@ -61,7 +61,7 @@ public class DeblurHorizHalftone extends PipelineStage {
      */
     public void Push(Image im) {
         if (!(im instanceof Gray8Image)) {
-            throw new IllegalArgumentException("image must be a Gray8Image");
+            throw new IllegalArgumentException(Messages.getString("DeblurHorizHalftone.0")); //$NON-NLS-1$
         }
         byte[] bData = ((Gray8Image) im).getData();
         for (int i=0; i<im.getHeight(); i++) {

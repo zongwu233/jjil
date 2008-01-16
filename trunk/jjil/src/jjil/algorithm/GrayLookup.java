@@ -63,8 +63,8 @@ public class GrayLookup extends PipelineStage {
      */
     public void Push(Image image) throws IllegalArgumentException {
         if (!(image instanceof Gray8Image)) {
-            throw new IllegalArgumentException(image.toString() + " should be " +
-                    "a Gray8Image");
+            throw new IllegalArgumentException(image.toString() + Messages.getString("GrayLookup.0") + //$NON-NLS-1$
+                    Messages.getString("GrayLookup.1")); //$NON-NLS-1$
         }
         Gray8Image input = (Gray8Image) image;
         byte[] data = input.getData();
@@ -82,8 +82,8 @@ public class GrayLookup extends PipelineStage {
      */
     public void setTable(byte[] table) throws IllegalArgumentException {
         if (table.length != 256) {
-            throw new IllegalArgumentException("lookup table must have 256" +
-                    " entries");
+            throw new IllegalArgumentException(Messages.getString("GrayLookup.2") + //$NON-NLS-1$
+                    Messages.getString("GrayLookup.3")); //$NON-NLS-1$
         }
         this.table = new byte[256];
         System.arraycopy(table, 0, this.table, 0, this.table.length);

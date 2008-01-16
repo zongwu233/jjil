@@ -85,8 +85,8 @@ public class Complex {
         
     public Complex div(int n) throws IllegalArgumentException {
         if (n==0) {
-            throw new IllegalArgumentException("division of " + this.toString() + 
-                    " by 0");
+            throw new IllegalArgumentException(Messages.getString("Complex.0") + this.toString() +  //$NON-NLS-1$
+                    Messages.getString("Complex.1")); //$NON-NLS-1$
         }
         this.nReal /= n;
         this.nImag /= n;
@@ -108,8 +108,8 @@ public class Complex {
         }
         int nSq = cx.square();
         if (nSq == 0) {
-            throw new IllegalArgumentException("division of " + this.toString() + 
-                    " by " + cx.toString());
+            throw new IllegalArgumentException(Messages.getString("Complex.2") + this.toString() +  //$NON-NLS-1$
+                    Messages.getString("Complex.3") + cx.toString()); //$NON-NLS-1$
         }
         // cx is right shifted by SHIFT bits. So multiplying by it and 
         // dividing by its square shifts left by SHIFT bits. We shift back to
@@ -221,8 +221,8 @@ public class Complex {
     public int square() throws ArithmeticException {
         if (Math.abs(this.nReal) > MathPlus.SCALE ||
             Math.abs(this.nImag) > MathPlus.SCALE) {
-            throw new ArithmeticException("Complex value " +
-                    this.toString() + " too large to take square");
+            throw new ArithmeticException(Messages.getString("Complex.4") + //$NON-NLS-1$
+                    this.toString() + Messages.getString("Complex.5")); //$NON-NLS-1$
         }
         return this.nReal * this.nReal + this.nImag * this.nImag;
     }
@@ -258,6 +258,6 @@ public class Complex {
      * @return the string (real, imag)
      */
     public String toString() {
-        return "(" + this.nReal + ", " + this.nImag + ")";
+        return "(" + this.nReal + Messages.getString("Complex.7") + this.nImag + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
 }

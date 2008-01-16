@@ -95,7 +95,7 @@ public class GrayHistMatch extends PipelineStage {
     public void Push(Image image) throws IllegalArgumentException {
         if (!(image instanceof Gray8Image)) {
             throw new IllegalArgumentException(image.toString() + 
-                    " should be a Gray8Image");
+                    Messages.getString("GrayHistMatch.0")); //$NON-NLS-1$
         }
         /* We could do a test here to make sure that the uppermost
          * element of histCumTarget equals the count of pixels in
@@ -129,7 +129,7 @@ public class GrayHistMatch extends PipelineStage {
      */
     public void setHistogram(int[] histTarget) throws IllegalArgumentException {
         if (histTarget.length != 256) {
-            throw new IllegalArgumentException("histogram length not 256");
+            throw new IllegalArgumentException(Messages.getString("GrayHistMatch.1")); //$NON-NLS-1$
         }
         this.histCumTarget = new int[256];
         /* We actually store the cumulative histogram, not the original.

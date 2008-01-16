@@ -53,15 +53,15 @@ public class GraySub implements Ladder.Join {
         if (!(imageFirst instanceof Gray8Image) ||
             !(imageSecond instanceof Gray8Image)) {
             throw new IllegalArgumentException(
-                    "both images should be gray: " +
-                    imageFirst.toString() + "," +
+                    Messages.getString("GraySub.0") + //$NON-NLS-1$
+                    imageFirst.toString() + Messages.getString("Comma") + //$NON-NLS-1$
                     imageSecond.toString());
         }
         if (imageFirst.getWidth() != imageSecond.getWidth() ||
             imageSecond.getHeight() != imageSecond.getHeight()) {
             throw new IllegalArgumentException(
-                    "both images should be the same size: " +
-                    imageFirst.toString() + "," +
+                    Messages.getString("GraySub.2") + //$NON-NLS-1$
+                    imageFirst.toString() + Messages.getString("Comma") + //$NON-NLS-1$
                     imageSecond.toString());
             
         }

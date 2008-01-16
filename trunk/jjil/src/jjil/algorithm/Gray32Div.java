@@ -54,7 +54,7 @@ public class Gray32Div extends PipelineStage {
     {
         if (!(image instanceof Gray32Image)) {
             throw new IllegalArgumentException(
-                    "image should be a Gray32Image: " +
+                    Messages.getString("Gray32Div.0") + //$NON-NLS-1$
                     image.toString());
         }
         Gray32Image gray = (Gray32Image) image;
@@ -72,7 +72,7 @@ public class Gray32Div extends PipelineStage {
      */
     public void setDivisor(int nDivisor) throws IllegalArgumentException {
         if (nDivisor == 0) {
-            throw new IllegalArgumentException("attempted division by 0");
+            throw new IllegalArgumentException(Messages.getString("Gray32Div.1")); //$NON-NLS-1$
         }
         this.nDivisor = nDivisor;
     }

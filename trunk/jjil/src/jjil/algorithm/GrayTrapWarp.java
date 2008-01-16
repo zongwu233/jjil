@@ -139,19 +139,19 @@ public class GrayTrapWarp extends PipelineStage {
      */
     public void Push(Image image) throws IllegalArgumentException {
         if (!(image instanceof Gray8Image)) {
-            throw new IllegalArgumentException("Image should be gray: " +
+            throw new IllegalArgumentException(Messages.getString("GrayTrapWarp.0") + //$NON-NLS-1$
                     image.toString());
         }
         if (this.nColRightStart > image.getWidth() ||
             this.nColRightEnd > image.getWidth() ||
             this.nRowEnd > image.getHeight()) {
-            throw new IllegalArgumentException("Trapezoid bounds should" +
-                    "be inside the image " + image.toString() +
-                    ", but you have " + image.toString() + 
-                    ": column start = " +
-                    this.nColRightStart + ", column end = " + 
-                    this.nColRightEnd + ", row end = " +
-                    this.nRowEnd + ")");
+            throw new IllegalArgumentException(Messages.getString("GrayTrapWarp.1") + //$NON-NLS-1$
+                    Messages.getString("GrayTrapWarp.2") + image.toString() + //$NON-NLS-1$
+                    Messages.getString("GrayTrapWarp.3") + image.toString() +  //$NON-NLS-1$
+                    Messages.getString("GrayTrapWarp.4") + //$NON-NLS-1$
+                    this.nColRightStart + Messages.getString("GrayTrapWarp.5") +  //$NON-NLS-1$
+                    this.nColRightEnd + Messages.getString("GrayTrapWarp.6") + //$NON-NLS-1$
+                    this.nRowEnd + ")"); //$NON-NLS-1$
         }
         int fLeft = (this.nColLeftStart * 256);
         int fRight = (this.nColRightStart * 256);
@@ -205,23 +205,23 @@ public class GrayTrapWarp extends PipelineStage {
 	    int nColLeftEnd, 
 	    int nColRightEnd) throws IllegalArgumentException {
         if (nRowStart >= nRowEnd) {
-            throw new IllegalArgumentException("Starting row should be less" +
-                    " than ending row, but you have " + nRowStart + " >= " +
+            throw new IllegalArgumentException(Messages.getString("GrayTrapWarp.8") + //$NON-NLS-1$
+                    Messages.getString("GrayTrapWarp.9") + nRowStart + " >= " + //$NON-NLS-1$ //$NON-NLS-2$
                     nRowEnd);
         }
         if (nColLeftStart >= nColRightStart) {
-            throw new IllegalArgumentException("Starting column in first row" +
-                    " should be less than ending column, but you have " + 
-                    nColLeftStart + " >= " + nColRightStart);
+            throw new IllegalArgumentException(Messages.getString("GrayTrapWarp.11") + //$NON-NLS-1$
+                    Messages.getString("GrayTrapWarp.12") +  //$NON-NLS-1$
+                    nColLeftStart + " >= " + nColRightStart); //$NON-NLS-1$
         }
         if (nColLeftEnd >= nColRightEnd) {
-            throw new IllegalArgumentException("Starting column in last row" +
-                    " should be less than ending column, but you have " + 
-                    nColLeftEnd + " >= " + nColRightEnd);
+            throw new IllegalArgumentException(Messages.getString("GrayTrapWarp.14") + //$NON-NLS-1$
+                    Messages.getString("GrayTrapWarp.15") +  //$NON-NLS-1$
+                    nColLeftEnd + Messages.getString("GrayTrapWarp.16") + nColRightEnd); //$NON-NLS-1$
         }
         if (nRowStart < 0) {
-            throw new IllegalArgumentException("Starting row must be " +
-                    "non-negative, but you have " + nRowStart);
+            throw new IllegalArgumentException(Messages.getString("GrayTrapWarp.17") + //$NON-NLS-1$
+                    Messages.getString("GrayTrapWarp.18") + nRowStart); //$NON-NLS-1$
         }
         this.nRowStart = nRowStart;
         this.nRowEnd = nRowEnd;
@@ -245,9 +245,9 @@ public class GrayTrapWarp extends PipelineStage {
      * rightColStart,leftColEnd,rightColEnd)"
      */
     public String toString() {
-        return super.toString() + " (" + this.nRowStart + "," +
-                this.nRowEnd + "," + this.nColLeftStart + "," +
-                this.nColRightStart + "," + this.nColLeftEnd + "," +
-                this.nColRightEnd + ")";
+        return super.toString() + " (" + this.nRowStart + Messages.getString("Comma") + //$NON-NLS-1$ //$NON-NLS-2$
+                this.nRowEnd + Messages.getString("Comma") + this.nColLeftStart + Messages.getString("Comma") + //$NON-NLS-1$ //$NON-NLS-2$
+                this.nColRightStart + Messages.getString("Comma") + this.nColLeftEnd + Messages.getString("Comma") + //$NON-NLS-1$ //$NON-NLS-2$
+                this.nColRightEnd + ")"; //$NON-NLS-1$
     }
 }

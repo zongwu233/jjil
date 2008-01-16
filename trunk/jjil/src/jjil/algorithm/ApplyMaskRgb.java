@@ -53,8 +53,8 @@ public class ApplyMaskRgb {
             Gray8Image imMask) throws IllegalArgumentException {
         if (imRgb.getWidth() != imMask.getWidth() ||
             imRgb.getHeight() != imMask.getHeight()) {
-            throw new IllegalArgumentException("images should be the " +
-                    "same size, but the arguments are " + imRgb.toString() + " and " +
+            throw new IllegalArgumentException(Messages.getString("ApplyMaskRgb.0") + //$NON-NLS-1$
+                    Messages.getString("ApplyMaskRgb.1") + imRgb.toString() + Messages.getString("ApplyMaskRgb.2") + //$NON-NLS-1$ //$NON-NLS-2$
                     imMask.toString());
         }
         int[] rgbData = imRgb.getData();

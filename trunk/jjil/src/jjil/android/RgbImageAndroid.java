@@ -44,9 +44,9 @@ public class RgbImageAndroid  {
 	     	Bitmap bmp = toBitmap(rgb);
 	     	Bitmap.CompressFormat format = Bitmap.CompressFormat.JPEG;
 	     	szPath = szPath.toLowerCase();
-	     	if (szPath.endsWith("jpg") || szPath.endsWith("jpeg")) {
+	     	if (szPath.endsWith(Messages.getString("RgbImageAndroid.0")) || szPath.endsWith(Messages.getString("RgbImageAndroid.1"))) { //$NON-NLS-1$ //$NON-NLS-2$
      			format = Bitmap.CompressFormat.JPEG;
-	     	} else if (szPath.endsWith("png")) {
+	     	} else if (szPath.endsWith(Messages.getString("RgbImageAndroid.2"))) { //$NON-NLS-1$
      			format = Bitmap.CompressFormat.PNG;
      		}
 	     	bmp.compress(format, nQuality, os);

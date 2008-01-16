@@ -74,19 +74,19 @@ public class LinefitHough {
             int cMaxSlope, 
             int cSteps) throws IllegalArgumentException {
         if (cMaxY < cMinY) {
-            throw new IllegalArgumentException("cMinY should be less than " +
-                    "or equall to cMaxY, but you have " + cMinY + " > " + cMaxY);
+            throw new IllegalArgumentException(Messages.getString("LinefitHough.0") + //$NON-NLS-1$
+                    Messages.getString("LinefitHough.1") + cMinY + Messages.getString("LinefitHough.2") + cMaxY); //$NON-NLS-1$ //$NON-NLS-2$
         }
         this.cMinY = cMinY;
         this.cMaxY = cMaxY;
         if (cMaxSlope < cMinSlope) {
-            throw new IllegalArgumentException("cMinSlope should be less than " +
-                    "or equal to cMaxSlope, but you have " + cMinSlope + 
-                    " > " + cMaxSlope);
+            throw new IllegalArgumentException(Messages.getString("LinefitHough.3") + //$NON-NLS-1$
+                    Messages.getString("LinefitHough.4") + cMinSlope +  //$NON-NLS-1$
+                    Messages.getString("LinefitHough.5") + cMaxSlope); //$NON-NLS-1$
         }
         if (cSteps <= 0) {
-            throw new IllegalArgumentException("cSteps should be positive, " +
-                    "but you have " + cSteps);
+            throw new IllegalArgumentException(Messages.getString("LinefitHough.6") + //$NON-NLS-1$
+                    Messages.getString("LinefitHough.7") + cSteps); //$NON-NLS-1$
         }
         this.cMinSlope = cMinSlope;
         this.cMaxSlope = cMaxSlope;
@@ -178,8 +178,8 @@ public class LinefitHough {
         for (Enumeration e = points.elements(); e.hasMoreElements();) {
             Object o = e.nextElement(); 
             if (!(o instanceof Point)) {
-                throw new IllegalArgumentException("points should be a Vector" +
-                        " of points, but it contains " + o.toString());
+                throw new IllegalArgumentException(Messages.getString("LinefitHough.8") + //$NON-NLS-1$
+                        Messages.getString("LinefitHough.9") + o.toString()); //$NON-NLS-1$
             }
             Point p = (Point) o;
             AddPoint(p);
@@ -194,7 +194,7 @@ public class LinefitHough {
      * @return the string describing the current instance.
      */
     public String toString() {
-        return super.toString() + "(" + this.cMinY + "," + this.cMaxY + "," +
-                this.cMinSlope + "," + this.cMaxSlope + "," + this.cSteps + ")";
+        return super.toString() + "(" + this.cMinY + Messages.getString("Comma") + this.cMaxY + Messages.getString("Comma") + //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                this.cMinSlope + Messages.getString("Comma") + this.cMaxSlope + Messages.getString("Comma") + this.cSteps + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
 }

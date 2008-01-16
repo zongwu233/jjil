@@ -115,17 +115,17 @@ public class Sequence extends PipelineStage {
     {
         if (pFirst == null) {
             throw new IllegalStateException(
-                    "Sequence: " +
-                    "Pipeline is empty when an image is being pushed"
+                    Messages.getString("Sequence.0") + //$NON-NLS-1$
+                    Messages.getString("Sequence.1") //$NON-NLS-1$
                     );
         }
         pFirst.Push(i);
         if (pFirst.Empty()) {
             throw new IllegalStateException(
-                    "Sequence: " +
-                    "Pipeline stage " + 
+                    Messages.getString("Sequence.2") + //$NON-NLS-1$
+                    Messages.getString("Sequence.3") +  //$NON-NLS-1$
                     pFirst.toString() +
-                    " did not return a result");
+                    Messages.getString("Sequence.4")); //$NON-NLS-1$
         }
         if (pNext != null) {
             pNext.Push(pFirst.Front());
@@ -142,13 +142,13 @@ public class Sequence extends PipelineStage {
     public String toString()
     {
         if (this.pFirst == null) {
-            return "(null)";
+            return Messages.getString("Sequence.5"); //$NON-NLS-1$
         } else {
             if (this.pNext == null) {
-                return "(" + this.pFirst.toString() + ")";
+                return "(" + this.pFirst.toString() + ")"; //$NON-NLS-1$ //$NON-NLS-2$
             } else {
-                return "(" + this.pFirst.toString() +
-                        " " + this.pNext.toString() + ")";
+                return "(" + this.pFirst.toString() + //$NON-NLS-1$
+                        " " + this.pNext.toString() + ")"; //$NON-NLS-1$ //$NON-NLS-2$
             }
         }
     }

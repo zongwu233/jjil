@@ -57,19 +57,19 @@ public class IFftComplex32 extends PipelineStage {
      */
     public void Push(Image im) throws IllegalArgumentException {
         if (!(im instanceof Complex32Image)) {
-            throw new IllegalArgumentException(im.toString() + " should be " +
-                    "a Complex32Image");
+            throw new IllegalArgumentException(im.toString() + Messages.getString("IFftComplex32.0") + //$NON-NLS-1$
+                    Messages.getString("IFftComplex32.1")); //$NON-NLS-1$
         }
         // make sure the image width and height are powers of two
         int nWidth = im.getWidth();
         int nHeight = im.getHeight();
         if ((nWidth & (nWidth-1)) != 0) {
-            throw new IllegalArgumentException("image width must be a power " +
-                    "of two, not " + nWidth);
+            throw new IllegalArgumentException(Messages.getString("IFftComplex32.2") + //$NON-NLS-1$
+                    Messages.getString("IFftComplex32.3") + nWidth); //$NON-NLS-1$
         }
         if ((nHeight & (nHeight-1)) != 0) {
-            throw new IllegalArgumentException("image height must be a power " +
-                    "of two, not " + nHeight);
+            throw new IllegalArgumentException(Messages.getString("IFftComplex32.4") + //$NON-NLS-1$
+                    Messages.getString("IFftComplex32.5") + nHeight); //$NON-NLS-1$
         }
         // initialize FFT
         if (this.fft == null) {

@@ -50,8 +50,8 @@ public class GrayHistEq extends PipelineStage {
      */
     public void Push(Image image) throws IllegalArgumentException {
         if (!(image instanceof Gray8Image)) {
-            throw new IllegalArgumentException(image.toString() + " should " +
-                    "be a gray image");
+            throw new IllegalArgumentException(image.toString() + Messages.getString("GrayHistEq.0") + //$NON-NLS-1$
+                    Messages.getString("GrayHistEq.1")); //$NON-NLS-1$
         }
         Gray8Image gray = (Gray8Image) image;
         /* In order to avoid recreating histMatch every call, we recompute

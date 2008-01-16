@@ -154,10 +154,10 @@ public class MaskedGray32SubImgGen extends PipelineStage {
         // check to make sure nobody damaged it somehow
         if (!(super.imageOutput instanceof Gray32SubImage)) {
             throw new IllegalStateException(super.imageOutput.toString() + 
-                    " should be a Gray32SubImage");
+                    Messages.getString("MaskedGray32SubImgGen.0")); //$NON-NLS-1$
         }
         if (!advanceToNextSubImage()) {
-            throw new IllegalStateException("no subimage available in front");
+            throw new IllegalStateException(Messages.getString("MaskedGray32SubImgGen.1")); //$NON-NLS-1$
         }
         
         int[] dataIn = this.imageInput.getData();
@@ -196,11 +196,11 @@ public class MaskedGray32SubImgGen extends PipelineStage {
     public void Push(Image image) throws IllegalArgumentException {
         if (!(image instanceof Gray32MaskedImage)) {
             throw new IllegalArgumentException(image.toString() +
-                    " should be a Gray32MaskedImage, but isn't");
+                    Messages.getString("MaskedGray32SubImgGen.2")); //$NON-NLS-1$
         }
         if (image.getWidth() < this.nWidth || image.getHeight() < this.nHeight) {
             throw new IllegalArgumentException(image.toString() +
-                    " is too small");            
+                    Messages.getString("MaskedGray32SubImgGen.3"));             //$NON-NLS-1$
         }
         this.imageInput = (Gray32MaskedImage) image;
         // we want to find the largest integer l such that

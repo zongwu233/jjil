@@ -59,8 +59,8 @@ public class Gray8Rect extends PipelineStage {
      */
     public void Push(Image image) throws IllegalArgumentException {
         if (!(image instanceof Gray8Image)) {
-            throw new IllegalArgumentException(image.toString() + " should be " +
-                    "a Gray8Image");
+            throw new IllegalArgumentException(image.toString() + Messages.getString("Gray8Rect.0") + //$NON-NLS-1$
+                    Messages.getString("Gray8Rect.1")); //$NON-NLS-1$
         }
         Gray8Image input = (Gray8Image) image;
         byte[] data = input.getData();

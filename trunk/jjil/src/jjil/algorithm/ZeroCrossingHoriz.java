@@ -165,7 +165,7 @@ public class ZeroCrossingHoriz {
      * "jjil.algorithm.ZeroCrossingHoriz@xxx (number)"
      */
     public String toString() {
-        return super.toString() + " (" + this.wThreshold + ")";
+        return super.toString() + " (" + this.wThreshold + ")"; //$NON-NLS-1$ //$NON-NLS-2$
     }
     
     /** Changes the zero crossing threshold.
@@ -176,8 +176,8 @@ public class ZeroCrossingHoriz {
      */
     public void setThreshold(int wThreshold) throws IllegalArgumentException {
         if (wThreshold < 0) {
-            throw new IllegalArgumentException("Threshold must be " +
-                    "greater than or equal to zero, not " + wThreshold);
+            throw new IllegalArgumentException(Messages.getString("ZeroCrossingHoriz.2") + //$NON-NLS-1$
+                    Messages.getString("ZeroCrossingHoriz.3") + wThreshold); //$NON-NLS-1$
         }
         this.wThreshold = wThreshold;
     }

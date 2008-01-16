@@ -68,7 +68,7 @@ public class BinaryHeap implements PriorityQueue {
      * by the insert method for BinaryHeap.
      */
     public void decreaseKey( PriorityQueue.Position p, Comparable newVal ) {
-        throw new UnsupportedOperationException( "Cannot use decreaseKey for binary heap" );
+        throw new UnsupportedOperationException( Messages.getString("BinaryHeap.0") ); //$NON-NLS-1$
     }
     
     /**
@@ -78,7 +78,7 @@ public class BinaryHeap implements PriorityQueue {
      */
     public Comparable findMin( ) {
         if( isEmpty( ) )
-            throw new UnderflowException( "Empty binary heap" );
+            throw new UnderflowException( Messages.getString("BinaryHeap.1") ); //$NON-NLS-1$
         return array[ 1 ];
     }
     
@@ -181,12 +181,12 @@ public class BinaryHeap implements PriorityQueue {
         
         for( i = 1; i < numItems; i++ )
             if( ((Integer)( h1.deleteMin( ) )).intValue( ) != i )
-                System.out.println( "Oops! " + i );
+                System.out.println( Messages.getString("BinaryHeap.2") + i ); //$NON-NLS-1$
         
         BinaryHeap h2 = new BinaryHeap( items );
         for( i = 1; i < numItems; i++ )
             if( ((Integer)( h2.deleteMin( ) )).intValue( ) != i )
-                System.out.println( "Oops! " + i );
+                System.out.println( Messages.getString("BinaryHeap.3") + i ); //$NON-NLS-1$
     }
 }
 

@@ -54,11 +54,11 @@ public class Fft1d {
     public Complex[] fft(Complex[] x) throws IllegalArgumentException {
         int N = x.length;
         if ((N & (N-1)) != 0) {
-            throw new IllegalArgumentException("array length must be a power " +
-                    "of 2, not " + N);
+            throw new IllegalArgumentException(Messages.getString("Fft1d.0") + //$NON-NLS-1$
+                    Messages.getString("Fft1d.1") + N); //$NON-NLS-1$
         }
         if (N > this.nMaxWidth) {
-            throw new IllegalArgumentException("array length " + N + " too large");
+            throw new IllegalArgumentException(Messages.getString("Fft1d.2") + N + Messages.getString("Fft1d.3")); //$NON-NLS-1$ //$NON-NLS-2$
         }
         // compute log2 N
         int nLog = 1;
@@ -147,8 +147,8 @@ public class Fft1d {
      */
     public void setMaxWidth(int N) throws IllegalArgumentException {
         if ((N & (N-1)) != 0) {
-            throw new IllegalArgumentException("maximum size must be a " +
-                    "power of 2, not " + N);
+            throw new IllegalArgumentException(Messages.getString("Fft1d.4") + //$NON-NLS-1$
+                    Messages.getString("Fft1d.5") + N); //$NON-NLS-1$
         }
         // we precompute the coefficients (complex roots of unity)
         // used in the FFT calculation
@@ -180,7 +180,7 @@ public class Fft1d {
      * @return The name and maximum width of this instance.
      */
     public String toString() {
-        return super.toString() + "(" + this.nMaxWidth + ")";
+        return super.toString() + "(" + this.nMaxWidth + ")"; //$NON-NLS-1$ //$NON-NLS-2$
     }
 }
 

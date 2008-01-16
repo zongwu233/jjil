@@ -52,7 +52,7 @@ public class GrayThreshold extends PipelineStage {
     {
         if (!(image instanceof Gray8Image)) {
             throw new IllegalArgumentException(
-                    "image should be gray: " +
+                    Messages.getString("GrayThreshold.0") + //$NON-NLS-1$
                     image.toString());
         }
         Gray8Image gray = (Gray8Image) image;
@@ -65,7 +65,7 @@ public class GrayThreshold extends PipelineStage {
     }
     
     public String toString() {
-    	return super.toString() + "(" + this.nThreshold + ")";
+    	return super.toString() + "(" + this.nThreshold + ")"; //$NON-NLS-1$ //$NON-NLS-2$
     }
 
 }

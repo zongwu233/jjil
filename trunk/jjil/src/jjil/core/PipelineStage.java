@@ -68,8 +68,8 @@ public abstract class PipelineStage
     {
         if (!this.fReady) {
             throw new IllegalStateException(
-                    "PipelineStage: " +
-                    "No image is available in pipeline stage."
+                    Messages.getString("PipelineStage.0") + //$NON-NLS-1$
+                    Messages.getString("PipelineStage.1") //$NON-NLS-1$
                     );
         }
         Image imageResult = this.imageOutput;

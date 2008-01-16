@@ -85,15 +85,15 @@ public class Ladder extends PipelineStage {
         pipeSecond.Push(imageCopy);
         if (pipeFirst.Empty()) {
             throw new IllegalStateException(
-                    "Ladder: " +
-                    "Pipeline " + pipeFirst.toString() +
-                    " did not produce an image");
+                    Messages.getString("Ladder.0") + //$NON-NLS-1$
+                    Messages.getString("Ladder.1") + pipeFirst.toString() + //$NON-NLS-1$
+                    Messages.getString("Ladder.2")); //$NON-NLS-1$
         }
         if (pipeSecond.Empty()) {
             throw new IllegalStateException(
-                    "Ladder: " +
-                    "Pipeline " + pipeSecond.toString() +
-                    " did not produce an image");
+                    Messages.getString("Ladder.3") + //$NON-NLS-1$
+                    Messages.getString("Ladder.4") + pipeSecond.toString() + //$NON-NLS-1$
+                    Messages.getString("Ladder.5")); //$NON-NLS-1$
         }
         super.setOutput(
                 join.DoJoin(pipeFirst.Front(), pipeSecond.Front())

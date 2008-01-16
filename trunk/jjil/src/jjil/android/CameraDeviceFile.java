@@ -43,9 +43,9 @@ public class CameraDeviceFile {
 		
 		public String toString() {
 			return super.toString() + 
-				"(" + this.nFile + "," + 
-					this.nWidth + "x" + 
-					this.nHeight + ")";
+				"(" + this.nFile + Messages.getString("CameraDeviceFile.1") +  //$NON-NLS-1$ //$NON-NLS-2$
+					this.nWidth + Messages.getString("CameraDeviceFile.2") +  //$NON-NLS-1$
+					this.nHeight + ")"; //$NON-NLS-1$
 		}
 	}
 	private CaptureParams captParams;

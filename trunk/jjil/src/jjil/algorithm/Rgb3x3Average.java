@@ -55,8 +55,8 @@ public class Rgb3x3Average extends PipelineStage {
         if (!(imageInput instanceof RgbImage)) 
         {
             throw new IllegalArgumentException(
-                    "Rgb3x3Average: " +
-                    "Input is not an RGB image");
+                    Messages.getString("Rgb3x3Average.0") + //$NON-NLS-1$
+                    Messages.getString("Rgb3x3Average.1")); //$NON-NLS-1$
         }
         
         int cWidth  = imageInput.getWidth();
