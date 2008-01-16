@@ -1,6 +1,5 @@
 package barcode;
 
-import java.awt.Rectangle;
 
 import jjil.algorithm.Gray2Rgb;
 import jjil.algorithm.GrayAbs;
@@ -17,6 +16,7 @@ import jjil.core.Sequence;
 import jjil.debug.Debug;
 
 public class DetectBarcode {
+	private static final boolean bDebug = true;
 	int nMinArea;
 	Rect rDetected;
 	
@@ -58,18 +58,21 @@ public class DetectBarcode {
 		seq.Add(new GrayHorizSimpleEdge());
 		seq.Add(new GrayAbs());
 		seq.Add(new GrayHistEq());
-		seq.Add(new GrayThreshold(88));
+		seq.Add(new GrayThreshold(96));
 		seq.Push(rgb);
 		GrayConnComp gcc = new GrayConnComp();
 		Image imThresh = seq.Front();
 		Gray2Rgb g2r = new Gray2Rgb();
 		g2r.Push(imThresh);
-		Debug debug = new Debug();
-		debug.toFile((RgbImage)g2r.Front(), "test.jpg");
+		if (DetectBarcode.bDebug) {
+			Debug debug = new Debug();
+			debug.toFile((RgbImage)g2r.Front(), "test.jpg");
+		}
 		gcc.Push(imThresh);
 		if (gcc.getComponents() == 0) {
 			return false;
 		}
+		// get largest component
 		Rect rReduced = gcc.getComponent(0);
 		// we detected the barcode at reduced resolution
 		// for speed. Stretch the rectangle back to its
@@ -81,16 +84,6 @@ public class DetectBarcode {
 				(rReduced.getHeight() * rgb.getHeight()) / nReducedHeight
 				);
 		if (this.rDetected.getArea() < this.nMinArea) {
-			return false;
-		}
-		ReadBarcode rb = new ReadBarcode();
-		rb.Push(
-				rgb, 
-				rDetected.getLeft() + 60, 
-				rDetected.getTop() + 80, 
-				rDetected.getWidth() - 100, 
-				rDetected.getHeight() - 200);
-		if (!rb.getSuccessful()) {
 			return false;
 		}
 		return true;
