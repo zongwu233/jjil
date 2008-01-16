@@ -232,7 +232,7 @@ public class BarcodeReaderEan13 implements BarcodeReader {
          */
         public CodeConv getCodeAt(int i) {
             if (i < 0 || i >= this.v.size()) {
-                throw new ArrayIndexOutOfBoundsException("getCodeAt");
+                throw new ArrayIndexOutOfBoundsException("getCodeAt"); //$NON-NLS-1$
             }
             return (CodeConv) this.v.elementAt(i);
         }
@@ -251,7 +251,7 @@ public class BarcodeReaderEan13 implements BarcodeReader {
          */
         public void removeCodeAt(int i) {
             if (i < 0 || i >= this.v.size()) {
-                throw new ArrayIndexOutOfBoundsException("getCodeAt");
+                throw new ArrayIndexOutOfBoundsException("getCodeAt"); //$NON-NLS-1$
             }
             this.v.removeElementAt(i);
         }
@@ -290,6 +290,7 @@ public class BarcodeReaderEan13 implements BarcodeReader {
     /** Used to store the number of times each barcode is seen as we scan the
      * image.
      */
+    private CodeHash chBarCodes; 
     private CodeHash chLeft; // for left barcode half
     private CodeHash chRight; // for right barcode half
     
@@ -308,6 +309,14 @@ public class BarcodeReaderEan13 implements BarcodeReader {
      * digits in the left half of the barcode.
      */
     private int nFirstDigit;
+    
+    /**
+     * rgnRunningSumLeft and rgnRunningSumRight are sums of the image used
+     * to choose the best barcodes when there is more than one barcode which
+     * could match the image and passes the check digit test.
+     */
+    int[] rgnRunningSumLeft;
+    int[] rgnRunningSumRight;
     
     /** rgxnLeftParity is the parity that is used to recognize the digits after
      * the first in the left side code.
@@ -448,7 +457,7 @@ public class BarcodeReaderEan13 implements BarcodeReader {
             int cPixelsPerBar, 
             int dCol) {
         if (image.length < dCol + rgWeights.length*cPixelsPerBar) {
-            throw new ArrayIndexOutOfBoundsException("Convolve");
+            throw new ArrayIndexOutOfBoundsException("Convolve"); //$NON-NLS-1$
         }
         int wConv = 0;
         for (int j=0; j<rgWeights.length; j++) {
@@ -478,7 +487,7 @@ public class BarcodeReaderEan13 implements BarcodeReader {
         throws IllegalArgumentException {
         if (!(image instanceof Gray8Image)) {
             throw new IllegalArgumentException(image.toString() +
-                    " should be a gray 8-bit image");
+                    Messages.getString("BarcodeReaderEan13.3")); //$NON-NLS-1$
         }
         Gray8Image gray = (Gray8Image) image;
         // number of pixels per bar
@@ -577,14 +586,26 @@ public class BarcodeReaderEan13 implements BarcodeReader {
         throws IllegalArgumentException {
         if (!(image instanceof Gray8Image)) {
             throw new IllegalArgumentException(image.toString() +
-                    " should be a gray 8-bit image");
+                    Messages.getString("BarcodeReaderEan13.4")); //$NON-NLS-1$
         }
         Gray8Image gray = (Gray8Image) image;
         // estimate the barcodes on the left and right side
         // for each row in the image and store them into hash
         // tables
         EstimateBarcodes(gray, cYLeft, cYRight, wSlopeLeft, wSlopeRight);
-        return 0;
+        // scan the barcodes and find the most likely one. This is our
+        // result
+        int nMostCommon = Integer.MIN_VALUE;
+        this.szBarCode = null;
+        for (Enumeration e = this.chBarCodes.keys(); e.hasMoreElements();) {
+        	String szBarcode = (String) e.nextElement();
+        	int nOccurrence = this.chBarCodes.get(szBarcode);
+        	if (nOccurrence > nMostCommon) {
+        		this.szBarCode = szBarcode;
+        		nMostCommon = nOccurrence;
+        	}
+        }
+        return nMostCommon;
     }
 
     /**
@@ -606,13 +627,15 @@ public class BarcodeReaderEan13 implements BarcodeReader {
     		Gray2Rgb g2r = new Gray2Rgb();
     		g2r.Push(image);
     		Debug debug = new Debug();
-    		debug.toFile((RgbImage) g2r.Front(), "barcode.png");
+    		debug.toFile((RgbImage) g2r.Front(), "barcode.png"); //$NON-NLS-1$
     	}
         this.chLeft = new CodeHash();
         this.chRight = new CodeHash();
         int cPixelsPerBar = image.getWidth() / TotalWidth;
         int wSumLeftEdge = 0;
         int wSumRightEdge = 0;
+        this.rgnRunningSumLeft = null;
+        this.rgnRunningSumRight = null;
         for (int dRow = 0; dRow<image.getHeight(); dRow++) {
         	// estimate position of left edge of barcode
         	// this will be the position of the first 1 in the
@@ -663,16 +686,18 @@ public class BarcodeReaderEan13 implements BarcodeReader {
             // stretch the left and right sides of the barcode so the
             // pixels are an exact multiple of the number of elementary
             // bars between the measured positions
+            int nLeftSideWidth = LeftWidth + LeftDigits + DigitWidth + 2;
             byte bLeft[] = Stretch(
             		bData, 
             		dLeftOffset, 
             		dMidOffset, 
-            		LeftWidth + LeftDigits + DigitWidth + 2);
+            		nLeftSideWidth);
+            int nRightSideWidth = 3 + RightDigits * DigitWidth + 1;
             byte bRight[] = Stretch(
             		bData, 
             		dMidOffset, 
             		dRightOffset, 
-            		3 + RightDigits * DigitWidth + 1);
+            		nRightSideWidth);
             // if we know the implied first digit we can call a different
             // version of EstimateLeftCode that takes that digits as
             // the last parameter. This will significantly improve accuracy
@@ -684,15 +709,30 @@ public class BarcodeReaderEan13 implements BarcodeReader {
             // with conventional cellphone optics and resolution. The only
             // option is to use better optics or get more pixels and
             // greater distance to the barcode, given better focus.
-            String code =  EstimateLeftCode(bLeft);
-            if (code == null) {
+            String szLeftCode =  EstimateLeftCode(bLeft);
+            if (szLeftCode == null) {
                 continue; // parity test didn't work out
             }
-            int c = this.chLeft.get(code);
-            this.chLeft.put(code, c+1);
-            code = EstimateRightCode(bRight);
-            c = this.chRight.get(code);
-            this.chRight.put(code, c+1);
+            // sum the image for this row into the running sum used
+            // for breaking ties between barcodes
+            this.rgnRunningSumLeft = SumStretchedImage(
+            		bLeft, 
+            		nLeftSideWidth, 
+            		this.rgnRunningSumLeft);
+            int c = this.chLeft.get(szLeftCode);
+            this.chLeft.put(szLeftCode, c+1);
+            String szRightCode = EstimateRightCode(bRight);
+            this.rgnRunningSumRight = SumStretchedImage(
+            		bRight,
+            		nRightSideWidth,
+            		this.rgnRunningSumRight);
+            c = this.chRight.get(szRightCode);
+            this.chRight.put(szRightCode, c+1);
+            String szCode = szLeftCode + szRightCode;
+            if (VerifyCheckDigit(szCode)) {
+	            c = this.chBarCodes.get(szCode);
+	            this.chBarCodes.put(szCode, c + 1);
+            }            
         }
         this.dAvgLeftEdge = wSumLeftEdge / image.getHeight();
         return true;
@@ -722,10 +762,11 @@ public class BarcodeReaderEan13 implements BarcodeReader {
     		Gray2Rgb g2r = new Gray2Rgb();
     		g2r.Push(image);
     		Debug debug = new Debug();
-    		debug.toFile((RgbImage) g2r.Front(), "barcode.png");
+    		debug.toFile((RgbImage) g2r.Front(), "barcode.png"); //$NON-NLS-1$
     	}
         this.chLeft = new CodeHash();
         this.chRight = new CodeHash();
+        this.chBarCodes = new CodeHash();
         int wSumLeftEdge = 0;
         int wSumRightEdge = 0;
         for (int dRow = 0; dRow<image.getHeight(); dRow++) {
@@ -766,7 +807,7 @@ public class BarcodeReaderEan13 implements BarcodeReader {
             	EstimateRightEdge(
             			image, 
             			dRow,
-            			nRight - nWidth / 4,
+            			nRight - nWidth / 8,
             			nRight,
             			nWidth);
             if (dRightOffset < 0 || dRightOffset <= dMidOffset) {
@@ -804,15 +845,20 @@ public class BarcodeReaderEan13 implements BarcodeReader {
             // with conventional cellphone optics and resolution. The only
             // option is to use better optics or get more pixels and
             // greater distance to the barcode, given better focus.
-            String code =  EstimateLeftCode(bLeft);
-            if (code == null) {
+            String szLeftCode =  EstimateLeftCode(bLeft);
+            if (szLeftCode == null) {
                 continue; // parity test didn't work out
             }
-            int c = this.chLeft.get(code);
-            this.chLeft.put(code, c+1);
-            code = EstimateRightCode(bRight);
-            c = this.chRight.get(code);
-            this.chRight.put(code, c+1);
+            int c = this.chLeft.get(szLeftCode);
+            this.chLeft.put(szLeftCode, c+1);
+            String szRightCode = EstimateRightCode(bRight);
+            c = this.chRight.get(szRightCode);
+            this.chRight.put(szRightCode, c+1);
+            String szCode = szLeftCode + szRightCode;
+            if (VerifyCheckDigit(szCode)) {
+	            c = this.chBarCodes.get(szCode);
+	            this.chBarCodes.put(szCode, c + 1);
+            }            
         }
         this.dAvgLeftEdge = wSumLeftEdge / image.getHeight();
         return true;
@@ -844,7 +890,7 @@ public class BarcodeReaderEan13 implements BarcodeReader {
         // the width of the left pattern + the width of the left
         // digits + 2 for the two bars detected in the middle pattern
         int cPixelsPerBar = dWidth / (MidOffset + 2);
-        String szCode = "";
+        String szCode = ""; //$NON-NLS-1$
         // for recording the parity we find in the left side barcode
         int nParity = 0;
         // Estimate the first digit
@@ -971,7 +1017,7 @@ public class BarcodeReaderEan13 implements BarcodeReader {
         byte[] bRight) {
     	int dWidth = bRight.length;
         int cPixelsPerBar = dWidth / (3 + RightDigits * DigitWidth + 1);
-        String szCode = "";
+        String szCode = ""; //$NON-NLS-1$
         // dCol is the position of the current digit
         int dCol = cPixelsPerBar * 3;
         for (int i=0; i<RightDigits; i++) {
@@ -1020,7 +1066,7 @@ public class BarcodeReaderEan13 implements BarcodeReader {
         int wBestConv = Integer.MIN_VALUE;
         int dBestPos = -1;
         byte[] in = image.getData();
-        nLeft = Math.max(0, nLeft - cExp);
+        nLeft = Math.max(0, nLeft - 2 * cExp);
         for (int dCol = nLeft + cExp; dCol < nRight; dCol++) {
             int wConv = 0;
             for (int j=0; j<cExp; j++) {
@@ -1090,6 +1136,7 @@ public class BarcodeReaderEan13 implements BarcodeReader {
         int wBestConv = Integer.MIN_VALUE;
         int dBestPos = -1;
         byte[] in = image.getData();
+        nRight = Math.min(image.getWidth(), nRight + 2*cExp);
         for (int dCol = nRight - cExp * 3; dCol > nLeft; dCol--) {
             int wConv = 0;
             for (int j=0; j<cExp; j++) {
@@ -1136,7 +1183,7 @@ public class BarcodeReaderEan13 implements BarcodeReader {
      * @return "UPC" -- the name of this barcode reader.
      */
     public String getName() {
-        return "EAN13";
+        return "EAN13"; //$NON-NLS-1$
     }
     
     
@@ -1302,7 +1349,8 @@ public class BarcodeReaderEan13 implements BarcodeReader {
     	byte[] bResult;
     	if (dWidth % dTargetWidth == 0) {
     		bResult = new byte[dTargetWidth];
-    		System.arraycopy(bInput, dLeft, bResult, 0, dWidth);
+    		System.arraycopy(bInput, dLeft, bResult, 0, dTargetWidth);
+    		return bResult;
     	}
     	// compute smallest multiple of dTargetWidth > dWidth
     	// integer division in Java truncates
@@ -1321,6 +1369,41 @@ public class BarcodeReaderEan13 implements BarcodeReader {
     			bRight * nFrac) / dTargetWidth);
     	}
     	return bResult;
+    }
+    
+    
+    /**
+     * Calculates a running sum of rows of an image. The rows are all
+     * a multiple of some fixed number in length. The sum is formed by
+     * first shrinking the input row to length equal to the fixed length
+     * then adding all the different rows together. <br>
+     * The idea is to use this function over and over to form an estimate
+     * of the barcode image and then to use the correlation of the barcode
+     * with this image as a tiebreaker when choosing the best barcode.
+     * @param bInput -- input data to be summed
+     * @param nLength -- the target length. bInput.length % nLength == 0.
+     * @param nSum -- the prior running sum, also the new sum. Initialized
+     * if null.
+     * @return the new sum. 
+     */
+    private int[] SumStretchedImage(byte[] bInput, int nLength, int[] nSum) 
+    	throws IllegalArgumentException
+    {
+    	if (bInput.length % nLength != 0) {
+    		throw new IllegalArgumentException(
+    				Messages.getString("BarcodeReaderEan13.5") + bInput.length +
+    				Messages.getString("BarcodeReaderEan13.6") + nLength);
+    	}
+    	if (nSum == null) {
+    		nSum = new int[nLength];
+    	}
+    	int nFactor = bInput.length / nLength;
+    	for (int i=0; i<nLength; i++) {
+    		for (int j=0; j<nFactor; j++) {
+    			nSum[i] += bInput[i*nFactor + j];    			
+    		}
+    	}
+    	return nSum;
     }
     
     private byte[] ThresholdBars(Gray8Image image, int dRow, int dCol, int cPixelsPerBar) {
@@ -1359,22 +1442,21 @@ public class BarcodeReaderEan13 implements BarcodeReader {
      */
     private static boolean VerifyCheckDigit(String digits) {
         // compute check digit
-        // add even numbered digits
-        int evenSum = 0;
-        int i;
-        for (i=0;i<LeftDigits+RightDigits;i+=2) {
-                evenSum += Character.digit(digits.charAt(i), 10);
+        // add odd digits
+    	int nOddSum = 0;
+    	for (int i=1; i<digits.length()-1; i+=2) {
+            nOddSum += Character.digit(digits.charAt(i), 10);
         }
-        // add odd numbered digits
-        int oddSum = 0;
-        for (i=1;i<LeftDigits+RightDigits-1;i+=2) {
-                oddSum += Character.digit(digits.charAt(i), 10);
+        // add even digits
+        int nEvenSum = 0;
+        for (int i=0;i<digits.length()-1; i+=2) {
+            nEvenSum += Character.digit(digits.charAt(i), 10);
         }
         // compute even digit sum * 3 + odd digit sum;
-        int total = evenSum*3+oddSum;
+        int nTotal = nOddSum*3 + nEvenSum;
         // check digit is this sum subtracted from the next higher multiple of 10
-        int checkDigit = (total/10 + 1) * 10 - total;
+        int checkDigit = (nTotal/10 + 1) * 10 - nTotal;
         return Character.digit(
-                digits.charAt(LeftDigits+RightDigits-1), 10) == checkDigit;
+                digits.charAt(digits.length()-1), 10) == checkDigit;
     }
 }

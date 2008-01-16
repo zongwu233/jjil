@@ -232,7 +232,7 @@ public class BarcodeReaderUpc implements BarcodeReader {
          */
         public CodeConv getCodeAt(int i) {
             if (i < 0 || i >= this.v.size()) {
-                throw new ArrayIndexOutOfBoundsException("getCodeAt");
+                throw new ArrayIndexOutOfBoundsException("getCodeAt"); //$NON-NLS-1$
             }
             return (CodeConv) this.v.elementAt(i);
         }
@@ -251,7 +251,7 @@ public class BarcodeReaderUpc implements BarcodeReader {
          */
         public void removeCodeAt(int i) {
             if (i < 0 || i >= this.v.size()) {
-                throw new ArrayIndexOutOfBoundsException("getCodeAt");
+                throw new ArrayIndexOutOfBoundsException("getCodeAt"); //$NON-NLS-1$
             }
             this.v.removeElementAt(i);
         }
@@ -411,7 +411,7 @@ public class BarcodeReaderUpc implements BarcodeReader {
             int cCols,
             int dCol) {
         if (image.length <= dRow*cCols + dCol + rgWeights.length*cPixelsPerBar) {
-            throw new ArrayIndexOutOfBoundsException("Convolve");
+            throw new ArrayIndexOutOfBoundsException("Convolve"); //$NON-NLS-1$
         }
         int wConv = 0;
         for (int j=0; j<rgWeights.length; j++) {
@@ -441,7 +441,7 @@ public class BarcodeReaderUpc implements BarcodeReader {
         throws IllegalArgumentException {
         if (!(image instanceof Gray8Image)) {
             throw new IllegalArgumentException(image.toString() +
-                    " should be a gray 8-bit image");
+                    Messages.getString("BarcodeReaderUpc.3")); //$NON-NLS-1$
         }
         Gray8Image gray = (Gray8Image) image;
         // number of pixels per bar
@@ -576,7 +576,7 @@ public class BarcodeReaderUpc implements BarcodeReader {
         int dRow, 
         int dCol) {
         int cPixelsPerBar = image.getWidth() / TotalWidth;
-        String szCode = "";
+        String szCode = ""; //$NON-NLS-1$
         for (int i=0; i<Digits; i++) {
             // try all digits
             int nBestDigit = -1;
@@ -622,7 +622,7 @@ public class BarcodeReaderUpc implements BarcodeReader {
         int dRow, 
         int dCol) {
         int cPixelsPerBar = image.getWidth() / TotalWidth;
-        String szCode = "";
+        String szCode = ""; //$NON-NLS-1$
         for (int i=0; i<Digits; i++) {
             // try all digits
             int nBestDigit = -1;
@@ -721,7 +721,7 @@ public class BarcodeReaderUpc implements BarcodeReader {
      * @return "UPC" -- the name of this barcode reader.
      */
     public String getName() {
-        return "UPC";
+        return Messages.getString("UPC"); //$NON-NLS-1$
     }
     
     

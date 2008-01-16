@@ -38,6 +38,7 @@ import jjil.algorithm.ZeroCrossingHoriz;
 import jjil.core.Gray8Image;
 import jjil.core.Image;
 import jjil.core.Point;
+import jjil.core.Rect;
 import jjil.core.RgbImage;
 import jjil.core.Sequence;
 import jjil.debug.Debug;
@@ -53,6 +54,7 @@ public class ReadBarcode {
     private Gray8Image imageCropped;
     private Gray8Image imageEdge;
     private Gray8Image imageRectified;
+    private Rect rectBarcode;
     private String szBestCode;
     private String szBestName;
     private int wBestMatch;
@@ -105,9 +107,15 @@ public class ReadBarcode {
         Image imageResult = seq.Front();
         if (!(imageResult instanceof Gray8Image)) {
             throw new IllegalStateException(imageResult.toString() +
-                    " should be an 8-bit gray image");
+                    Messages.getString("ReadBarcode.0")); //$NON-NLS-1$
         }
         this.imageCropped = (Gray8Image) imageResult;
+        {   Debug debug = new Debug();
+        	Gray2Rgb g2r = new Gray2Rgb();
+        	g2r.Push(this.imageCropped);
+        	RgbImage rgb = (RgbImage) g2r.Front();
+        	debug.toFile(rgb, "cropped.png"); //$NON-NLS-1$
+        }
         /* Then do edge detection. The cWidth of the Canny operator is set
          * based on the cropped cWidth, which is supposed to be the
          * barcode cWidth.
@@ -122,9 +130,16 @@ public class ReadBarcode {
         imageResult = canny.Front();
         if (!(imageResult instanceof Gray8Image)) {
             throw new IllegalStateException(imageResult.toString() +
-                    " should be an 8-bit gray image");
+                    Messages.getString("ReadBarcode.2")); //$NON-NLS-1$
         }
         this.imageEdge = (Gray8Image) imageResult;
+        {   
+        	Debug debug = new Debug();
+	    	Gray2Rgb g2r = new Gray2Rgb();
+	    	g2r.Push(this.imageEdge);
+	    	RgbImage rgb = (RgbImage) g2r.Front();
+	    	debug.toFile(rgb, "edges.png"); //$NON-NLS-1$
+	    }
     }
     
     private static Image CropAndStretchImage(
@@ -183,7 +198,7 @@ public class ReadBarcode {
         	Debug debug = new Debug();
         	Gray2Rgb g2r = new Gray2Rgb();
         	g2r.Push(this.imageEdge);
-        	debug.toFile((RgbImage) g2r.Front(), "edges.png");
+        	debug.toFile((RgbImage) g2r.Front(), "edges.png"); //$NON-NLS-1$
         }
         return true;
      }
@@ -305,12 +320,12 @@ public class ReadBarcode {
      * @throws java.lang.IllegalArgumentException if the input image is not
      * an 8-bit gray image.
      */
-    public void Push(
-            Image image, 
-            int dTopLeftX, 
-            int dTopLeftY,
-            int cWidth, 
-            int cHeight) throws IllegalArgumentException {
+    public void Push(Image image) throws IllegalArgumentException {
+        int dTopLeftX = this.rectBarcode.getLeft();
+        int dTopLeftY = this.rectBarcode.getTop();
+        int cWidth = this.rectBarcode.getWidth();
+        int cHeight = this.rectBarcode.getHeight();
+        
         this.szBestCode = null;
         this.szBestName = null;
         this.wBestMatch = Integer.MIN_VALUE;
@@ -318,9 +333,9 @@ public class ReadBarcode {
             dTopLeftY < 0 || dTopLeftY > image.getHeight() ||
             cWidth < 0 || dTopLeftX + cWidth > image.getWidth() ||
             cHeight < 0 || dTopLeftY + cHeight > image.getHeight()) {
-            throw new IllegalArgumentException("Cropping rectangle " +
-                    "(" + dTopLeftX + "," + dTopLeftY + "," + cWidth + "," +
-                    cHeight + ") doesn't lie within the image " + 
+            throw new IllegalArgumentException(Messages.getString("ReadBarcode.5") + //$NON-NLS-1$
+                    "(" + dTopLeftX + Messages.getString("Comma") + dTopLeftY + Messages.getString("Comma") + cWidth + Messages.getString("Comma") + //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+                    cHeight + Messages.getString("ReadBarcode.10") +  //$NON-NLS-1$
                     image.toString());
         }
         /* Convert the RGB input image to gray, crop, and detect edges. This
@@ -335,15 +350,16 @@ public class ReadBarcode {
         }
         /* Rectify the barcode image so the left and right edges are vertical
          */
-        RectifyBarcode();
+        // RectifyBarcode();
         /* Find the exact left and right edges of the barcode in the rectified
          * image. Initializes dBestLeftPos and dBestRightPos.
          */
-        FindPreciseBarcodeLimits();
-        if (this.dBestLeftPos == -1 || this.dBestRightPos == -1) {
-            return;
-        }
+        // FindPreciseBarcodeLimits();
+        // if (this.dBestLeftPos == -1 || this.dBestRightPos == -1) {
+        //     return;
+        // }
         BarcodeReaderEan13 reader = new BarcodeReaderEan13();
+        /*
         GrayCrop gc = new GrayCrop(dBestLeftPos, 
         		0,
         		dBestRightPos - dBestLeftPos,
@@ -357,7 +373,13 @@ public class ReadBarcode {
         	debug.toFile((RgbImage) g2r.Front(), "rectCropped.png");
         	
         }
-        int wGoodness = reader.Decode(this.imageCropped, this.cYLeft, this.cYRight, this.wSlopeLeft, this.wSlopeRight);
+        */
+        int wGoodness = reader.Decode(
+        		this.imageCropped, 
+        		this.cYLeft, 
+        		this.cYRight, 
+        		this.wSlopeLeft, 
+        		this.wSlopeRight);
 		if (reader.getCode() != null && wGoodness > this.wBestMatch) {
 		    this.szBestCode = reader.getCode();
 		    this.wBestMatch = wGoodness;
@@ -400,15 +422,19 @@ public class ReadBarcode {
         Image imageResult = warp.Front();
         if (!(imageResult instanceof Gray8Image)) {
             throw new IllegalStateException(imageResult.toString() +
-                    " should be an 8-bit gray image");
+                    Messages.getString("ReadBarcode.11")); //$NON-NLS-1$
         }
         {
         	Debug debug = new Debug();
         	Gray2Rgb g2r = new Gray2Rgb();
         	g2r.Push(imageResult);
-        	debug.toFile((RgbImage) g2r.Front(), "rectified.png");
+        	debug.toFile((RgbImage) g2r.Front(), "rectified.png"); //$NON-NLS-1$
         }
         this.imageRectified = (Gray8Image) imageResult;
+    }
+    
+    public void setRect(Rect rect) {
+    	this.rectBarcode = rect;
     }
     
     private void TryWidth(int cInputWidth, int cJitter, BarcodeReader reader)
@@ -431,7 +457,7 @@ public class ReadBarcode {
         {
         	Gray2Rgb g2r = new Gray2Rgb();
         	g2r.Push(imageStretched);
-        	new Debug().toFile((RgbImage) g2r.Front(), "stretched.png");
+        	new Debug().toFile((RgbImage) g2r.Front(), "stretched.png"); //$NON-NLS-1$
         }
         // now look for a barcode in the stretched rectangle at positions 0..2*cJitter-1
         // (in the input image) which must be scaled by cTargetWidth / cInputWidth in
@@ -452,10 +478,25 @@ public class ReadBarcode {
             if (wZeroes[i] != null) {
                 if (wZeroes[i].length > 10) {
                     if (oLeft) {
-                        vResult.addElement(new Point(i, wZeroes[i][0] / 256));
+                    	// on the left side of the barcode we are looking for a negative
+                    	// zero crossing, from light to dark
+                    	if (wZeroes[i][0] < 0) {
+                            vResult.addElement(new Point(i, Math.abs(wZeroes[i][0]) / 256));                   		
+                    	} else {
+                    		vResult.addElement(new Point(i, Math.abs(wZeroes[i][1]) / 256));
+                    	}
                     } else {
-                        vResult.addElement(
-                            new Point(i, wZeroes[i][wZeroes[i].length-1] / 256));
+                    	// on the right side of the barcode we are looking for a positive
+                    	// zero crossing, from dark to light
+                    	if (wZeroes[i][wZeroes[i].length-1] < 0) {
+                            vResult.addElement(
+                                    new Point(i, Math.abs(wZeroes[i][wZeroes[i].length-1]) / 256));
+                   		
+                    	} else {
+                    		vResult.addElement(
+                    				new Point(i, Math.abs(wZeroes[i][wZeroes[i].length-2]) / 256));
+                    		
+                    	}
                     }
                 }
             }

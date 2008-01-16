@@ -1,0 +1,37 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+  <head>
+    <title>Coding Conventions</title>
+  </head>
+  <body>
+  We use application Hungarian notation, with these abbreviations:
+      <ul>
+          <li>b -- a computed value (type byte)</li>
+          <li>c -- a count of items (type int)</li>
+          <li>d -- an offset into an array or Vector (type int)</li>
+          <li>i -- any other type of index (type int).</li>
+          <li>o -- a flag -- true or false (type boolean)</li>
+          <li>rg -- an array (type in following prefix). We collapse two or more
+            'rg' sequences into a single 'rgx'.</li>
+          <li>sz -- a string (type String).</li>
+          <li>v -- a vector (type Vector).</li>
+          <li>w -- a computed value (int)</li>
+      </ul>
+  In addition the variable names i, j, k, etc. are used for indices.
+  <p>
+      All fields should be referenced by being preceded with 'this.'. We don't
+      use a special prefix like _ or m before field names. Contant fields are
+      are not preceded by 'this.' and also do not have a Hungarian notation
+      prefix. They begin with a capital letter.
+  </p>
+  <p>
+      Methods are named following the usual Java conventions. Classes each
+      specify their Hungarian prefix in their header comments.
+  </p>
+  <p>
+      Whenever there are several items of a similar purpose (methods,
+      fields, constants, etc.) they are listed in alphabetical order.
+  </p>
+  </body>
+</html>
