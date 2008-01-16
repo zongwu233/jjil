@@ -48,8 +48,8 @@ public class Gray2Rgb extends PipelineStage {
      */
     public void Push(Image image) throws IllegalArgumentException {
         if (!(image instanceof Gray8Image)) {
-            throw new IllegalArgumentException(image.toString() + "" +
-                    " should be a Gray8Image, but isn't");
+            throw new IllegalArgumentException(image.toString() + "" + //$NON-NLS-1$
+                    Messages.getString("Gray2Rgb.1")); //$NON-NLS-1$
         }
         Gray8Image gray = (Gray8Image) image;
         RgbImage rgb = new RgbImage(image.getWidth(), image.getHeight());

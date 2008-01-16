@@ -61,15 +61,15 @@ public class RgbSubSample extends PipelineStage {
     public void Push(Image image) throws IllegalArgumentException {
         if (!(image instanceof RgbImage)) {
             throw new IllegalArgumentException(image.toString() + 
-                    " should be an RgbImage, but isn't");
+                    Messages.getString("RgbSubSample.0")); //$NON-NLS-1$
         }
         if (image.getWidth() < this.cTargetWidth) {
             throw new IllegalArgumentException(image.toString() + 
-                    " width should be at least " + this.cTargetWidth);
+                    Messages.getString("RgbSubSample.1") + this.cTargetWidth); //$NON-NLS-1$
         }
         if (image.getHeight() < this.cTargetHeight) {
             throw new IllegalArgumentException(image.toString() + 
-                    " height should be at least " + this.cTargetHeight);
+                    Messages.getString("RgbSubSample.2") + this.cTargetHeight); //$NON-NLS-1$
         }
         // note that Java division truncates. So 
         // e.g. cReduceWidth * this.cTargetWidth <= image.getWidth
@@ -121,8 +121,8 @@ public class RgbSubSample extends PipelineStage {
         throws IllegalArgumentException {
         if (cTargetWidth <= 0 || cTargetHeight <= 0) {
             throw new IllegalArgumentException(
-                    "expected positive reduction factor; " +
-                    "got: (" + cTargetWidth + "," + cTargetHeight + ")");
+                    Messages.getString("RgbSubSample.3") + //$NON-NLS-1$
+                    Messages.getString("RgbSubSample.4") + cTargetWidth + Messages.getString("Comma") + cTargetHeight + ")"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         }
         this.cTargetWidth = cTargetWidth;
         this.cTargetHeight = cTargetHeight;
@@ -133,7 +133,7 @@ public class RgbSubSample extends PipelineStage {
      * @return the string describing the reduction operation.
      */
     public String toString() {
-        return super.toString() + " (" + this.cTargetWidth + "," + 
-                this.cTargetHeight + ")";
+        return super.toString() + " (" + this.cTargetWidth + Messages.getString("Comma") +  //$NON-NLS-1$ //$NON-NLS-2$
+                this.cTargetHeight + ")"; //$NON-NLS-1$
     }
 }

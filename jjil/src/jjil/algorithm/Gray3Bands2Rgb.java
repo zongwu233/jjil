@@ -58,9 +58,9 @@ public class Gray3Bands2Rgb {
             imGreen.getWidth() != imBlue.getWidth() ||
             imRed.getHeight() != imGreen.getHeight() ||
             imGreen.getHeight() != imBlue.getHeight()) {
-            throw new IllegalArgumentException("images should all be the " +
-                    "same size, but the arguments are " + imRed.toString() + ", " +
-                    imGreen.toString() + ", and " + imBlue.toString());
+            throw new IllegalArgumentException(Messages.getString("Gray3Bands2Rgb.0") + //$NON-NLS-1$
+                    Messages.getString("Gray3Bands2Rgb.1") + imRed.toString() + Messages.getString("Comma") + //$NON-NLS-1$ //$NON-NLS-2$
+                    imGreen.toString() + Messages.getString("Gray3Bands2Rgb.3") + imBlue.toString()); //$NON-NLS-1$
         }
         RgbImage rgb = new RgbImage(imRed.getWidth(), imRed.getHeight());
         byte[] redData = imRed.getData();

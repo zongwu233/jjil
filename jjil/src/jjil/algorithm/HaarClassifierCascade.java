@@ -125,8 +125,8 @@ public abstract class HaarClassifierCascade {
         do {
            int nChar = isr.read();
             if (nChar == -1) {
-                throw new ParseException("end of stream " + isr.toString() + 
-                        " when reading int");
+                throw new ParseException(Messages.getString("HaarClassifierCascade.0") + isr.toString() +  //$NON-NLS-1$
+                        Messages.getString("HaarClassifierCascade.1")); //$NON-NLS-1$
             }
             char c = (char) nChar;
             if (c == '-') {
@@ -194,7 +194,7 @@ public abstract class HaarClassifierCascade {
             }
             
             public String toString() {
-                return "(hr 0 0 0 0 0)";
+                return "(hr 0 0 0 0 0)"; //$NON-NLS-1$
             }
         }
         
@@ -230,9 +230,9 @@ public abstract class HaarClassifierCascade {
              }
             
             public String toString() {
-                return "(hr " + this.tlx + " " + this.tly +
-                        " " + this.w + " " + this.h + 
-                        " " + this.weight + ")";
+                return "(hr " + this.tlx + " " + this.tly + //$NON-NLS-1$ //$NON-NLS-2$
+                        " " + this.w + " " + this.h +  //$NON-NLS-1$ //$NON-NLS-2$
+                        " " + this.weight + ")"; //$NON-NLS-1$ //$NON-NLS-2$
             }
         };
         
@@ -267,9 +267,9 @@ public abstract class HaarClassifierCascade {
             }
             
             public String toString() {
-                return "(hr 0 " + this.tly +
-                        " " + this.w + " " + this.h + 
-                        " " + this.weight + ")";
+                return "(hr 0 " + this.tly + //$NON-NLS-1$
+                        " " + this.w + " " + this.h +  //$NON-NLS-1$ //$NON-NLS-2$
+                        " " + this.weight + ")"; //$NON-NLS-1$ //$NON-NLS-2$
             }
         };
         
@@ -304,9 +304,9 @@ public abstract class HaarClassifierCascade {
             }
             
             public String toString() {
-                return "(hr " + this.tlx + " 0 " + 
-                        this.w + " " + this.h + 
-                        " " + this.weight + ")";
+                return "(hr " + this.tlx + " 0 " +  //$NON-NLS-1$ //$NON-NLS-2$
+                        this.w + " " + this.h +  //$NON-NLS-1$
+                        " " + this.weight + ")"; //$NON-NLS-1$ //$NON-NLS-2$
             }
         };
         
@@ -337,8 +337,8 @@ public abstract class HaarClassifierCascade {
              }
              
             public String toString() {
-                return "(hr 0 0 " + this.w + " " + this.h + 
-                        " " + this.weight + ")";
+                return "(hr 0 0 " + this.w + " " + this.h +  //$NON-NLS-1$ //$NON-NLS-2$
+                        " " + this.weight + ")"; //$NON-NLS-1$ //$NON-NLS-2$
             }
        };
         
@@ -356,9 +356,9 @@ public abstract class HaarClassifierCascade {
 
             char[] rC = new char[4];
             isr.read(rC, 0, 4);
-            if ("(hr ".compareTo(new String(rC)) != 0) {
-                throw new ParseException("Error at " + isr.toString() + 
-                        "; read '" + new String(rC) + "'; expected '(hr '");
+            if ("(hr ".compareTo(new String(rC)) != 0) { //$NON-NLS-1$
+                throw new ParseException(Messages.getString("HaarClassifierCascade.24") + isr.toString() +  //$NON-NLS-1$
+                        Messages.getString("HaarClassifierCascade.25") + new String(rC) + Messages.getString("HaarClassifierCascade.26")); //$NON-NLS-1$ //$NON-NLS-2$
             }
 
             int tlx = readInt(isr);
@@ -404,9 +404,9 @@ public abstract class HaarClassifierCascade {
         {
             char[] rC = new char[4];
             isr.read(rC, 0, 4);
-            if ("(hf ".compareTo(new String(rC)) != 0) {
-                throw new ParseException("Error at " + isr.toString() + 
-                        "; read '" + new String(rC) + "'; expected '(hf '");
+            if ("(hf ".compareTo(new String(rC)) != 0) { //$NON-NLS-1$
+                throw new ParseException(Messages.getString("HaarClassifierCascade.28") + isr.toString() +  //$NON-NLS-1$
+                        Messages.getString("HaarClassifierCascade.29") + new String(rC) + Messages.getString("HaarClassifierCascade.30")); //$NON-NLS-1$ //$NON-NLS-2$
             }
             this.rect = new HaarRect[3];
             this.rect[0] = makeHaarRectFromStream(isr);
@@ -448,9 +448,9 @@ public abstract class HaarClassifierCascade {
          * @return A string representation of the HaarFeature.
          */
         public String toString() {
-            return "(hf " + this.rect[0].toString() + 
+            return "(hf " + this.rect[0].toString() +  //$NON-NLS-1$
                     this.rect[1].toString() + this.rect[2].toString() +
-                    (this.bTilted ? "1" : "0") + ")";
+                    (this.bTilted ? "1" : "0") + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         }
     };
     
@@ -505,21 +505,21 @@ public abstract class HaarClassifierCascade {
            throws IOException, ParseException 
     {
         // read the first token from the stream
-        String szToken = "";
+        String szToken = ""; //$NON-NLS-1$
         char c;
         do {
             int nCh = isr.read();
             if (nCh == -1) {
-                throw new ParseException("end of file while reading first" +
-                        " token from " + isr.toString());
+                throw new ParseException(Messages.getString("HaarClassifierCascade.36") + //$NON-NLS-1$
+                        Messages.getString("HaarClassifierCascade.37") + isr.toString()); //$NON-NLS-1$
             }
             c = (char) nCh;
             szToken += c;
         } while (c != ' ');
-        if (szToken.compareTo("(hcsb ") == 0) return new HaarClassifierStumpBase(isr);
+        if (szToken.compareTo("(hcsb ") == 0) return new HaarClassifierStumpBase(isr); //$NON-NLS-1$
         else
-            throw new ParseException("unexpected token '" + szToken + "' while " +
-                    "reading " + isr.toString() + ", expected '(hcsb '");
+            throw new ParseException(Messages.getString("HaarClassifierCascade.39") + szToken + Messages.getString("HaarClassifierCascade.40") + //$NON-NLS-1$ //$NON-NLS-2$
+                    Messages.getString("HaarClassifierCascade.41") + isr.toString() + Messages.getString("HaarClassifierCascade.42")); //$NON-NLS-1$ //$NON-NLS-2$
     }
     
 }
@@ -580,8 +580,8 @@ class HaarClassifierTreeBase extends HaarClassifierCascade
 
     public boolean eval(Image image) {
         if (!(image instanceof Gray32Image)) {
-             throw new IllegalArgumentException(image.toString() + "" +
-                    " should be a Gray32Image, but isn't");
+             throw new IllegalArgumentException(image.toString() + "" + //$NON-NLS-1$
+                    Messages.getString("HaarClassifierCascade.44")); //$NON-NLS-1$
         }
         Gray32Image g32 = (Gray32Image) image;
         int nSumHc = 0;
@@ -642,9 +642,9 @@ class  HaarClassifierStumpBase extends HaarClassifierCascade {
         {
             char[] rC = new char[6];
             isr.read(rC, 0, 6);
-            if ("(hwcs ".compareTo(new String(rC)) != 0) {
-                throw new ParseException("Error at " + isr.toString() + 
-                        "; read '" + rC.toString() + "'; expected '(hwcs '");
+            if ("(hwcs ".compareTo(new String(rC)) != 0) { //$NON-NLS-1$
+                throw new ParseException(Messages.getString("HaarClassifierCascade.46") + isr.toString() +  //$NON-NLS-1$
+                        Messages.getString("HaarClassifierCascade.47") + rC.toString() + Messages.getString("HaarClassifierCascade.48")); //$NON-NLS-1$ //$NON-NLS-2$
             }
             this.feature = new HaarFeature(isr);
             this.threshold = readInt(isr);
@@ -685,9 +685,9 @@ class  HaarClassifierStumpBase extends HaarClassifierCascade {
         }
         
         public String toString() {
-            return "(hwcs " + this.feature.toString() +
-                    this.threshold + " " + this.a + " " + this.b + " " +
-                    this.width + " " + this.height + ")";
+            return Messages.getString("HaarClassifierCascade.49") + this.feature.toString() + //$NON-NLS-1$
+                    this.threshold + " " + this.a + " " + this.b + " " + //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                    this.width + " " + this.height + ")"; //$NON-NLS-1$ //$NON-NLS-2$
         }
     };
     
@@ -707,9 +707,9 @@ class  HaarClassifierStumpBase extends HaarClassifierCascade {
         {
             char[] rC = new char[5];
             isr.read(rC, 0, 5);
-            if ("(hcs ".compareTo(new String(rC)) != 0) {
-                throw new ParseException("Error at " + isr.toString() + 
-                        "; read '" + new String(rC) + "'; expected '(hcs '");
+            if ("(hcs ".compareTo(new String(rC)) != 0) { //$NON-NLS-1$
+                throw new ParseException(Messages.getString("HaarClassifierCascade.56") + isr.toString() +  //$NON-NLS-1$
+                        Messages.getString("HaarClassifierCascade.57") + new String(rC) + Messages.getString("HaarClassifierCascade.58")); //$NON-NLS-1$ //$NON-NLS-2$
             }
             int n = readInt(isr);
             this.hwcs = new HaarWeakClassifierStump[n];
@@ -740,11 +740,11 @@ class  HaarClassifierStumpBase extends HaarClassifierCascade {
         }
         
         public String toString() {
-            String sz =  "(hcs " + this.hwcs.length;
+            String sz =  "(hcs " + this.hwcs.length; //$NON-NLS-1$
             for (int i=0; i<this.hwcs.length; i++) {
-                sz += " " + this.hwcs[i].toString();
+                sz += " " + this.hwcs[i].toString(); //$NON-NLS-1$
             }
-            sz += " " + this.threshold + ")";
+            sz += " " + this.threshold + ")"; //$NON-NLS-1$ //$NON-NLS-2$
             return sz;
         }
     };
@@ -752,8 +752,8 @@ class  HaarClassifierStumpBase extends HaarClassifierCascade {
        
         public boolean eval(Image image) throws IllegalArgumentException {
             if (!(image instanceof Gray8Image)) {
-                 throw new IllegalArgumentException(image.toString() + "" +
-                        " should be a Gray8Image, but isn't");
+                 throw new IllegalArgumentException(image.toString() + "" + //$NON-NLS-1$
+                        Messages.getString("HaarClassifierCascade.64")); //$NON-NLS-1$
             }
             // calculate the standard deviation of the input mage
             this.gs.Push(image);
@@ -802,21 +802,21 @@ class  HaarClassifierStumpBase extends HaarClassifierCascade {
         }
         n = isr.read();
         if (n == -1) {
-            throw new ParseException("eof at " + isr.toString());
+            throw new ParseException(Messages.getString("HaarClassifierCascade.65") + isr.toString()); //$NON-NLS-1$
         }
         char c = (char) n;
         if (c != ')') {
-            throw new ParseException("Expected ')', got '" + c + "'");
+            throw new ParseException(Messages.getString("HaarClassifierCascade.66") + c + Messages.getString("HaarClassifierCascade.67")); //$NON-NLS-1$ //$NON-NLS-2$
         }
     }
         
     public String toString() {
-        String sz = "(hcsb " + this.width + " " + this.height + " " +
+        String sz = "(hcsb " + this.width + " " + this.height + " " + //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
                 this.hsc.length;
          for (int i=0; i<this.hsc.length; i++) {
-            sz += " " + this.hsc[i].toString();
+            sz += " " + this.hsc[i].toString(); //$NON-NLS-1$
         }
-        sz += ")";
+        sz += ")"; //$NON-NLS-1$
         return sz;
     }
 }

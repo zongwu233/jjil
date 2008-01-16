@@ -38,7 +38,7 @@ public class SumG82G32 extends PipelineStage {
     {
         if (!(image instanceof Gray8Image)) {
             throw new IllegalArgumentException(image.toString() +
-                    " should be a Gray8Image, but isn't");
+                    Messages.getString("SumG82G32.0")); //$NON-NLS-1$
         }
         Gray32Image imageResult;
         if (image instanceof Gray8SubImage) {

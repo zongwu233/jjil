@@ -82,7 +82,7 @@ public class RgbClip extends PipelineStage {
     public void Push(Image image) throws IllegalArgumentException {
         if (!(image instanceof RgbImage)) {
             throw new IllegalArgumentException(image.toString() +
-                    " should be a RgbImage, but isn't");
+                    Messages.getString("RgbClip.0")); //$NON-NLS-1$
         }
         RgbImage rgbImage = (RgbImage) image;
         int[] src = rgbImage.getData();
@@ -131,7 +131,7 @@ public class RgbClip extends PipelineStage {
      * @return the string describing the clipping operation.
      */
     public String toString() {
-        return super.toString() + " (" + this.nR + "," + this.nG + 
-                "," + this.nB + "," + this.nLimit + "," + this.bDir + ")";
+        return super.toString() + " (" + this.nR + Messages.getString("Comma") + this.nG +  //$NON-NLS-1$ //$NON-NLS-2$
+                Messages.getString("Comma") + this.nB + Messages.getString("Comma") + this.nLimit + Messages.getString("Comma") + this.bDir + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
     }
 }

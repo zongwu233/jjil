@@ -52,8 +52,8 @@ public class Gray8Statistics {
     public void Push(Image image) throws IllegalArgumentException
     {
         if (!(image instanceof Gray8Image)) {
-            throw new IllegalArgumentException(image.toString() + " should " +
-                    "be a gray image");
+            throw new IllegalArgumentException(image.toString() + Messages.getString("Gray8Statistics.0") + //$NON-NLS-1$
+                    Messages.getString("Gray8Statistics.1")); //$NON-NLS-1$
         }
         Gray8Image gray = (Gray8Image) image;
         int nSum = 0, nSumSq = 0;
@@ -93,7 +93,7 @@ public class Gray8Statistics {
     public int getStdDev() throws ArithmeticException {
         // n = variance * 256 * 256 (for accuracy)
         int n = getVariance() << 8;
-        if (n < 0) throw new ArithmeticException("variance is less than 0");
+        if (n < 0) throw new ArithmeticException(Messages.getString("Gray8Statistics.2")); //$NON-NLS-1$
         // return standard deviation * 256 = sqrt(variance * 256 * 256)
         return MathPlus.sqrt(n);
     }

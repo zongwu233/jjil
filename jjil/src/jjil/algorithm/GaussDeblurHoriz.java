@@ -185,10 +185,10 @@ public class GaussDeblurHoriz extends PipelineStage {
      */
     public void Push(Image im) {
         if (im.getWidth() != im.getHeight()) {
-            throw new IllegalArgumentException("image must be square");
+            throw new IllegalArgumentException(Messages.getString("GaussDeblurHoriz.0")); //$NON-NLS-1$
         }
         if (!(im instanceof Gray8Image)) {
-            throw new IllegalArgumentException("image must be a Gray8Image");
+            throw new IllegalArgumentException(Messages.getString("GaussDeblurHoriz.1")); //$NON-NLS-1$
         }
         this.fft.Push(im);
         Complex32Image cxmIm = (Complex32Image) this.fft.Front();
@@ -228,8 +228,8 @@ public class GaussDeblurHoriz extends PipelineStage {
      */
     public void setStdDev(int nStdDev) throws IllegalArgumentException {
         if (nStdDev < 0 || nStdDev > this.rxnCoeffs.length) {
-            throw new IllegalArgumentException("standard deviation " + nStdDev +
-                    " out of range");
+            throw new IllegalArgumentException(Messages.getString("GaussDeblurHoriz.2") + nStdDev + //$NON-NLS-1$
+                    Messages.getString("GaussDeblurHoriz.3")); //$NON-NLS-1$
         }
         this.nStdDev = nStdDev;
     }

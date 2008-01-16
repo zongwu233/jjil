@@ -50,7 +50,7 @@ public class GrayLinComb implements Ladder.Join {
      */
     public GrayLinComb(int a, int b, int c) throws IllegalArgumentException {
         if (c == 0) {
-            throw new IllegalArgumentException("attempted division by 0");
+            throw new IllegalArgumentException(Messages.getString("GrayLinComb.0")); //$NON-NLS-1$
         }
         this.nA = a;
         this.nB = b;
@@ -72,15 +72,15 @@ public class GrayLinComb implements Ladder.Join {
         if (!(imageFirst instanceof Gray8Image) ||
             !(imageSecond instanceof Gray8Image)) {
             throw new IllegalArgumentException(
-                    "both images should be gray: " +
-                    imageFirst.toString() + "," +
+                    Messages.getString("GrayLinComb.1") + //$NON-NLS-1$
+                    imageFirst.toString() + Messages.getString("Comma") + //$NON-NLS-1$
                     imageSecond.toString());
         }
         if (imageFirst.getWidth() != imageSecond.getWidth() ||
             imageSecond.getHeight() != imageSecond.getHeight()) {
             throw new IllegalArgumentException(
-                    "both images should be the same size: " +
-                    imageFirst.toString() + "," +
+                    Messages.getString("GrayLinComb.3") + //$NON-NLS-1$
+                    imageFirst.toString() + Messages.getString("Comma") + //$NON-NLS-1$
                     imageSecond.toString());
             
         }

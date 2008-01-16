@@ -46,10 +46,10 @@ public class WienerDeconv extends PipelineStage {
      */
     public WienerDeconv(Gray8Image psf, int nNoise) throws IllegalArgumentException {
         if (psf.getWidth() != psf.getHeight()) {
-            throw new IllegalArgumentException("psf must be square");
+            throw new IllegalArgumentException(Messages.getString("WienerDeconv.0")); //$NON-NLS-1$
         }
         if (!(psf instanceof Gray8Image)) {
-            throw new IllegalArgumentException("psf must be a Gray8Image");
+            throw new IllegalArgumentException(Messages.getString("WienerDeconv.1")); //$NON-NLS-1$
         }
         this.nNoise = nNoise;
         this.fft = new FftGray8();
@@ -60,16 +60,16 @@ public class WienerDeconv extends PipelineStage {
     
     public void Push(Image im) {
         if (im.getWidth() != im.getHeight()) {
-            throw new IllegalArgumentException("image must be square");
+            throw new IllegalArgumentException(Messages.getString("WienerDeconv.2")); //$NON-NLS-1$
         }
         if (im.getWidth() != this.cxmPsfInv.getWidth()) {
-            throw new IllegalArgumentException("image must be same size as psf");
+            throw new IllegalArgumentException(Messages.getString("WienerDeconv.3")); //$NON-NLS-1$
         }
         if (im.getHeight() != this.cxmPsfInv.getHeight()) {
-            throw new IllegalArgumentException("image must be same size as psf");
+            throw new IllegalArgumentException(Messages.getString("WienerDeconv.4")); //$NON-NLS-1$
         }
         if (!(im instanceof Gray8Image)) {
-            throw new IllegalArgumentException("psf must be a Gray8Image");
+            throw new IllegalArgumentException(Messages.getString("WienerDeconv.5")); //$NON-NLS-1$
         }
         this.fft.Push(im);
         Complex32Image cxmIm = (Complex32Image) this.fft.Front();

@@ -81,8 +81,8 @@ public class Gray8SubImage extends Gray8Image {
      */
     public String toString()
     {
-        return super.toString() + " (" + getWidth() + "x" + getHeight() +
-                "," + getXOffset() + "," + getYOffset() + ")";
+        return super.toString() + " (" + getWidth() + Messages.getString("Gray8SubImage.1") + getHeight() + //$NON-NLS-1$ //$NON-NLS-2$
+                Messages.getString("Gray8SubImage.2") + getXOffset() + Messages.getString("Gray8SubImage.3") + getYOffset() + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
 
 

@@ -60,15 +60,15 @@ public class GrayReduce extends PipelineStage {
     public void Push(Image image) throws IllegalArgumentException {
         if (!(image instanceof Gray8Image)) {
             throw new IllegalArgumentException(image.toString() + 
-                    " should be a Gray8Image, but isn't");
+                    Messages.getString("GrayReduce.0")); //$NON-NLS-1$
         }
         if (image.getWidth() % this.cReduceWidth != 0) {
             throw new IllegalArgumentException(image.toString() + 
-                    " width should be divisible by " + this.cReduceWidth);
+                    Messages.getString("GrayReduce.1") + this.cReduceWidth); //$NON-NLS-1$
         }
         if (image.getHeight() % this.cReduceHeight != 0) {
             throw new IllegalArgumentException(image.toString() + 
-                    " height should be divisible by " + this.cReduceHeight);
+                    Messages.getString("GrayReduce.2") + this.cReduceHeight); //$NON-NLS-1$
         }
         Gray8Image gray = (Gray8Image) image;
         byte[] bIn = gray.getData();
@@ -121,8 +121,8 @@ public class GrayReduce extends PipelineStage {
         throws IllegalArgumentException {
         if (cReduceWidth <= 0 || cReduceHeight <= 0) {
             throw new IllegalArgumentException(
-                    "expected positive reduction factor; " +
-                    "got: (" + cReduceWidth + "," + cReduceHeight + ")");
+                    Messages.getString("GrayReduce.3") + //$NON-NLS-1$
+                    Messages.getString("GrayReduce.4") + cReduceWidth + Messages.getString("Comma") + cReduceHeight + ")"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         }
         this.cReduceWidth = cReduceWidth;
         this.cReduceHeight = cReduceHeight;
@@ -133,7 +133,7 @@ public class GrayReduce extends PipelineStage {
      * @return the string describing the reduction operation.
      */
     public String toString() {
-        return super.toString() + " (" + this.cReduceWidth + "," + 
-                this.cReduceHeight + ")";
+        return super.toString() + " (" + this.cReduceWidth + Messages.getString("Comma") +  //$NON-NLS-1$ //$NON-NLS-2$
+                this.cReduceHeight + ")"; //$NON-NLS-1$
     }
 }

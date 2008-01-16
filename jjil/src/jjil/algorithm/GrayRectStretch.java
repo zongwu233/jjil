@@ -77,15 +77,15 @@ public class GrayRectStretch extends PipelineStage {
      */
     public void Push(Image image) throws IllegalArgumentException {
         if (!(image instanceof Gray8Image)) {
-            throw new IllegalArgumentException("image " + image.toString() +
-                    " should be a Gray8Image");
+            throw new IllegalArgumentException(Messages.getString("GrayRectStretch.0") + image.toString() + //$NON-NLS-1$
+                    Messages.getString("GrayRectStretch.1")); //$NON-NLS-1$
         }
         if (image.getWidth() > this.cWidth || image.getHeight() > this.cHeight) {
-            throw new IllegalArgumentException("GrayRectStretch is for " +
-                    " stretching images only, but input size is (" +
-                    image.getWidth() + "," + image.getHeight() + ") " +
-                    "but target size is (" + this.cWidth + "," + 
-                    this.cHeight + ")");
+            throw new IllegalArgumentException(Messages.getString("GrayRectStretch.2") + //$NON-NLS-1$
+                    Messages.getString("GrayRectStretch.3") + //$NON-NLS-1$
+                    image.getWidth() + Messages.getString("Comma") + image.getHeight() + ") " + //$NON-NLS-1$ //$NON-NLS-2$
+                    Messages.getString("GrayRectStretch.6") + this.cWidth + Messages.getString("Comma") +  //$NON-NLS-1$ //$NON-NLS-2$
+                    this.cHeight + ")"); //$NON-NLS-1$
         }
         Gray8Image input = (Gray8Image) image;
         /** we do the stretch in to passes, one horizontal and the other
@@ -106,8 +106,8 @@ public class GrayRectStretch extends PipelineStage {
      */
     public void setHeight(int cHeight) throws IllegalArgumentException {
         if (cHeight <= 0) {
-            throw new IllegalArgumentException("new height must be positive, " +
-                    "not " + cHeight);
+            throw new IllegalArgumentException(Messages.getString("GrayRectStretch.9") + //$NON-NLS-1$
+                    Messages.getString("Not") + cHeight); //$NON-NLS-1$
         }
         this.cHeight = cHeight;
     }
@@ -119,8 +119,8 @@ public class GrayRectStretch extends PipelineStage {
      */
     public void setWidth(int cWidth) throws IllegalArgumentException {
         if (cWidth <= 0) {
-            throw new IllegalArgumentException("new width must be positive, " +
-                    "not " + cWidth);
+            throw new IllegalArgumentException(Messages.getString("GrayRectStretch.11") + //$NON-NLS-1$
+                    Messages.getString("Not") + cWidth); //$NON-NLS-1$
         }
         this.cWidth = cWidth;
     }
@@ -219,6 +219,6 @@ public class GrayRectStretch extends PipelineStage {
      * @return the string describing the stretching operation.
      */
     public String toString() {
-        return super.toString() + " (" + this.cWidth + "," + this.cHeight + ")";
+        return super.toString() + " (" + this.cWidth + Messages.getString("Comma") + this.cHeight + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
 }

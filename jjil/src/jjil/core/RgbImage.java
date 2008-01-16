@@ -98,7 +98,7 @@ public class RgbImage extends Image {
      */
     public String toString()
     {
-        return super.toString() + " (" + getWidth() + "x" + getHeight() +
-                ")";
+        return super.toString() + " (" + getWidth() + Messages.getString("RgbImage.1") + getHeight() + //$NON-NLS-1$ //$NON-NLS-2$
+                ")"; //$NON-NLS-1$
     }
 }

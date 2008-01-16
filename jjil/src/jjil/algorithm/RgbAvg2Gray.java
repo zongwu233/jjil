@@ -55,7 +55,7 @@ public class RgbAvg2Gray extends PipelineStage {
     public void Push(Image image) throws IllegalArgumentException {
         if (!(image instanceof RgbImage)) {
             throw new IllegalArgumentException(image.toString() +
-                    " should be an RgbImage, but isn't");
+                    Messages.getString("RgbAvg2Gray.0")); //$NON-NLS-1$
         }
         RgbImage rgb = (RgbImage) image;
         int[] rgbData = rgb.getData();

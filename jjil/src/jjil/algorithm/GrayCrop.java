@@ -56,9 +56,9 @@ public class GrayCrop extends PipelineStage {
             int height) throws IllegalArgumentException {
         if (x<0 || y<0 || width<=0 || height<=0) {
             throw new IllegalArgumentException(
-                    "Illegal cropping window (" + 
-                    x + "," + y + "," + 
-                    width + "," + height + ")");
+                    Messages.getString("GrayCrop.0") +  //$NON-NLS-1$
+                    x + Messages.getString("Comma") + y + Messages.getString("Comma") +  //$NON-NLS-1$ //$NON-NLS-2$
+                    width + Messages.getString("Comma") + height + ")"); //$NON-NLS-1$ //$NON-NLS-2$
         }
         this.cX = x;
         this.cY = y;
@@ -77,15 +77,15 @@ public class GrayCrop extends PipelineStage {
     public void Push(Image image) throws IllegalArgumentException {
         if (!(image instanceof Gray8Image)) {
             throw new IllegalArgumentException(image.toString() +
-                    " should be a Gray8Image, but isn't");
+                    Messages.getString("GrayCrop.5")); //$NON-NLS-1$
         }
         Gray8Image imageInput = (Gray8Image) image;
         if (this.cX + this.cWidth > image.getWidth() ||
             this.cY + this.cHeight > image.getHeight()) {
-            throw new IllegalArgumentException("Cropping window (" +
-                    this.cX + "," + this.cY + "," + 
-                    this.cWidth + "," + this.cHeight + 
-                    ") extends outside image " +
+            throw new IllegalArgumentException(Messages.getString("GrayCrop.6") + //$NON-NLS-1$
+                    this.cX + Messages.getString("Comma") + this.cY + Messages.getString("Comma") +  //$NON-NLS-1$ //$NON-NLS-2$
+                    this.cWidth + Messages.getString("Comma") + this.cHeight +  //$NON-NLS-1$
+                    Messages.getString("GrayCrop.10") + //$NON-NLS-1$
                     image.toString());
         }
         Gray8Image imageResult = new Gray8Image(this.cWidth,this.cHeight);
@@ -150,9 +150,9 @@ public class GrayCrop extends PipelineStage {
             int height) throws IllegalArgumentException {
         if (x<0 || y<0 || width<=0 || height<=0) {
             throw new IllegalArgumentException(
-                    "Illegal cropping window (" + 
-                    x + "," + y + "," + 
-                    width + "," + height + ")");
+                    Messages.getString("GrayCrop.11") +  //$NON-NLS-1$
+                    x + Messages.getString("Comma") + y + Messages.getString("Comma") +  //$NON-NLS-1$ //$NON-NLS-2$
+                    width + Messages.getString("Comma") + height + ")"); //$NON-NLS-1$ //$NON-NLS-2$
         }
         this.cX = x;
         this.cY = y;
@@ -165,7 +165,7 @@ public class GrayCrop extends PipelineStage {
      * @return the string describing the cropping operation.
      */
     public String toString() {
-        return super.toString() + " (" + this.cX + "," + this.cY + 
-                "," + this.cWidth + "," + this.cHeight + ")";
+        return super.toString() + " (" + this.cX + Messages.getString("Comma") + this.cY +  //$NON-NLS-1$ //$NON-NLS-2$
+                Messages.getString("Comma") + this.cWidth + Messages.getString("Comma") + this.cHeight + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
 }

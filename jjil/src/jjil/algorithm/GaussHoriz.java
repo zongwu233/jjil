@@ -184,7 +184,7 @@ public class GaussHoriz extends PipelineStage {
     public void Push(Image image) throws IllegalArgumentException {
         if (!(image instanceof Gray8Image)) {
             throw new IllegalArgumentException(image.toString() +
-                    " should be a Gray8Image, but isn't");
+                    Messages.getString("GaussHoriz.0")); //$NON-NLS-1$
         }
         Gray8Image input = (Gray8Image) image;
         Gray8Image result = new Gray8Image(image.getWidth(), image.getHeight());
@@ -241,7 +241,7 @@ public class GaussHoriz extends PipelineStage {
      */
     public void setSigma(int cSigma) throws IllegalArgumentException {
         if (cSigma <= 1 || cSigma >= this.nCoeff.length) {
-            throw new IllegalArgumentException(cSigma + " is out of range");
+            throw new IllegalArgumentException(cSigma + Messages.getString("GaussHoriz.1")); //$NON-NLS-1$
         }
         this.cSigma = cSigma;
     }
@@ -251,6 +251,6 @@ public class GaussHoriz extends PipelineStage {
      * @return a string describing the Gaussian blur.
      */
     public String toString() {
-        return super.toString() + " (" + this.cSigma + ")";
+        return super.toString() + " (" + this.cSigma + ")"; //$NON-NLS-1$ //$NON-NLS-2$
     }
 }

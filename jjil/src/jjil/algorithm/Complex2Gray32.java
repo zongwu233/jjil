@@ -49,8 +49,8 @@ public class Complex2Gray32 extends PipelineStage {
      */
     public void Push(Image im) throws IllegalArgumentException {
         if (!(im instanceof Complex32Image)) {
-            throw new IllegalArgumentException(im.toString() + " should be a" +
-                    " Complex32Image, but isn't");
+            throw new IllegalArgumentException(im.toString() + Messages.getString("Complex2Gray32.0") + //$NON-NLS-1$
+                    Messages.getString("Complex2Gray32.1")); //$NON-NLS-1$
         }
         Gray32Image imResult = new Gray32Image(im.getWidth(), im.getHeight());
         Complex cData[] = ((Complex32Image) im).getData();

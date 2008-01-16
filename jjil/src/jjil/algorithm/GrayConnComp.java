@@ -57,11 +57,11 @@ public class GrayConnComp {
 
 		public int compareTo(Object o) {
 			if (o == null) {
-				throw new NullPointerException("Label.compareTo");
+				throw new NullPointerException(Messages.getString("GrayConnComp.0")); //$NON-NLS-1$
 			}
 			if (!(o instanceof Label)) {
-				throw new ClassCastException("Incompatible classes "
-						+ "compared: Label and " + o.toString());
+				throw new ClassCastException(Messages.getString("GrayConnComp.1") //$NON-NLS-1$
+						+ Messages.getString("GrayConnComp.2") + o.toString()); //$NON-NLS-1$
 			}
 			Label l = (Label) o;
 			if (l.nPixelCount == this.nPixelCount) {
@@ -118,7 +118,7 @@ public class GrayConnComp {
 		// see if the requested component is out of bounds
 		if (nComponent >= this.rSortedLabels.length) {
 			throw new ArrayIndexOutOfBoundsException(nComponent
-					+ " > number of components " + this.pqLabels.size());
+					+ Messages.getString("GrayConnComp.3") + this.pqLabels.size()); //$NON-NLS-1$
 		}
 		// now see if we've figured out what the nComponent'th
 		// component is. If not compute it by finding and
@@ -208,7 +208,7 @@ public class GrayConnComp {
 	 */
 	public void Push(Image image) throws IllegalArgumentException {
 		if (!(image instanceof Gray8Image)) {
-			throw new IllegalArgumentException("image should be gray: "
+			throw new IllegalArgumentException(Messages.getString("GrayConnComp.4") //$NON-NLS-1$
 					+ image.toString());
 		}
 		// initialize the label lookup array

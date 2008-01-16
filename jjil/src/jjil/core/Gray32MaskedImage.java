@@ -58,9 +58,9 @@ public class Gray32MaskedImage extends Gray32Image {
         super(imData.getWidth(), imData.getHeight());
         if (imData.getWidth() != imMask.getWidth() ||
             imData.getHeight() != imMask.getHeight()) {
-            throw new IllegalArgumentException("image is " +
-                    imData.getWidth() + "x" + imData.getHeight() + ", but " +
-                    "mask is " + imMask.getWidth() + "x" + imMask.getHeight());
+            throw new IllegalArgumentException(Messages.getString("Gray32MaskedImage.0") + //$NON-NLS-1$
+                    imData.getWidth() + Messages.getString("Gray32MaskedImage.1") + imData.getHeight() + Messages.getString("Gray32MaskedImage.2") + //$NON-NLS-1$ //$NON-NLS-2$
+                    Messages.getString("Gray32MaskedImage.3") + imMask.getWidth() + Messages.getString("Gray32MaskedImage.4") + imMask.getHeight()); //$NON-NLS-1$ //$NON-NLS-2$
         }
         System.arraycopy(
                 imData.getData(),
@@ -117,8 +117,8 @@ public class Gray32MaskedImage extends Gray32Image {
      */
     public String toString()
     {
-        return super.toString() + " (" + this.getWidth() + "x" + 
-                this.getHeight() + ")";
+        return super.toString() + " (" + this.getWidth() + Messages.getString("Gray32MaskedImage.6") +  //$NON-NLS-1$ //$NON-NLS-2$
+                this.getHeight() + ")"; //$NON-NLS-1$
     }
 
 }

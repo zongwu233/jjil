@@ -85,10 +85,10 @@ public class DetectHaarMultiScale extends PipelineStage {
             this.hcc = HaarClassifierCascade.fromStream(isr);
         }
         catch (HaarClassifierCascade.ParseException ex) {
-            System.err.print("Caught parse exception: " + ex.toString());
+            System.err.print(Messages.getString("DetectHaarMultiScale.0") + ex.toString()); //$NON-NLS-1$
         }
         catch (IOException ex) {
-            System.err.print("Caught exception: " + ex.toString());           
+            System.err.print(Messages.getString("DetectHaarMultiScale.1") + ex.toString());            //$NON-NLS-1$
         } 
     }
     /**
@@ -104,14 +104,14 @@ public class DetectHaarMultiScale extends PipelineStage {
         if (image instanceof Gray8Image) {
             imGray = (Gray8Image) image;
         } else {
-            throw new IllegalArgumentException("image " + image.toString() +
-                    " is not a Gray8Image");
+            throw new IllegalArgumentException(Messages.getString("DetectHaarMultiScale.2") + image.toString() + //$NON-NLS-1$
+                    Messages.getString("DetectHaarMultiScale.3")); //$NON-NLS-1$
         }
         if (image.getWidth() < this.hcc.getWidth() ||
             image.getHeight() < this.hcc.getHeight()) {
-            throw new IllegalArgumentException("image " + image.toString() +
-                    " is too small; minimum size is " + this.hcc.getWidth() + 
-                    "x" + this.hcc.getHeight());
+            throw new IllegalArgumentException(Messages.getString("DetectHaarMultiScale.4") + image.toString() + //$NON-NLS-1$
+                    Messages.getString("DetectHaarMultiScale.5") + this.hcc.getWidth() +  //$NON-NLS-1$
+                    Messages.getString("DetectHaarMultiScale.6") + this.hcc.getHeight()); //$NON-NLS-1$
         }
         int nScale = Math.min(this.nMaxScale, 
                 Math.min(image.getWidth() / this.hcc.getWidth(),

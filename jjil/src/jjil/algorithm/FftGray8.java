@@ -57,18 +57,18 @@ public class FftGray8 extends PipelineStage {
      */
     public void Push(Image im) throws IllegalArgumentException {
         if (!(im instanceof Gray8Image)) {
-            throw new IllegalArgumentException(im.toString() + " should be " +
-                    "a Gray8Image");
+            throw new IllegalArgumentException(im.toString() + Messages.getString("FftGray8.0") + //$NON-NLS-1$
+                    Messages.getString("FftGray8.1")); //$NON-NLS-1$
         }
         int nWidth = im.getWidth();
         int nHeight = im.getHeight();
         if ((nWidth & (nWidth-1)) != 0) {
-            throw new IllegalArgumentException("image width must be a power " +
-                    "of two, not " + nWidth);
+            throw new IllegalArgumentException(Messages.getString("FftGray8.2") + //$NON-NLS-1$
+                    Messages.getString("FftGray8.3") + nWidth); //$NON-NLS-1$
         }
         if ((nHeight & (nHeight-1)) != 0) {
-            throw new IllegalArgumentException("image height must be a power " +
-                    "of two, not " + nHeight);
+            throw new IllegalArgumentException(Messages.getString("FftGray8.4") + //$NON-NLS-1$
+                    Messages.getString("FftGray8.5") + nHeight); //$NON-NLS-1$
         }
         // initialize FFT
         if (this.fft == null) {

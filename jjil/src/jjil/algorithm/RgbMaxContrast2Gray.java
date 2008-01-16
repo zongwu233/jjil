@@ -59,7 +59,7 @@ public class RgbMaxContrast2Gray extends PipelineStage {
     public void Push(Image image) throws IllegalArgumentException {
         if (!(image instanceof RgbImage)) {
             throw new IllegalArgumentException(image.toString() +
-                    " should be an RgbImage, but isn't");
+                    Messages.getString("RgbMaxContrast2Gray.0")); //$NON-NLS-1$
         }
         RgbImage rgb = (RgbImage) image;
         int[] rgbData = rgb.getData();

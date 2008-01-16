@@ -55,9 +55,9 @@ public class RgbSelect2Gray extends PipelineStage {
      */
     public static class ColorClass {
         private String name;
-        private static final ColorClass RED = new ColorClass("RED");
-        private static final ColorClass GREEN = new ColorClass("GREEN");
-        private static final ColorClass BLUE = new ColorClass("BLUE");
+        private static final ColorClass RED = new ColorClass(Messages.getString("RgbSelect2Gray.0")); //$NON-NLS-1$
+        private static final ColorClass GREEN = new ColorClass(Messages.getString("RgbSelect2Gray.1")); //$NON-NLS-1$
+        private static final ColorClass BLUE = new ColorClass(Messages.getString("RgbSelect2Gray.2")); //$NON-NLS-1$
         
         private ColorClass(String name) {
             this.name = name;
@@ -111,7 +111,7 @@ public class RgbSelect2Gray extends PipelineStage {
      * The class represents the color blue. It is used like an enumerated value when
      * calling the RgbSelect2Gray constructor.
      */
-    public static final ColorClass BLUE = new ColorClass("BLUE");
+    public static final ColorClass BLUE = new ColorClass(Messages.getString("RgbSelect2Gray.3")); //$NON-NLS-1$
     
     private ColorClass colorChosen;
     
@@ -145,7 +145,7 @@ public class RgbSelect2Gray extends PipelineStage {
     public void Push(Image image) throws IllegalArgumentException {
         if (!(image instanceof RgbImage)) {
             throw new IllegalArgumentException(image.toString() +
-                    " should be an RgbImage, but isn't");
+                    Messages.getString("RgbSelect2Gray.4")); //$NON-NLS-1$
         }
         RgbImage rgb = (RgbImage) image;
         int[] rgbData = rgb.getData();
@@ -188,7 +188,7 @@ public class RgbSelect2Gray extends PipelineStage {
                 color.equals(RgbSelect2Gray.GREEN) || 
                 color.equals(RgbSelect2Gray.BLUE))) {
             throw new IllegalArgumentException(color.toString() +
-                    " should be RED, GREEN, or BLUE, but isn't");
+                    Messages.getString("RgbSelect2Gray.5")); //$NON-NLS-1$
         }
         this.colorChosen = color;
     }
@@ -198,8 +198,8 @@ public class RgbSelect2Gray extends PipelineStage {
      * @return the string describing the RGB select operation.
      */
     public String toString() {
-        return super.toString() + " (" + this.colorChosen.toString() + 
-                ")";
+        return super.toString() + " (" + this.colorChosen.toString() +  //$NON-NLS-1$
+                ")"; //$NON-NLS-1$
     }
     
 }
