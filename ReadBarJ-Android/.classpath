@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/Barcode"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/jjil"/>
-	<classpathentry kind="lib" path="C:/From/Android/android_sdk_windows_m3-rc20a/android.jar">
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/Barcode"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/jjil">
 		<attributes>
-			<attribute name="javadoc_location" value="file:/C:/From/Android/android_sdk_windows_m3-rc20a/docs/reference"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="jjil"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="con" path="com.android.ide.eclipse.adt.project.AndroidClasspathContainerInitializer"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

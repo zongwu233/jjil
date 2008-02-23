@@ -1,17 +1,22 @@
 package readbarj.app;
 
+import jjil.algorithm.RgbSelect2Gray;
 import jjil.android.CameraDeviceFile;
+import jjil.android.RgbImageAndroid;
+import jjil.core.PipelineStage;
+import jjil.core.RgbImage;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.PixelFormat;
 import android.hardware.CameraDevice;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.Window;
+import barcode.DetectBarcode;
+import barcode.ReadBarcode;
 
 //----------------------------------------------------------------------
 
@@ -21,27 +26,14 @@ public class readbarj extends Activity
         protected void onCreate(Bundle icicle)
     {
         super.onCreate(icicle);
-
+        PipelineStage g8t = new RgbSelect2Gray(RgbSelect2Gray.GREEN);
         // Hide the window title.
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-
-        // Make sure to create a TRANSLUCENT window. This is required
-        // for SurfaceView to work. Eventually this'll be done by
-        // the system automatically.
-        getWindow().setFormat(PixelFormat.TRANSLUCENT);
 
         // Create our Preview view and set it as the content of our
         // Activity
         mPreview = new Preview(this);
         setContentView(mPreview);
-    }
-
-    @Override
-        protected boolean isFullscreenOpaque() {
-        // Our main window is set to translucent, but we know that we will
-        // fill it with opaque data. Tell the system that so it can perform
-        // some important optimizations.
-        return true;
     }
 
     @Override
@@ -71,11 +63,10 @@ class Preview extends SurfaceView implements SurfaceHolder.Callback
     Preview(Context context) {
         super(context);
 
-        setBcpFromIndex();
         // Install a SurfaceHolder.Callback so we get notified when the
         // underlying surface is created and destroyed.
         mHolder = getHolder();
-        mHolder.setCallback(this);
+        mHolder.addCallback(this);
         mHasSurface = false;
 
         // In this example, we hardcode the size of the preview. In a real
@@ -105,18 +96,8 @@ class Preview extends SurfaceView implements SurfaceHolder.Callback
             mPreviewThread = null;
         }
     }
-
-    private void setBcpFromIndex() 
-    {
-        this.mBcp = new BarcodeParam(
-        		this.mContext,
-                this.mrgxnBarcodeParams[mnCurrentBarcodeIndex][0],
-                this.mrgxnBarcodeParams[mnCurrentBarcodeIndex][1],
-                this.mrgxnBarcodeParams[mnCurrentBarcodeIndex][2],
-                this.mrgxnBarcodeParams[mnCurrentBarcodeIndex][3]);        
-    }
     
-    public boolean surfaceCreated(SurfaceHolder holder) {
+    public void surfaceCreated(SurfaceHolder holder) {
         // We first open the CameraDevice and configure it.
     	int [] files = {R.raw.barcode};
        	this.mCamera = CameraDeviceFile.open(getResources(), files);
@@ -138,13 +119,6 @@ class Preview extends SurfaceView implements SurfaceHolder.Callback
         if (mPreviewThread != null) {
             mPreviewThread.start();
         }
-        // Tell the system that we filled the surface in this call.
-        // This is a lie to prevent the system to fill the surface for us
-        // automatically. 
-        // THIS IS REQUIRED because other wise we'll access the Surface object
-        // from 2 different threads which is not allowed (And will crash
-        // currently).
-        return true;
     }
 
     public void surfaceDestroyed(SurfaceHolder holder) {
@@ -173,8 +147,29 @@ class Preview extends SurfaceView implements SurfaceHolder.Callback
     		Bitmap bmp = Bitmap.createBitmap(1280, 1024, false);
     		Canvas c = new Canvas(bmp);
     		this.mCamera.capture(c);
-    		this.mBcp.setImage(bmp);
-    		this.mBcp.Push();
+    		RgbImage inimg = RgbImageAndroid.toRgbImage(bmp);
+    		DetectBarcode db = new DetectBarcode(20000);
+    		if (!db.Push(inimg)) {
+    			/**
+    			 * Couldn't find the barcode. Tell the user.
+    			 */
+    			System.out.println("Couldn't find barcode"); //$NON-NLS-1$
+    		} else {
+    			ReadBarcode rb = new ReadBarcode();
+    			rb.setRect(db.getRect());
+    			rb.Push(inimg);
+    			if (!rb.getSuccessful()) {
+    				/**
+    				 * Couldn't read the barcode.
+    				 */
+    				System.out.println("Couldn't read barcode"); //$NON-NLS-1$
+    			} else {
+    				/**
+    				 * Read the barcode. Tell the user.
+    				 */
+    				System.out.println("Read barcode: " + rb.getCode()); //$NON-NLS-1$
+    			}
+    		}
     	}
     	return handled;
     }
@@ -225,19 +220,8 @@ class Preview extends SurfaceView implements SurfaceHolder.Callback
         private boolean mDone;
     }
 
-    private BarcodeParam mBcp;
     private CameraDeviceFile mCamera;
     	    SurfaceHolder    mHolder;
-    private int mnCurrentBarcodeIndex = 1;
-    private final int[][] mrgxnBarcodeParams = 
-    	    {
-    	        {195, 116, 253, 250},
-//    	        {70, 116, 506, 250},
-    	        {242, 192, 150, 61},
-    	        {70, 178, 506, 125},
-    		{195, 178, 253, 125},
-    	        {0, 0, 640, 480}
-    	    };
     private PreviewThread    mPreviewThread;
     private boolean          mHasSurface;
 }
