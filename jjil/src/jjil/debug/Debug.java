@@ -1,10 +1,5 @@
 package jjil.debug;
 
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferInt;
-import java.awt.image.Raster;
-import java.awt.image.WritableRenderedImage;
 
 import jjil.core.RgbImage;
 

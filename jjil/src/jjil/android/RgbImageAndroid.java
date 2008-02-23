@@ -27,7 +27,7 @@ public class RgbImageAndroid  {
     			rgb.getData(), 
     			rgb.getWidth(), 
     			rgb.getHeight(), 
-    			false);
+    			Bitmap.Config.ARGB_8888);
     }
     
     static public void toDisplay(Context context, RgbImage rgb) 

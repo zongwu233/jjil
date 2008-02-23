@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding="jjil/j2me/" kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="C:/From/Android/android_sdk_windows_m3-rc37a/android.jar"/>
+	<classpathentry excluding="jjil/j2me/|jjil/j2se/" kind="src" path="src"/>
+	<classpathentry kind="lib" path="C:/From/Android/android-sdk_m5-rc14_windows/android.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -55,9 +55,16 @@ public class RgbSelect2Gray extends PipelineStage {
      */
     public static class ColorClass {
         private String name;
-        private static final ColorClass RED = new ColorClass(Messages.getString("RgbSelect2Gray.0")); //$NON-NLS-1$
-        private static final ColorClass GREEN = new ColorClass(Messages.getString("RgbSelect2Gray.1")); //$NON-NLS-1$
-        private static final ColorClass BLUE = new ColorClass(Messages.getString("RgbSelect2Gray.2")); //$NON-NLS-1$
+        private static ColorClass RED;
+        private static ColorClass GREEN;
+        private static ColorClass BLUE;
+        
+        {
+            RED = new ColorClass("RED"); //$NON-NLS-1$
+            GREEN = new ColorClass("GREEN"); //$NON-NLS-1$
+            BLUE = new ColorClass("BLUE"); //$NON-NLS-1$
+        	
+        }
         
         private ColorClass(String name) {
             this.name = name;
