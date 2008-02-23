@@ -1,12 +1,11 @@
 package barcode;
 
 
+import jjil.algorithm.Gray16Threshold;
 import jjil.algorithm.Gray2Rgb;
-import jjil.algorithm.GrayAbs;
 import jjil.algorithm.GrayConnComp;
 import jjil.algorithm.GrayHistEq;
-import jjil.algorithm.GrayHorizSimpleEdge;
-import jjil.algorithm.GrayThreshold;
+import jjil.algorithm.GrayHorizVertContrast;
 import jjil.algorithm.RgbAvg2Gray;
 import jjil.algorithm.RgbSubSample;
 import jjil.core.Image;
@@ -49,16 +48,15 @@ public class DetectBarcode {
 	 * @return true iff a barcode appeared to have been found.
 	 */
 	public boolean Push(RgbImage rgb) {
-		final int nReducedHeight = 64;
-		final int nReducedWidth = 64;
+		final int nReducedHeight = 240;
+		final int nReducedWidth = 320;
 		// build pipeline
 		Sequence seq = new Sequence();
 		seq.Add(new RgbSubSample(nReducedWidth, nReducedHeight));
 		seq.Add(new RgbAvg2Gray());
-		seq.Add(new GrayHorizSimpleEdge());
-		seq.Add(new GrayAbs());
 		seq.Add(new GrayHistEq());
-		seq.Add(new GrayThreshold(96));
+		seq.Add(new GrayHorizVertContrast(4, 2, -8, 3));
+		seq.Add(new Gray16Threshold(200));
 		seq.Push(rgb);
 		GrayConnComp gcc = new GrayConnComp();
 		Image imThresh = seq.Front();
@@ -72,20 +70,34 @@ public class DetectBarcode {
 		if (gcc.getComponents() == 0) {
 			return false;
 		}
-		// get largest component
-		Rect rReduced = gcc.getComponent(0);
+		// get component which is largest than the minimum size and
+		// closest to a 4/3 ratio of width to height
+		Rect rReduced;
+		int nBestDiff = Integer.MAX_VALUE;
+		for (int i=0; i<gcc.getComponents(); i++) {
+			rReduced = gcc.getComponent(0);
+			Rect rThisDetected = new Rect(
+					(rReduced.getLeft() * rgb.getWidth()) / nReducedWidth,
+					(rReduced.getTop() * rgb.getHeight()) / nReducedHeight,
+					(rReduced.getWidth() * rgb.getWidth()) / nReducedWidth,
+					(rReduced.getHeight() * rgb.getHeight()) / nReducedHeight
+					);
+			if (rThisDetected.getArea() >= this.nMinArea) {
+				int nRatio = 3 * rThisDetected.getWidth() / rThisDetected.getHeight();
+				// the ratio should be close to 4 since in the ideal case
+				// width = 4x and height = 3x so 3 * width / height = 4
+				int nDiff = Math.abs(nRatio-4);
+				if (nDiff < nBestDiff) {
+					this.rDetected = rThisDetected;
+					nBestDiff = nDiff;
+				}
+			} else {
+				break;
+			}
+		}
 		// we detected the barcode at reduced resolution
 		// for speed. Stretch the rectangle back to its
 		// original size
-		this.rDetected = new Rect(
-				(rReduced.getLeft() * rgb.getWidth()) / nReducedWidth,
-				(rReduced.getTop() * rgb.getHeight()) / nReducedHeight,
-				(rReduced.getWidth() * rgb.getWidth()) / nReducedWidth,
-				(rReduced.getHeight() * rgb.getHeight()) / nReducedHeight
-				);
-		if (this.rDetected.getArea() < this.nMinArea) {
-			return false;
-		}
 		return true;
 	}
 	
