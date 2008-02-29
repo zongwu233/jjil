@@ -16,7 +16,7 @@ class ReadBarJ extends Frame
 		this.setVisible(true);
 		RgbImageJ2se debug = new RgbImageJ2se(this.getGraphics());
 		Debug.setShow(debug);
-		Image image = getToolkit().getImage("c:\\images\\barcode.jpg"); //$NON-NLS-1$
+		Image image = getToolkit().getImage("Z:\\Data transfer\\101_PANA\\barcode.JPG"); //$NON-NLS-1$
 		jjil.core.RgbImage inimg = RgbImageJ2se.toRgbImage(image);
 		DetectBarcode db = new DetectBarcode(20000);
 		if (!db.Push(inimg)) {
