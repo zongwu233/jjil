@@ -480,11 +480,11 @@ public class ReadBarcode {
                     if (oLeft) {
                     	// on the left side of the barcode we are looking for a negative
                     	// zero crossing, from light to dark
-                    	if (wZeroes[i][0] < 0) {
+//                    	if (wZeroes[i][0] < 0) {
                             vResult.addElement(new Point(i, Math.abs(wZeroes[i][0]) / 256));                   		
-                    	} else {
-                    		vResult.addElement(new Point(i, Math.abs(wZeroes[i][1]) / 256));
-                    	}
+//                    	} else {
+//                    		vResult.addElement(new Point(i, Math.abs(wZeroes[i][1]) / 256));
+//                    	}
                     } else {
                     	// on the right side of the barcode we are looking for a positive
                     	// zero crossing, from dark to light
