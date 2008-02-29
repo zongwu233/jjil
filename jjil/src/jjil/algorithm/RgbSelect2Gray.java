@@ -55,16 +55,9 @@ public class RgbSelect2Gray extends PipelineStage {
      */
     public static class ColorClass {
         private String name;
-        private static ColorClass RED;
-        private static ColorClass GREEN;
-        private static ColorClass BLUE;
-        
-        {
-            RED = new ColorClass("RED"); //$NON-NLS-1$
-            GREEN = new ColorClass("GREEN"); //$NON-NLS-1$
-            BLUE = new ColorClass("BLUE"); //$NON-NLS-1$
-        	
-        }
+        private static final ColorClass RED = new ColorClass("RED");
+        private static final ColorClass GREEN = new ColorClass("GREEN");
+        private static final ColorClass BLUE = new ColorClass("BLUE");
         
         private ColorClass(String name) {
             this.name = name;
@@ -118,7 +111,7 @@ public class RgbSelect2Gray extends PipelineStage {
      * The class represents the color blue. It is used like an enumerated value when
      * calling the RgbSelect2Gray constructor.
      */
-    public static final ColorClass BLUE = new ColorClass(Messages.getString("RgbSelect2Gray.3")); //$NON-NLS-1$
+    public static final ColorClass BLUE = ColorClass.Blue();
     
     private ColorClass colorChosen;
     
