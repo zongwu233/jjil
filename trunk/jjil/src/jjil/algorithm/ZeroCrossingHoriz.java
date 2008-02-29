@@ -145,6 +145,8 @@ public class ZeroCrossingHoriz {
                         int posEdge = 
                             ComputeZeroCrossing(cLastPos, wLastEdge,
                                 j, bThisPix);
+                        // test for negative or positive zero crossing
+                        if (bThisPix < 0) posEdge = -posEdge;
                         v.addElement(new Integer(posEdge));
                     }
                     cLastPos = j;
