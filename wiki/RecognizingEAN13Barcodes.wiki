@@ -1,4 +1,4 @@
-#summary Introduction.
+#summary Introduction to detecting and reading EAN-13 barcodes with JJIL.
 
 _Jon A. Webb, Ph.D._
 
@@ -13,6 +13,8 @@ Two-dimensional barcodes are designed to address this problem by spreading the i
 = Imaging requirements for EAN-13 barcodes =
 
 There are many good descriptions of EAN-13 barcodes available on the web. In summary, an EAN-13 barcode consists of two blocks of six digits each. (One more digit is encoded using the parity of the first block, making thirteen digits in all and giving the name.) Each digit is encoded using seven vertical bars of equal width, which we will call “elementary bars”. The elementary bars are either white or black. A digit code is always arranged into four groups of the same color. For example, one code for the digit 0 is “0001101”, where 1 stands for black and 0 for white. This code consists of an elementary black bar, followed by an elementary white bar, followed by a black bar the width of two elementary bars, followed by a white bar the width of three elementary bars. An example is shown below:
+
+http://jjil.googlecode.com/files/EAN13Barcode.jpg
 
 The two groups of six digits are separated by a middle pattern consisting of five elementary bars of alternating color, and the barcode begins with a start pattern and ends with and end pattern, each consisting of three bars of alternating color. Thus, there are 3 + 6*7 + 5 + 6*7 + 3 = 95 elementary bars in an EAN-13 barcode. Examining the digit encodings shows that a shift of as little as two elementary bars can transform one digit’s code into another’s. For example, one encoding of the digit 1 is “0011001”, which can be transformed into “0001101”, the encoding for 0 given above, by changing the third 1 to 0 and the fifth 0 to 1. This means every one of the elementary bars must be detected, and gives us a lower bound on the number of pixels an EAN-13 barcode must extend over for correct recognition: with perfect focus and no loss of resolution due to image coding, it must extend over at least 95 pixels. In practice, because focus is not perfect and cellphone cameras commonly compress an image before making it available for processing, the resolution must be at least two to three times that, i.e., over two to three hundred pixels in width.
 
