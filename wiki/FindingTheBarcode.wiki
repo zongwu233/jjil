@@ -25,3 +25,5 @@ We therefore have this series of steps to detect the barcode:
   # Extract the largest region with a roughly 3:4 height/width ratio and determine its bounding box.
 
 These steps are implemented in the Push method of the DetectBarcode class of the Barcode library in JJIL. We will describe this method in more detail later. 
+
+See [ExamplesOfBarcodeDetection] for examples.
