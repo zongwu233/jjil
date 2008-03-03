@@ -1,4 +1,5 @@
 #summary Introduction to detecting and reading EAN-13 barcodes with JJIL.
+#labels Featured
 
 _Jon A. Webb, Ph.D._
 
@@ -21,3 +22,5 @@ The two groups of six digits are separated by a middle pattern consisting of fiv
 Cellphone camera resolutions currently vary from VGA (640x480) to UXGA (1600x1200). For a VGA cellphone camera to take an acceptable image of an EAN-13 barcode the barcode must fill almost half its field of view. This is impractical for most cellphones without changes to the camera’s optics, because cellphone cameras are designed to be in focus at a few feet, allowing a good capture of a face. An EAN-13 barcode would have to be only a few inches away from a typical cellphone camera to fill at least half the field of view, and would be well out of focus.
 
 With cameras with horizontal resolution at least 1280, i.e., SXGA (1280x1024) or better, however, the situation is different. With a high resolution camera the barcode need only fill less than a quarter of the field of view of the camera. This is a practical requirement with current cellphones, especially those with autofocus.
+
+See [HowBarcodeRecognitionWorks] for a top-level description of the overall algorithm.
