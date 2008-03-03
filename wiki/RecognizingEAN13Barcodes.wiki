@@ -1,0 +1,9 @@
+#summary Introduction.
+
+_Jon A. Webb, Ph.D._
+
+= Why EAN-13 Barcodes? =
+
+There are a number of different barcode formats, including some that are specifically designed to be read with a camera (instead of a linear scanning device). Although EAN-13 (which includes UPC) barcodes are designed to be read with a linear scanner, EAN-13 barcode recognition using a cellphone camera is interesting because these barcodes are the most common object designed to be read by any image sensor. They are the barcodes found on packaging which are used to identify products for retail sale. A successful EAN-13 barcode reader would make it possible to link information in the real world (products) to information in the virtual world (web sites discussing products, price databases, etc.) This is not true for other barcodes.
+That said, there are significant problems with trying to read EAN-13 barcodes with a cellphone camera, resulting from the fact that an EAN-13 barcode is one-dimensional. All the information contained in the barcode is arranged horizontally. This makes the horizontal density of the information quite high. A camera records information with similar density horizontally and vertically. There is not a good match between the barcode and the sensor we are using. In practical terms, this means that the barcode must be in good focus in order to be read, and must be close enough to the camera to cover a significant portion of the image. This is not always easy to achieve with a cellphone camera.
+Two-dimensional barcodes are designed to address this problem by spreading the information out both horizontally and vertically. However, two-dimensional barcodes are far less common than EAN-13 barcodes. Moreover, we learn more from trying to recognize a more difficult object than a simpler one.
