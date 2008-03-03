@@ -1,4 +1,5 @@
 #summary Top-level description of barcode recognition using JJIL
+#labels Featured
 
 = How Barcode Recognition Works=
 
