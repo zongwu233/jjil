@@ -89,4 +89,4 @@ The entire sequence can be executed simply by
 }}}
 Of course, once a Ladder like this is constructed, it can be used over and over to process images, just as a Sequence can be. 
 
-Now that the basics of JJIL have been explained, let's consider how we actually [FaceDetectionHighLevel implement face detection in JJIL].
+See [FaceDetectionHighLevel] for an explanation of how Sequences and Ladders are used to implement face detection in JJIL, or [BarcodeDetectionDetail] for how Sequences are used to detect barcodes.
