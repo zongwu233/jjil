@@ -2,7 +2,7 @@
 
 = Detecting the barcode: More detail =
 
-The barcode is detected in the Push method of the DetectBarcode class in the Barcode library. Push begins by applying a pipeline which does the following operations in sequence:
+The barcode is detected in the Push method of the DetectBarcode class in the Barcode library. Push begins by applying a pipeline (see [SequencesAndLadders] for more information on how JJIL implements pipelines) which does the following operations in sequence:
 
   # Subsample the image (RgbSubSample).
   # Convert RGB pixels to gray (RgbAvg2Gray).
