@@ -100,7 +100,9 @@ public class ReadBarcode {
         }
         /* Now crop the gray image.
          */
-        seq.Add(new GrayCrop(dTopLeftX, dTopLeftY, cWidth, cHeight));
+        int dLeft = Math.max(0, dTopLeftX - cWidth / 12);
+        int cWidthExp = Math.min(image.getWidth() - dLeft, cWidth * 7 / 6);
+        seq.Add(new GrayCrop(dLeft, dTopLeftY, cWidthExp, cHeight));
         /* Apply the pipeline to get the cropped image.
          */
         seq.Push(image);
@@ -478,13 +480,13 @@ public class ReadBarcode {
             if (wZeroes[i] != null) {
                 if (wZeroes[i].length > 10) {
                     if (oLeft) {
-                    	// on the left side of the barcode we are looking for a negative
-                    	// zero crossing, from light to dark
-//                    	if (wZeroes[i][0] < 0) {
+                    	// on the left side of the barcode we are looking for a positive
+                    	// zero crossing, from dark to light 
+                    	if (wZeroes[i][0] > 0) {
                             vResult.addElement(new Point(i, Math.abs(wZeroes[i][0]) / 256));                   		
-//                    	} else {
-//                    		vResult.addElement(new Point(i, Math.abs(wZeroes[i][1]) / 256));
-//                    	}
+                    	} else {
+                    		vResult.addElement(new Point(i, Math.abs(wZeroes[i][1]) / 256));
+                    	}
                     } else {
                     	// on the right side of the barcode we are looking for a positive
                     	// zero crossing, from dark to light
