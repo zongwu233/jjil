@@ -788,7 +788,7 @@ public class BarcodeReaderEan13 implements BarcodeReader {
             }
             wSumLeftEdge += dLeftOffset;
             // estimate position of the middle of the barcode
-            // this will be the position of the first 1 in the
+            // this will be the position of the second 0 in the
             // string "0101010"
             int dMidOffset = 
             	EstimateMiddle(
@@ -801,7 +801,7 @@ public class BarcodeReaderEan13 implements BarcodeReader {
             	return false;
             }
             // estimate position of the right of the barcode.
-            // this will be the position of the first 1 in the
+            // this will be the position of the second 0 in the
             // string "1010000"
             int dRightOffset = 
             	EstimateRightEdge(
@@ -824,16 +824,23 @@ public class BarcodeReaderEan13 implements BarcodeReader {
             // stretch the left and right sides of the barcode so the
             // pixels are an exact multiple of the number of elementary
             // bars between the measured positions
+            // The "stretched width" reflects the number of elementary bars
+            // that should lie between the measured positions of the start,
+            // middle, and end patterns if we've detected them correctly.
+            // On the left side we measured from the left edge of the start
+            // pattern (LeftWidth) to the start of the middle pattern
             byte bLeft[] = Stretch(
             		bData, 
             		dLeftOffset, 
             		dMidOffset, 
-            		LeftWidth + LeftDigits * DigitWidth + 2);
+            		MidOffset + 1);
+            // On the right side we measured from the start of the middle
+            // pattern (MidWidth) to the start of the right pattern
             byte bRight[] = Stretch(
             		bData, 
             		dMidOffset, 
             		dRightOffset, 
-            		3 + RightDigits * DigitWidth + 1);
+            		MidWidth - 1 + RightDigits * DigitWidth + 1);
             // if we know the implied first digit we can call a different
             // version of EstimateLeftCode that takes that digits as
             // the last parameter. This will significantly improve accuracy
@@ -888,8 +895,8 @@ public class BarcodeReaderEan13 implements BarcodeReader {
         int dWidth = bLeft.length;
         // the number of elementary bars in bLeft = 
         // the width of the left pattern + the width of the left
-        // digits + 2 for the two bars detected in the middle pattern
-        int cPixelsPerBar = dWidth / (MidOffset + 2);
+        // digits for the two bars detected in the middle pattern
+        int cPixelsPerBar = dWidth / (MidOffset + 1);
         String szCode = ""; //$NON-NLS-1$
         // for recording the parity we find in the left side barcode
         int nParity = 0;
@@ -1016,10 +1023,10 @@ public class BarcodeReaderEan13 implements BarcodeReader {
     private String EstimateRightCode(
         byte[] bRight) {
     	int dWidth = bRight.length;
-        int cPixelsPerBar = dWidth / (3 + RightDigits * DigitWidth + 1);
+        int cPixelsPerBar = dWidth / (MidWidth + RightDigits * DigitWidth);
         String szCode = ""; //$NON-NLS-1$
         // dCol is the position of the current digit
-        int dCol = cPixelsPerBar * 3;
+        int dCol = cPixelsPerBar * (MidWidth - 1);
         for (int i=0; i<RightDigits; i++) {
             // try all digits
             int nBestDigit = -1;
@@ -1088,6 +1095,18 @@ public class BarcodeReaderEan13 implements BarcodeReader {
         return dBestPos;
     }
     
+    /**
+     * We search for the middle pattern (10101, surrounded by 0's) using correlation. 
+     * The input is an image and a row in the image. 
+     * The search is done between defined positions in the
+     * row. We return the position of the second 0 in the pattern 0101010.
+     * @param image: the input image.
+     * @param dRow: the row in the image.
+     * @param nLeft: the starting position to search.
+     * @param nRight: the end position to search.
+     * @param cWidth
+     * @return
+     */
     private int EstimateMiddle(
     		Gray8Image image, 
     		int dRow,
@@ -1107,12 +1126,13 @@ public class BarcodeReaderEan13 implements BarcodeReader {
                 int dOffset = j + dCol;
                 // mid pattern is 1, 0, 1, 0, 1, surrounded by 0's
                 wConv += 
-                        - (int) in[dRow*nImageWidth + dOffset - (3 * cWidth) / TotalWidth] // dark
-                        + (int) in[dRow*nImageWidth + dOffset - (2 * cWidth) / TotalWidth] // light
-                        - (int) in[dRow*nImageWidth + dOffset - (1 * cWidth) / TotalWidth] // dark
-                        + (int) in[dRow*nImageWidth + dOffset + (0 * cWidth) / TotalWidth] // light
-                        - (int) in[dRow*nImageWidth + dOffset + (1 * cWidth) / TotalWidth] // dark
-                        + (int) in[dRow*nImageWidth + dOffset + (2 * cWidth) / TotalWidth] // light
+                        - (int) in[dRow*nImageWidth + dOffset - (2 * cWidth) / TotalWidth] // dark  / 0
+                        + (int) in[dRow*nImageWidth + dOffset - (1 * cWidth) / TotalWidth] // light / 1
+                        - (int) in[dRow*nImageWidth + dOffset - (0 * cWidth) / TotalWidth] // dark  / 0
+                        + (int) in[dRow*nImageWidth + dOffset + (1 * cWidth) / TotalWidth] // light / 1
+                        - (int) in[dRow*nImageWidth + dOffset + (2 * cWidth) / TotalWidth] // dark  / 0
+                        + (int) in[dRow*nImageWidth + dOffset + (3 * cWidth) / TotalWidth] // light / 1
+                        - (int) in[dRow*nImageWidth + dOffset + (4 * cWidth) / TotalWidth] // dark  / 0
                       ;
             }
             if (wConv > wBestConv) {
@@ -1123,6 +1143,15 @@ public class BarcodeReaderEan13 implements BarcodeReader {
         return dBestPos;
     }
     
+    /**
+     * Returns the position of the second '0' in the string '01010'.
+     * @param image
+     * @param dRow
+     * @param nLeft
+     * @param nRight
+     * @param cWidth
+     * @return
+     */
     private int EstimateRightEdge(
     		Gray8Image image, 
     		int dRow,
@@ -1143,11 +1172,11 @@ public class BarcodeReaderEan13 implements BarcodeReader {
                 int dOffset = j + dCol;
                 wConv = wConv
                         // right pattern is 1, 0, 1, followed by 0's
-                        + (int) in[dRow*nImageWidth + dOffset + (-2 * cWidth) / TotalWidth] // light
-                        - (int) in[dRow*nImageWidth + dOffset + (-1 * cWidth) / TotalWidth] // dark
-                        + (int) in[dRow*nImageWidth + dOffset + (0 * cWidth) / TotalWidth] // light
-                        - (int) in[dRow*nImageWidth + dOffset + (1 * cWidth) / TotalWidth] // dark
-                        + (int) in[dRow*nImageWidth + dOffset + (2 * cWidth) / TotalWidth] // light
+                        + (int) in[dRow*nImageWidth + dOffset + (-2 * cWidth) / TotalWidth] // light 0
+                        - (int) in[dRow*nImageWidth + dOffset + (-1 * cWidth) / TotalWidth] // dark  1
+                        + (int) in[dRow*nImageWidth + dOffset + (0 * cWidth) / TotalWidth] // light  0
+                        - (int) in[dRow*nImageWidth + dOffset + (1 * cWidth) / TotalWidth] // dark   1
+                        + (int) in[dRow*nImageWidth + dOffset + (2 * cWidth) / TotalWidth] // light  0
                ;
             }
             if (wConv > wBestConv) {
