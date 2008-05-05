@@ -23,6 +23,7 @@
  */
 
 package jjil.algorithm;
+import jjil.core.Error;
 import jjil.core.Gray8Image;
 import jjil.core.Image;
 import jjil.core.PipelineStage;
@@ -144,8 +145,13 @@ public class RgbSelect2Gray extends PipelineStage {
      */
     public void Push(Image image) throws IllegalArgumentException {
         if (!(image instanceof RgbImage)) {
-            throw new IllegalArgumentException(image.toString() +
-                    Messages.getString("RgbSelect2Gray.4")); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+            	new Error(
+            			Error.PACKAGE.ALGORITHM,
+            			ErrorCodes.IMAGE_NOT_RGBIMAGE,
+            			image.toString(),
+            			null,
+            			null));
         }
         RgbImage rgb = (RgbImage) image;
         int[] rgbData = rgb.getData();
@@ -187,8 +193,14 @@ public class RgbSelect2Gray extends PipelineStage {
         if (!(color.equals(RgbSelect2Gray.RED) || 
                 color.equals(RgbSelect2Gray.GREEN) || 
                 color.equals(RgbSelect2Gray.BLUE))) {
-            throw new IllegalArgumentException(color.toString() +
-                    Messages.getString("RgbSelect2Gray.5")); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+            	new Error(
+        			Error.PACKAGE.ALGORITHM,
+        			ErrorCodes.ILLEGAL_COLOR_CHOICE,
+        			color.toString(),
+        			null,
+        			null));
+
         }
         this.colorChosen = color;
     }

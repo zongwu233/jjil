@@ -23,6 +23,7 @@
  */
 
 package jjil.algorithm;
+import jjil.core.Error;
 import jjil.core.Gray8Image;
 import jjil.core.Image;
 import jjil.core.Ladder;
@@ -48,19 +49,33 @@ public class GrayAdd implements Ladder.Join {
     public Image DoJoin(Image imageFirst, Image imageSecond)
         throws IllegalArgumentException
     {
-        if (!(imageFirst instanceof Gray8Image) ||
-            !(imageSecond instanceof Gray8Image)) {
-            throw new IllegalArgumentException(
-                    Messages.getString("GrayAdd.0") + //$NON-NLS-1$
-                    imageFirst.toString() + Messages.getString("Comma") + //$NON-NLS-1$
-                    imageSecond.toString());
-        }
+        if (!(imageFirst instanceof Gray8Image)) {
+                throw new IllegalArgumentException(
+                    	new Error(
+                				Error.PACKAGE.ALGORITHM,
+                				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
+                				imageFirst.toString(),
+                				null,
+                				null));
+            }
+        if (!(imageSecond instanceof Gray8Image)) {
+                throw new IllegalArgumentException(
+                    	new Error(
+                				Error.PACKAGE.ALGORITHM,
+                				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
+                				imageSecond.toString(),
+                				null,
+                				null));
+            }
         if (imageFirst.getWidth() != imageSecond.getWidth() ||
             imageSecond.getHeight() != imageSecond.getHeight()) {
             throw new IllegalArgumentException(
-                    Messages.getString("GrayAdd.2") + //$NON-NLS-1$
-                    imageFirst.toString() + Messages.getString("Comma") + //$NON-NLS-1$
-                    imageSecond.toString());
+                	new Error(
+            				Error.PACKAGE.ALGORITHM,
+            				ErrorCodes.IMAGE_SIZES_DIFFER,
+            				imageFirst.toString(),
+            				imageSecond.toString(),
+            				null));
             
         }
         Gray8Image gray1 = (Gray8Image) imageFirst;

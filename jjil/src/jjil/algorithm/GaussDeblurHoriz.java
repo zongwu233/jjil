@@ -25,9 +25,11 @@
 package jjil.algorithm;
 import jjil.core.Complex;
 import jjil.core.Complex32Image;
+import jjil.core.Error;
 import jjil.core.Gray8Image;
 import jjil.core.Image;
 import jjil.core.PipelineStage;
+import jjil.core.Point;
 /**
  * Uses deconvolution to remove blur from a Gray8Image. The blur removed is a 
  * horizontal Gaussian blur with a given standard deviation. The background noise
@@ -185,10 +187,22 @@ public class GaussDeblurHoriz extends PipelineStage {
      */
     public void Push(Image im) {
         if (im.getWidth() != im.getHeight()) {
-            throw new IllegalArgumentException(Messages.getString("GaussDeblurHoriz.0")); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+                	new Error(
+            				Error.PACKAGE.ALGORITHM,
+            				ErrorCodes.IMAGE_NOT_SQUARE,
+            				im.toString(),
+            				null,
+            				null));
         }
         if (!(im instanceof Gray8Image)) {
-            throw new IllegalArgumentException(Messages.getString("GaussDeblurHoriz.1")); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+                	new Error(
+            				Error.PACKAGE.ALGORITHM,
+            				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
+            				im.toString(),
+            				null,
+            				null));
         }
         this.fft.Push(im);
         Complex32Image cxmIm = (Complex32Image) this.fft.Front();
@@ -228,8 +242,13 @@ public class GaussDeblurHoriz extends PipelineStage {
      */
     public void setStdDev(int nStdDev) throws IllegalArgumentException {
         if (nStdDev < 0 || nStdDev > this.rxnCoeffs.length) {
-            throw new IllegalArgumentException(Messages.getString("GaussDeblurHoriz.2") + nStdDev + //$NON-NLS-1$
-                    Messages.getString("GaussDeblurHoriz.3")); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+                	new Error(
+                			Error.PACKAGE.ALGORITHM,
+                			ErrorCodes.PARAMETER_OUT_OF_RANGE,
+                			new Integer(nStdDev).toString(),
+                			new Integer(0).toString(),
+                			new Integer(this.rxnCoeffs.length).toString()));
         }
         this.nStdDev = nStdDev;
     }

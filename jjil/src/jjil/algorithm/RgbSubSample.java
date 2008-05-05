@@ -23,6 +23,7 @@
  */
 
 package jjil.algorithm;
+import jjil.core.Error;
 import jjil.core.Image;
 import jjil.core.PipelineStage;
 import jjil.core.RgbImage;
@@ -60,16 +61,31 @@ public class RgbSubSample extends PipelineStage {
      */
     public void Push(Image image) throws IllegalArgumentException {
         if (!(image instanceof RgbImage)) {
-            throw new IllegalArgumentException(image.toString() + 
-                    Messages.getString("RgbSubSample.0")); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+                	new Error(
+                			Error.PACKAGE.ALGORITHM,
+                			ErrorCodes.IMAGE_NOT_RGBIMAGE,
+                			image.toString(),
+                			null,
+                			null));
         }
         if (image.getWidth() < this.cTargetWidth) {
-            throw new IllegalArgumentException(image.toString() + 
-                    Messages.getString("RgbSubSample.1") + this.cTargetWidth); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+                	new Error(
+                			Error.PACKAGE.ALGORITHM,
+                			ErrorCodes.SHRINK_OUTPUT_LARGER_THAN_INPUT,
+                			image.toString(),
+                			this.toString(),
+                			null));
         }
         if (image.getHeight() < this.cTargetHeight) {
-            throw new IllegalArgumentException(image.toString() + 
-                    Messages.getString("RgbSubSample.2") + this.cTargetHeight); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+                	new Error(
+                			Error.PACKAGE.ALGORITHM,
+                			ErrorCodes.SHRINK_OUTPUT_LARGER_THAN_INPUT,
+                			image.toString(),
+                			this.toString(),
+                			null));
         }
         // note that Java division truncates. So 
         // e.g. cReduceWidth * this.cTargetWidth <= image.getWidth
@@ -121,8 +137,12 @@ public class RgbSubSample extends PipelineStage {
         throws IllegalArgumentException {
         if (cTargetWidth <= 0 || cTargetHeight <= 0) {
             throw new IllegalArgumentException(
-                    Messages.getString("RgbSubSample.3") + //$NON-NLS-1$
-                    Messages.getString("RgbSubSample.4") + cTargetWidth + Messages.getString("Comma") + cTargetHeight + ")"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                	new Error(
+                			Error.PACKAGE.ALGORITHM,
+                			ErrorCodes.OUTPUT_IMAGE_SIZE_NEGATIVE,
+                			new Integer(cTargetWidth).toString(),
+                			new Integer(cTargetHeight).toString(),
+                			null));
         }
         this.cTargetWidth = cTargetWidth;
         this.cTargetHeight = cTargetHeight;
@@ -133,7 +153,7 @@ public class RgbSubSample extends PipelineStage {
      * @return the string describing the reduction operation.
      */
     public String toString() {
-        return super.toString() + " (" + this.cTargetWidth + Messages.getString("Comma") +  //$NON-NLS-1$ //$NON-NLS-2$
+        return super.toString() + " (" + this.cTargetWidth + "," +  //$NON-NLS-1$ //$NON-NLS-2$
                 this.cTargetHeight + ")"; //$NON-NLS-1$
     }
 }

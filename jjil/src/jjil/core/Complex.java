@@ -85,8 +85,13 @@ public class Complex {
         
     public Complex div(int n) throws IllegalArgumentException {
         if (n==0) {
-            throw new IllegalArgumentException(Messages.getString("Complex.0") + this.toString() +  //$NON-NLS-1$
-                    Messages.getString("Complex.1")); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+            		new Error(
+            				Error.PACKAGE.CORE,
+            				ErrorCodes.MATH_DIVISION_ZERO, 
+            				this.toString(), 
+            				new Integer(n).toString(), 
+            				null));
         }
         this.nReal /= n;
         this.nImag /= n;
@@ -108,8 +113,13 @@ public class Complex {
         }
         int nSq = cx.square();
         if (nSq == 0) {
-            throw new IllegalArgumentException(Messages.getString("Complex.2") + this.toString() +  //$NON-NLS-1$
-                    Messages.getString("Complex.3") + cx.toString()); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+            		new Error(
+            				Error.PACKAGE.CORE,
+            				ErrorCodes.MATH_PRODUCT_TOO_LARGE,
+            				this.toString(),
+            				cx.toString(),
+            				null));
         }
         // cx is right shifted by SHIFT bits. So multiplying by it and 
         // dividing by its square shifts left by SHIFT bits. We shift back to
@@ -154,7 +164,7 @@ public class Complex {
      * @return the magnitude of this number, i.e., sqrt(real**2 + imag**2)
      */
     public int magnitude() {
-        // speciall case when one component is 0
+        // special case when one component is 0
         if (this.nReal == 0 || this.nImag == 0) {
             return Math.abs(this.nReal) + Math.abs(this.nImag);
         }
@@ -216,13 +226,18 @@ public class Complex {
     /**
      * Computes the absolute square.
      * @return The absolute square, i.e, real**2 + imag**2.
-     * @throws ArithmeticException if Complex value is too large.
+     * @throws RuntimeException if Complex value is too large.
      */
-    public int square() throws ArithmeticException {
+    public int square() throws RuntimeException {
         if (Math.abs(this.nReal) > MathPlus.SCALE ||
             Math.abs(this.nImag) > MathPlus.SCALE) {
-            throw new ArithmeticException(Messages.getString("Complex.4") + //$NON-NLS-1$
-                    this.toString() + Messages.getString("Complex.5")); //$NON-NLS-1$
+            throw new RuntimeException(
+            		new Error(
+            				Error.PACKAGE.CORE,
+            				ErrorCodes.MATH_SQUARE_TOO_LARGE,
+            				this.toString(),
+            				null,
+            				null));
         }
         return this.nReal * this.nReal + this.nImag * this.nImag;
     }
@@ -258,6 +273,6 @@ public class Complex {
      * @return the string (real, imag)
      */
     public String toString() {
-        return "(" + this.nReal + Messages.getString("Complex.7") + this.nImag + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        return "(" + this.nReal + ", " + this.nImag + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
 }

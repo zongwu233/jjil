@@ -25,6 +25,7 @@
 package jjil.algorithm;
 import jjil.core.Complex;
 import jjil.core.Complex32Image;
+import jjil.core.Error;
 import jjil.core.Gray8Image;
 import jjil.core.Image;
 import jjil.core.PipelineStage;
@@ -57,18 +58,33 @@ public class FftGray8 extends PipelineStage {
      */
     public void Push(Image im) throws IllegalArgumentException {
         if (!(im instanceof Gray8Image)) {
-            throw new IllegalArgumentException(im.toString() + Messages.getString("FftGray8.0") + //$NON-NLS-1$
-                    Messages.getString("FftGray8.1")); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+            		new Error(
+            				Error.PACKAGE.ALGORITHM,
+            				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
+            				im.toString(),
+            				null,
+            				null));
         }
         int nWidth = im.getWidth();
         int nHeight = im.getHeight();
         if ((nWidth & (nWidth-1)) != 0) {
-            throw new IllegalArgumentException(Messages.getString("FftGray8.2") + //$NON-NLS-1$
-                    Messages.getString("FftGray8.3") + nWidth); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+            		new Error(
+            				Error.PACKAGE.ALGORITHM,
+            				ErrorCodes.FFT_SIZE_NOT_POWER_OF_2,
+            				im.toString(),
+            				null,
+            				null));
         }
         if ((nHeight & (nHeight-1)) != 0) {
-            throw new IllegalArgumentException(Messages.getString("FftGray8.4") + //$NON-NLS-1$
-                    Messages.getString("FftGray8.5") + nHeight); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+            		new Error(
+            				Error.PACKAGE.ALGORITHM,
+            				ErrorCodes.FFT_SIZE_NOT_POWER_OF_2,
+            				im.toString(),
+            				null,
+            				null));
         }
         // initialize FFT
         if (this.fft == null) {

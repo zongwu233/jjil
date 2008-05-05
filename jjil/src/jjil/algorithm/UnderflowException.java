@@ -12,7 +12,7 @@ public class UnderflowException extends RuntimeException {
      * Construct this exception object.
      * @param message the error message.
      */
-    public UnderflowException( String message ) {
+    public UnderflowException( Throwable message ) {
         super( message );
     }
 }

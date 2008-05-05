@@ -23,6 +23,7 @@
  */
 
 package jjil.algorithm;
+import jjil.core.Error;
 import jjil.core.Gray32Image;
 import jjil.core.Image;
 import jjil.core.PipelineStage;
@@ -54,8 +55,12 @@ public class Gray32Div extends PipelineStage {
     {
         if (!(image instanceof Gray32Image)) {
             throw new IllegalArgumentException(
-                    Messages.getString("Gray32Div.0") + //$NON-NLS-1$
-                    image.toString());
+               	new Error(
+            		Error.PACKAGE.CORE,
+            		ErrorCodes.IMAGE_NOT_GRAY32IMAGE,
+            		image.toString(),
+            		null,
+            		null));
         }
         Gray32Image gray = (Gray32Image) image;
         int[] data = gray.getData();
@@ -72,7 +77,13 @@ public class Gray32Div extends PipelineStage {
      */
     public void setDivisor(int nDivisor) throws IllegalArgumentException {
         if (nDivisor == 0) {
-            throw new IllegalArgumentException(Messages.getString("Gray32Div.1")); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+               	new Error(
+               		Error.PACKAGE.CORE,
+               		jjil.core.ErrorCodes.MATH_DIVISION_ZERO,
+               		null,
+               		null,
+               		null));
         }
         this.nDivisor = nDivisor;
     }

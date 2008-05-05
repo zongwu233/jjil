@@ -24,6 +24,7 @@
 
 package jjil.algorithm;
 
+import jjil.core.Error;
 import jjil.core.Gray16Image;
 import jjil.core.Gray8Image;
 import jjil.core.Image;
@@ -41,7 +42,7 @@ import jjil.core.Sequence;
  * @author webb
  */
 public class GrayConnComp {
-	private class Label implements Comparable {
+	private class Label implements ComparableJ2me {
 		private int nPixelCount = 0;
 		private Rect rectBounding;
 
@@ -57,11 +58,22 @@ public class GrayConnComp {
 
 		public int compareTo(Object o) {
 			if (o == null) {
-				throw new NullPointerException(Messages.getString("GrayConnComp.0")); //$NON-NLS-1$
+				throw new RuntimeException(
+		            new Error(
+		        		Error.PACKAGE.ALGORITHM,
+		        		ErrorCodes.CONN_COMP_LABEL_COMPARETO_NULL,
+		        		null,
+		        		null,
+		        		null));
 			}
 			if (!(o instanceof Label)) {
-				throw new ClassCastException(Messages.getString("GrayConnComp.1") //$NON-NLS-1$
-						+ Messages.getString("GrayConnComp.2") + o.toString()); //$NON-NLS-1$
+				throw new RuntimeException(
+			        new Error(
+				    	Error.PACKAGE.ALGORITHM,
+				    	ErrorCodes.OBJECT_NOT_EXPECTED_TYPE,
+				    	o.toString(),
+				    	Label.class.toString(),
+				    	null));
 			}
 			Label l = (Label) o;
 			if (l.nPixelCount == this.nPixelCount) {
@@ -117,8 +129,13 @@ public class GrayConnComp {
 		}
 		// see if the requested component is out of bounds
 		if (nComponent >= this.rSortedLabels.length) {
-			throw new ArrayIndexOutOfBoundsException(nComponent
-					+ Messages.getString("GrayConnComp.3") + this.pqLabels.size()); //$NON-NLS-1$
+			throw new RuntimeException(
+			        new Error(
+					    	Error.PACKAGE.ALGORITHM,
+					    	ErrorCodes.CONN_COMP_LABEL_OUT_OF_BOUNDS,
+					    	new Integer(nComponent).toString(),
+					    	this.rSortedLabels.toString(),
+					    	null));
 		}
 		// now see if we've figured out what the nComponent'th
 		// component is. If not compute it by finding and
@@ -208,8 +225,13 @@ public class GrayConnComp {
 	 */
 	public void Push(Image image) throws IllegalArgumentException {
 		if (!(image instanceof Gray8Image)) {
-			throw new IllegalArgumentException(Messages.getString("GrayConnComp.4") //$NON-NLS-1$
-					+ image.toString());
+			throw new IllegalArgumentException(
+			    new Error(
+				   	Error.PACKAGE.ALGORITHM,
+				   	ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
+				   	image.toString(),
+				   	null,
+				   	null));
 		}
 		// initialize the label lookup array
 		this.reClasses = new EquivalenceClass[image.getWidth() * image.getHeight()];

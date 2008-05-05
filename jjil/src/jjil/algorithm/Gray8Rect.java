@@ -23,6 +23,7 @@
  */
 
 package jjil.algorithm;
+import jjil.core.Error;
 import jjil.core.Gray8Image;
 import jjil.core.Image;
 import jjil.core.PipelineStage;
@@ -45,10 +46,7 @@ public class Gray8Rect extends PipelineStage {
      * @param bValue the value to be assigned to the rectangle.
      */
     public Gray8Rect(int cX, int cY, int nWidth, int nHeight, byte bValue) {
-        this.cX = cX;
-        this.cY = cY;
-        this.nWidth = nWidth;
-        this.nHeight = nHeight;
+    	setWindow(cX, cY, nWidth, nHeight);
         this.bValue = bValue;
     }
         
@@ -59,12 +57,17 @@ public class Gray8Rect extends PipelineStage {
      */
     public void Push(Image image) throws IllegalArgumentException {
         if (!(image instanceof Gray8Image)) {
-            throw new IllegalArgumentException(image.toString() + Messages.getString("Gray8Rect.0") + //$NON-NLS-1$
-                    Messages.getString("Gray8Rect.1")); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+                	new Error(
+            				Error.PACKAGE.ALGORITHM,
+            				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
+            				image.toString(),
+            				null,
+            				null));
         }
         Gray8Image input = (Gray8Image) image;
         byte[] data = input.getData();
-        int nLimitY = Math.min(input.getHeight(), this.cY +this.nHeight);
+        int nLimitY = Math.min(input.getHeight(), this.cY + this.nHeight);
         int nLimitX = Math.min(input.getWidth(), this.cX + this.nWidth);
         for (int i=this.cY; i<nLimitY; i++) {
             int nStart = i * image.getWidth();
@@ -75,4 +78,19 @@ public class Gray8Rect extends PipelineStage {
          super.setOutput(input);
     }
     
+    public void setWindow(int cX, int cY, int nWidth, int nHeight) {
+    	if (nWidth <= 0 || nHeight <= 0) {
+            throw new IllegalArgumentException(
+               	new Error(
+            		Error.PACKAGE.ALGORITHM,
+            		ErrorCodes.OUTPUT_IMAGE_SIZE_NEGATIVE,
+            		new Integer(nWidth).toString(),
+            		new Integer(nHeight).toString(),
+            		null));
+    	}
+        this.cX = cX;
+        this.cY = cY;
+        this.nWidth = nWidth;
+        this.nHeight = nHeight;
+    }
 }

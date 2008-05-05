@@ -161,7 +161,13 @@ public class MathPlus {
      */
     public static int sqrt(int x) throws IllegalArgumentException {
         if (x < 0) {
-            throw new IllegalArgumentException(Messages.getString("MathPlus.0") + x); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+            		new Error(
+            				Error.PACKAGE.CORE,
+            				ErrorCodes.MATH_NEGATIVE_SQRT,
+            				new Integer(x).toString(),
+            				null,
+            				null));
         }
         // special case for 0
         if (x == 0) {

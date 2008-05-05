@@ -23,6 +23,7 @@
  */
 
 package jjil.algorithm;
+import jjil.core.Error;
 import jjil.core.Gray32Image;
 import jjil.core.Gray8Image;
 import jjil.core.Image;
@@ -47,8 +48,13 @@ public class Gray32Scale2Gray8 extends PipelineStage {
      */
     public void Push(Image image) throws IllegalArgumentException {
         if (!(image instanceof Gray32Image)) {
-            throw new IllegalArgumentException(image.toString() + "" + //$NON-NLS-1$
-                    Messages.getString("Gray32Scale2Gray8.1")); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+            	new Error(
+    				Error.PACKAGE.ALGORITHM,
+    				ErrorCodes.IMAGE_NOT_GRAY32IMAGE,
+    				image.toString(),
+    				null,
+    				null));
         }
         Gray32Image gray32 = (Gray32Image) image;
         Gray8Image gray8 = new Gray8Image(image.getWidth(), image.getHeight());

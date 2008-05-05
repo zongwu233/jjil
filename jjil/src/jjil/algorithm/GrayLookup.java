@@ -23,6 +23,7 @@
  */
 
 package jjil.algorithm;
+import jjil.core.Error;
 import jjil.core.Gray8Image;
 import jjil.core.Image;
 import jjil.core.PipelineStage;
@@ -63,8 +64,13 @@ public class GrayLookup extends PipelineStage {
      */
     public void Push(Image image) throws IllegalArgumentException {
         if (!(image instanceof Gray8Image)) {
-            throw new IllegalArgumentException(image.toString() + Messages.getString("GrayLookup.0") + //$NON-NLS-1$
-                    Messages.getString("GrayLookup.1")); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+                	new Error(
+            				Error.PACKAGE.ALGORITHM,
+            				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
+            				image.toString(),
+            				null,
+            				null));
         }
         Gray8Image input = (Gray8Image) image;
         byte[] data = input.getData();
@@ -82,8 +88,13 @@ public class GrayLookup extends PipelineStage {
      */
     public void setTable(byte[] table) throws IllegalArgumentException {
         if (table.length != 256) {
-            throw new IllegalArgumentException(Messages.getString("GrayLookup.2") + //$NON-NLS-1$
-                    Messages.getString("GrayLookup.3")); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+                	new Error(
+            				Error.PACKAGE.ALGORITHM,
+            				ErrorCodes.LOOKUP_TABLE_LENGTH_NOT_256,
+            				table.toString(),
+            				null,
+            				null));
         }
         this.table = new byte[256];
         System.arraycopy(table, 0, this.table, 0, this.table.length);

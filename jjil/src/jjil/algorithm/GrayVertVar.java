@@ -23,6 +23,7 @@
  */
 
 package jjil.algorithm;
+import jjil.core.Error;
 import jjil.core.Gray16Image;
 import jjil.core.Gray8Image;
 import jjil.core.Image;
@@ -57,8 +58,13 @@ public class GrayVertVar extends PipelineStage {
      */
     public void Push(Image image) throws IllegalArgumentException {
         if (!(image instanceof Gray8Image)) {
-            throw new IllegalArgumentException(image.toString() +
-                    Messages.getString("GrayHorizSimpleEdge.0")); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+            	new Error(
+    				Error.PACKAGE.ALGORITHM,
+    				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
+    				image.toString(),
+    				null,
+    				null));
         }
         if (this.g16 == null || 
         	this.g16.getWidth() != image.getWidth() ||

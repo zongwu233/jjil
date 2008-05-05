@@ -115,17 +115,22 @@ public class Sequence extends PipelineStage {
     {
         if (pFirst == null) {
             throw new IllegalStateException(
-                    Messages.getString("Sequence.0") + //$NON-NLS-1$
-                    Messages.getString("Sequence.1") //$NON-NLS-1$
-                    );
+            		new Error(
+            				Error.PACKAGE.CORE,
+            				ErrorCodes.PIPELINE_EMPTY_PUSH,
+            				this.toString(),
+            				null,
+            				null));
         }
         pFirst.Push(i);
         if (pFirst.Empty()) {
             throw new IllegalStateException(
-                    Messages.getString("Sequence.2") + //$NON-NLS-1$
-                    Messages.getString("Sequence.3") +  //$NON-NLS-1$
-                    pFirst.toString() +
-                    Messages.getString("Sequence.4")); //$NON-NLS-1$
+            		new Error(
+            				Error.PACKAGE.CORE,
+            				ErrorCodes.PIPELINE_NO_RESULT,
+            				pFirst.toString(),
+            				null,
+            				null));
         }
         if (pNext != null) {
             pNext.Push(pFirst.Front());
@@ -142,7 +147,7 @@ public class Sequence extends PipelineStage {
     public String toString()
     {
         if (this.pFirst == null) {
-            return Messages.getString("Sequence.5"); //$NON-NLS-1$
+            return "(null)"; //$NON-NLS-1$
         } else {
             if (this.pNext == null) {
                 return "(" + this.pFirst.toString() + ")"; //$NON-NLS-1$ //$NON-NLS-2$

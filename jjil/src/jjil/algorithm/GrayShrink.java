@@ -27,6 +27,7 @@
  */
 
 package jjil.algorithm;
+import jjil.core.Error;
 import jjil.core.Gray32Image;
 import jjil.core.Gray8Image;
 import jjil.core.Image;
@@ -77,15 +78,22 @@ public class GrayShrink extends PipelineStage {
      */
     public void Push(Image image) throws IllegalArgumentException {
         if (!(image instanceof Gray8Image)) {
-            throw new IllegalArgumentException(Messages.getString("GrayShrink.0") + image.toString() + //$NON-NLS-1$
-                    Messages.getString("GrayShrink.1")); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+                	new Error(
+                			Error.PACKAGE.ALGORITHM,
+                			ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
+                			image.toString(),
+                			null,
+                			null));
         }
         if (image.getWidth() < this.cWidth || image.getHeight() < this.cHeight) {
-            throw new IllegalArgumentException(Messages.getString("GrayShrink.2") + //$NON-NLS-1$
-                    Messages.getString("GrayShrink.3") + //$NON-NLS-1$
-                    image.getWidth() + Messages.getString("Comma") + image.getHeight() + ") " + //$NON-NLS-1$ //$NON-NLS-2$
-                    Messages.getString("GrayShrink.6") + this.cWidth + Messages.getString("Comma") +  //$NON-NLS-1$ //$NON-NLS-2$
-                    this.cHeight + ")"); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+                	new Error(
+                			Error.PACKAGE.ALGORITHM,
+                			ErrorCodes.SHRINK_OUTPUT_LARGER_THAN_INPUT,
+                			image.toString(),
+                			this.toString(),
+                			null));
         }
         Gray8Image input = (Gray8Image) image;
         /* horizontal shrink */
@@ -102,8 +110,13 @@ public class GrayShrink extends PipelineStage {
      */
     public void setHeight(int cHeight) throws IllegalArgumentException {
         if (cHeight <= 0) {
-            throw new IllegalArgumentException(Messages.getString("GrayShrink.9") + //$NON-NLS-1$
-                    Messages.getString("Not") + cHeight); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+                	new Error(
+                			Error.PACKAGE.ALGORITHM,
+                			ErrorCodes.OUTPUT_IMAGE_SIZE_NEGATIVE,
+                			new Integer(cHeight).toString(),
+                			this.toString(),
+                			null));
         }
         this.cHeight = cHeight;
     }
@@ -115,8 +128,13 @@ public class GrayShrink extends PipelineStage {
      */
     public void setWidth(int cWidth) throws IllegalArgumentException {
         if (cWidth <= 0) {
-            throw new IllegalArgumentException(Messages.getString("GrayShrink.11") + //$NON-NLS-1$
-                    Messages.getString("Not") + cWidth); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+                	new Error(
+                			Error.PACKAGE.ALGORITHM,
+                			ErrorCodes.OUTPUT_IMAGE_SIZE_NEGATIVE,
+                			new Integer(cWidth).toString(),
+                			this.toString(),
+                			null));
         }
         this.cWidth = cWidth;
     }
@@ -210,6 +228,6 @@ public class GrayShrink extends PipelineStage {
      * @return the string describing the shrinking operation.
      */
     public String toString() {
-        return super.toString() + " (" + this.cWidth + Messages.getString("Comma") + this.cHeight + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        return super.toString() + " (" + this.cWidth + "," + this.cHeight + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
 }

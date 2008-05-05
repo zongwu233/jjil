@@ -23,6 +23,7 @@
  */
 
 package jjil.algorithm;
+import jjil.core.Error;
 import jjil.core.Image;
 import jjil.core.PipelineStage;
 import jjil.core.RgbImage;
@@ -54,16 +55,7 @@ public class RgbCrop extends PipelineStage {
             int y,
             int width,
             int height) throws IllegalArgumentException {
-        if (x<0 || y<0 || width<=0 || height<=0) {
-            throw new IllegalArgumentException(
-                    Messages.getString("RgbCrop.0") +  //$NON-NLS-1$
-                    x + Messages.getString("Comma") + y + Messages.getString("Comma") +  //$NON-NLS-1$ //$NON-NLS-2$
-                    width + Messages.getString("Comma") + height + ")"); //$NON-NLS-1$ //$NON-NLS-2$
-        }
-        this.cX = x;
-        this.cY = y;
-        this.cWidth = width;
-        this.cHeight = height;
+        setWindow(x, y, width, height);
     }
     
     /** Crops the input RGB image to the cropping window that was
@@ -76,17 +68,24 @@ public class RgbCrop extends PipelineStage {
      */
     public void Push(Image image) throws IllegalArgumentException {
         if (!(image instanceof RgbImage)) {
-            throw new IllegalArgumentException(image.toString() +
-                    Messages.getString("RgbCrop.5")); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+                	new Error(
+                			Error.PACKAGE.ALGORITHM,
+                			ErrorCodes.IMAGE_NOT_RGBIMAGE,
+                			image.toString(),
+                			null,
+                			null));
         }
         RgbImage imageInput = (RgbImage) image;
         if (this.cX + this.cWidth > image.getWidth() ||
             this.cY + this.cHeight > image.getHeight()) {
-            throw new IllegalArgumentException(Messages.getString("RgbCrop.6") + //$NON-NLS-1$
-                    this.cX + Messages.getString("Comma") + this.cY + Messages.getString("Comma") +  //$NON-NLS-1$ //$NON-NLS-2$
-                    this.cWidth + Messages.getString("Comma") + this.cHeight +  //$NON-NLS-1$
-                    Messages.getString("RgbCrop.10") + //$NON-NLS-1$
-                    image.toString());
+            throw new IllegalArgumentException(
+                	new Error(
+                			Error.PACKAGE.ALGORITHM,
+                			ErrorCodes.BOUNDS_OUTSIDE_IMAGE,
+                			image.toString(),
+                			this.toString(),
+                			null));
         }
         RgbImage imageResult = new RgbImage(this.cWidth,this.cHeight);
         int[] src = imageInput.getData();
@@ -148,11 +147,23 @@ public class RgbCrop extends PipelineStage {
             int y,
             int width,
             int height) throws IllegalArgumentException {
-        if (x<0 || y<0 || width<=0 || height<=0) {
+        if (x<0 || y<0) {
             throw new IllegalArgumentException(
-                    Messages.getString("RgbCrop.11") +  //$NON-NLS-1$
-                    x + Messages.getString("Comma") + y + Messages.getString("Comma") +  //$NON-NLS-1$ //$NON-NLS-2$
-                    width + Messages.getString("Comma") + height + ")"); //$NON-NLS-1$ //$NON-NLS-2$
+                	new Error(
+                			Error.PACKAGE.ALGORITHM,
+                			ErrorCodes.BOUNDS_OUTSIDE_IMAGE,
+                			new Integer(x).toString(),
+                			new Integer(y).toString(),
+                			null));
+        }
+        if (width<=0 || height<=0) {
+            throw new IllegalArgumentException(
+                	new Error(
+                			Error.PACKAGE.ALGORITHM,
+                			ErrorCodes.INPUT_IMAGE_SIZE_NEGATIVE,
+                			new Integer(width).toString(),
+                			new Integer(height).toString(),
+                			null));
         }
         this.cX = x;
         this.cY = y;
@@ -165,7 +176,7 @@ public class RgbCrop extends PipelineStage {
      * @return the string describing the cropping operation.
      */
     public String toString() {
-        return super.toString() + " (" + this.cX + Messages.getString("Comma") + this.cY +  //$NON-NLS-1$ //$NON-NLS-2$
-                Messages.getString("Comma") + this.cWidth + Messages.getString("Comma") + this.cHeight + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        return super.toString() + " (" + this.cX + "," + this.cY +  //$NON-NLS-1$ //$NON-NLS-2$
+                "," + this.cWidth + "," + this.cHeight + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
 }

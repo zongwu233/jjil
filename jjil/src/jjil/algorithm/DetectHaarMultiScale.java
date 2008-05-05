@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import jjil.core.Error;
 import jjil.core.Gray8Image;
 import jjil.core.Gray8MaskedImage;
 import jjil.core.Gray8SubImage;
@@ -76,21 +77,16 @@ public class DetectHaarMultiScale extends PipelineStage {
      * @param nMinScale Minimum (finest) scale at which features will be detected.
      * @param nMaxScale Maximum (coarsest) scale at which features will be detected.
      */
-    public DetectHaarMultiScale(InputStream is, int nMinScale, int nMaxScale) {
+    public DetectHaarMultiScale(InputStream is, int nMinScale, int nMaxScale) 
+    	throws HaarClassifierCascade.ParseException, IOException
+    {
         this.nMinScale = nMinScale;
         this.nMaxScale = nMaxScale;
         // load Haar classifier cascade
         InputStreamReader isr = new InputStreamReader(is);
-        try {
-            this.hcc = HaarClassifierCascade.fromStream(isr);
-        }
-        catch (HaarClassifierCascade.ParseException ex) {
-            System.err.print(Messages.getString("DetectHaarMultiScale.0") + ex.toString()); //$NON-NLS-1$
-        }
-        catch (IOException ex) {
-            System.err.print(Messages.getString("DetectHaarMultiScale.1") + ex.toString());            //$NON-NLS-1$
-        } 
+        this.hcc = HaarClassifierCascade.fromStream(isr);
     }
+    
     /**
      * Apply multi-scale Haar cascade and prepare a mask image showing where features
      * were detected.
@@ -104,14 +100,23 @@ public class DetectHaarMultiScale extends PipelineStage {
         if (image instanceof Gray8Image) {
             imGray = (Gray8Image) image;
         } else {
-            throw new IllegalArgumentException(Messages.getString("DetectHaarMultiScale.2") + image.toString() + //$NON-NLS-1$
-                    Messages.getString("DetectHaarMultiScale.3")); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+            		new Error(
+            				Error.PACKAGE.ALGORITHM,
+            				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
+            				image.toString(),
+            				null,
+            				null));
         }
         if (image.getWidth() < this.hcc.getWidth() ||
             image.getHeight() < this.hcc.getHeight()) {
-            throw new IllegalArgumentException(Messages.getString("DetectHaarMultiScale.4") + image.toString() + //$NON-NLS-1$
-                    Messages.getString("DetectHaarMultiScale.5") + this.hcc.getWidth() +  //$NON-NLS-1$
-                    Messages.getString("DetectHaarMultiScale.6") + this.hcc.getHeight()); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+            		new Error(
+            				Error.PACKAGE.ALGORITHM,
+            				ErrorCodes.IMAGE_TOO_SMALL,
+            				image.toString(),
+            				this.hcc.toString(),
+            				null));
         }
         int nScale = Math.min(this.nMaxScale, 
                 Math.min(image.getWidth() / this.hcc.getWidth(),

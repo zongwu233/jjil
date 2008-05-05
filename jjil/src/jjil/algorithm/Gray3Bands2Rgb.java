@@ -25,6 +25,7 @@
  */
 
 package jjil.algorithm;
+import jjil.core.Error;
 import jjil.core.Gray8Image;
 import jjil.core.RgbImage;
 /** Gray3Bands2Rgb converts an 8-bit gray image to RGB by replicating the 
@@ -58,9 +59,13 @@ public class Gray3Bands2Rgb {
             imGreen.getWidth() != imBlue.getWidth() ||
             imRed.getHeight() != imGreen.getHeight() ||
             imGreen.getHeight() != imBlue.getHeight()) {
-            throw new IllegalArgumentException(Messages.getString("Gray3Bands2Rgb.0") + //$NON-NLS-1$
-                    Messages.getString("Gray3Bands2Rgb.1") + imRed.toString() + Messages.getString("Comma") + //$NON-NLS-1$ //$NON-NLS-2$
-                    imGreen.toString() + Messages.getString("Gray3Bands2Rgb.3") + imBlue.toString()); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+                	new Error(
+                			Error.PACKAGE.ALGORITHM,
+                			ErrorCodes.IMAGE_SIZES_DIFFER,
+                			imRed.toString(),
+                			imGreen.toString(),
+                			imBlue.toString()));
         }
         RgbImage rgb = new RgbImage(imRed.getWidth(), imRed.getHeight());
         byte[] redData = imRed.getData();

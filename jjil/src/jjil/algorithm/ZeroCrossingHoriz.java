@@ -26,6 +26,7 @@ package jjil.algorithm;
 import java.util.Enumeration;
 import java.util.Vector;
 
+import jjil.core.Error;
 import jjil.core.Gray8Image;
 
 /**
@@ -178,9 +179,14 @@ public class ZeroCrossingHoriz {
      */
     public void setThreshold(int wThreshold) throws IllegalArgumentException {
         if (wThreshold < 0) {
-            throw new IllegalArgumentException(Messages.getString("ZeroCrossingHoriz.2") + //$NON-NLS-1$
-                    Messages.getString("ZeroCrossingHoriz.3") + wThreshold); //$NON-NLS-1$
-        }
+            throw new IllegalArgumentException(
+            	new Error(
+        			Error.PACKAGE.CORE,
+        			ErrorCodes.THRESHOLD_NEGATIVE,
+        			new Integer(wThreshold).toString(),
+        			null,
+        			null));
+            }
         this.wThreshold = wThreshold;
     }
 }

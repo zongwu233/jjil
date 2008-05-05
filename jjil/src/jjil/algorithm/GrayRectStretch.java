@@ -23,6 +23,7 @@
  */
 
 package jjil.algorithm;
+import jjil.core.Error;
 import jjil.core.Gray8Image;
 import jjil.core.Image;
 import jjil.core.PipelineStage;
@@ -77,15 +78,22 @@ public class GrayRectStretch extends PipelineStage {
      */
     public void Push(Image image) throws IllegalArgumentException {
         if (!(image instanceof Gray8Image)) {
-            throw new IllegalArgumentException(Messages.getString("GrayRectStretch.0") + image.toString() + //$NON-NLS-1$
-                    Messages.getString("GrayRectStretch.1")); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+		            new Error(
+			        		Error.PACKAGE.ALGORITHM,
+			        		ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
+			        		image.toString(),
+			        		null,
+			        		null));
         }
         if (image.getWidth() > this.cWidth || image.getHeight() > this.cHeight) {
-            throw new IllegalArgumentException(Messages.getString("GrayRectStretch.2") + //$NON-NLS-1$
-                    Messages.getString("GrayRectStretch.3") + //$NON-NLS-1$
-                    image.getWidth() + Messages.getString("Comma") + image.getHeight() + ") " + //$NON-NLS-1$ //$NON-NLS-2$
-                    Messages.getString("GrayRectStretch.6") + this.cWidth + Messages.getString("Comma") +  //$NON-NLS-1$ //$NON-NLS-2$
-                    this.cHeight + ")"); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+		            new Error(
+			        		Error.PACKAGE.ALGORITHM,
+			        		ErrorCodes.STRETCH_OUTPUT_SMALLER_THAN_INPUT,
+			        		image.toString(),
+			        		new Integer(this.cWidth).toString(),
+			        		new Integer(this.cHeight).toString()));
         }
         Gray8Image input = (Gray8Image) image;
         /** we do the stretch in to passes, one horizontal and the other
@@ -106,8 +114,13 @@ public class GrayRectStretch extends PipelineStage {
      */
     public void setHeight(int cHeight) throws IllegalArgumentException {
         if (cHeight <= 0) {
-            throw new IllegalArgumentException(Messages.getString("GrayRectStretch.9") + //$NON-NLS-1$
-                    Messages.getString("Not") + cHeight); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+		        new Error(
+			        Error.PACKAGE.ALGORITHM,
+			        ErrorCodes.OUTPUT_IMAGE_SIZE_NEGATIVE,
+			        new Integer(cHeight).toString(),
+			        null,
+			        null));
         }
         this.cHeight = cHeight;
     }
@@ -119,8 +132,13 @@ public class GrayRectStretch extends PipelineStage {
      */
     public void setWidth(int cWidth) throws IllegalArgumentException {
         if (cWidth <= 0) {
-            throw new IllegalArgumentException(Messages.getString("GrayRectStretch.11") + //$NON-NLS-1$
-                    Messages.getString("Not") + cWidth); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+    		        new Error(
+    				        Error.PACKAGE.ALGORITHM,
+    				        ErrorCodes.OUTPUT_IMAGE_SIZE_NEGATIVE,
+    				        new Integer(cWidth).toString(),
+    				        null,
+    				        null));
         }
         this.cWidth = cWidth;
     }
@@ -219,6 +237,6 @@ public class GrayRectStretch extends PipelineStage {
      * @return the string describing the stretching operation.
      */
     public String toString() {
-        return super.toString() + " (" + this.cWidth + Messages.getString("Comma") + this.cHeight + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        return super.toString() + " (" + this.cWidth + "," + this.cHeight + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
 }

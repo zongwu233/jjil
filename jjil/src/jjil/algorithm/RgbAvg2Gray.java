@@ -23,6 +23,7 @@
  */
 
 package jjil.algorithm;
+import jjil.core.Error;
 import jjil.core.Gray8Image;
 import jjil.core.Image;
 import jjil.core.PipelineStage;
@@ -54,8 +55,13 @@ public class RgbAvg2Gray extends PipelineStage {
      */
     public void Push(Image image) throws IllegalArgumentException {
         if (!(image instanceof RgbImage)) {
-            throw new IllegalArgumentException(image.toString() +
-                    Messages.getString("RgbAvg2Gray.0")); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+                	new Error(
+            				Error.PACKAGE.ALGORITHM,
+            				ErrorCodes.IMAGE_NOT_RGBIMAGE,
+            				image.toString(),
+            				null,
+            				null));
         }
         RgbImage rgb = (RgbImage) image;
         int[] rgbData = rgb.getData();
