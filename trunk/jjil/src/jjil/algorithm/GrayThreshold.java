@@ -23,6 +23,7 @@
  */
 
 package jjil.algorithm;
+import jjil.core.Error;
 import jjil.core.Gray8Image;
 import jjil.core.Image;
 import jjil.core.PipelineStage;
@@ -52,8 +53,12 @@ public class GrayThreshold extends PipelineStage {
     {
         if (!(image instanceof Gray8Image)) {
             throw new IllegalArgumentException(
-                    Messages.getString("GrayThreshold.0") + //$NON-NLS-1$
-                    image.toString());
+            		new Error(
+            				Error.PACKAGE.ALGORITHM,
+            				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
+            				image.toString(),
+            				null,
+            				null));
         }
         Gray8Image gray = (Gray8Image) image;
         byte[] data = gray.getData();

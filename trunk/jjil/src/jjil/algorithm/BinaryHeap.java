@@ -1,4 +1,6 @@
 package jjil.algorithm;
+
+import jjil.core.Error;
 //The code in this file is from
 //http://www.java-tips.org/java-se-tips/java.lang/priority-queue-binary-heap-implementation-in-3.html
 
@@ -8,8 +10,8 @@ package jjil.algorithm;
 //
 // ******************PUBLIC OPERATIONS*********************
 // void insert( x )       --> Insert x
-// Comparable deleteMin( )--> Return and remove smallest item
-// Comparable findMin( )  --> Return smallest item
+// ComparableJ2me deleteMin( )--> Return and remove smallest item
+// ComparableJ2me findMin( )  --> Return smallest item
 // boolean isEmpty( )     --> Return true if empty; else false
 // void makeEmpty( )      --> Remove all items
 // ******************ERRORS********************************
@@ -26,16 +28,16 @@ public class BinaryHeap implements PriorityQueue {
      */
     public BinaryHeap( ) {
         currentSize = 0;
-        array = new Comparable[ DEFAULT_CAPACITY + 1 ];
+        array = new ComparableJ2me[ DEFAULT_CAPACITY + 1 ];
     }
     
     /**
      * Construct the binary heap from an array.
      * @param items the inital items in the binary heap.
      */
-    public BinaryHeap( Comparable [ ] items ) {
+    public BinaryHeap( ComparableJ2me [ ] items ) {
         currentSize = items.length;
-        array = new Comparable[ items.length + 1 ];
+        array = new ComparableJ2me[ items.length + 1 ];
         
         for( int i = 0; i < items.length; i++ )
             array[ i + 1 ] = items[ i ];
@@ -48,7 +50,7 @@ public class BinaryHeap implements PriorityQueue {
      * @param x the item to insert.
      * @return null, signifying that decreaseKey cannot be used.
      */
-    public PriorityQueue.Position insert( Comparable x ) {
+    public PriorityQueue.Position insert( ComparableJ2me x ) {
         if( currentSize + 1 == array.length )
             doubleArray( );
         
@@ -67,18 +69,25 @@ public class BinaryHeap implements PriorityQueue {
      * @throws UnsupportedOperationException because no Positions are returned
      * by the insert method for BinaryHeap.
      */
-    public void decreaseKey( PriorityQueue.Position p, Comparable newVal ) {
-        throw new UnsupportedOperationException( Messages.getString("BinaryHeap.0") ); //$NON-NLS-1$
-    }
-    
+/*    public void decreaseKey( PriorityQueue.Position p, ComparableJ2me newVal ) {
+        throw new UnsupportedOperationException( "Cannot use decreaseKey for binary heap" ); 
+      }
+*/    
     /**
      * Find the smallest item in the priority queue.
      * @return the smallest item.
      * @throws UnderflowException if empty.
      */
-    public Comparable findMin( ) {
+    public ComparableJ2me findMin( ) {
         if( isEmpty( ) )
-            throw new UnderflowException( Messages.getString("BinaryHeap.1") ); //$NON-NLS-1$
+            throw new UnderflowException(
+                	new Error(
+                			Error.PACKAGE.ALGORITHM,
+                			ErrorCodes.HEAP_EMPTY,
+                			this.toString(),
+                			null,
+                			null)
+                	);
         return array[ 1 ];
     }
     
@@ -87,8 +96,8 @@ public class BinaryHeap implements PriorityQueue {
      * @return the smallest item.
      * @throws UnderflowException if empty.
      */
-    public Comparable deleteMin( ) {
-        Comparable minItem = findMin( );
+    public ComparableJ2me deleteMin( ) {
+        ComparableJ2me minItem = findMin( );
         array[ 1 ] = array[ currentSize-- ];
         percolateDown( 1 );
         
@@ -130,7 +139,7 @@ public class BinaryHeap implements PriorityQueue {
     private static final int DEFAULT_CAPACITY = 100;
     
     private int currentSize;      // Number of elements in heap
-    private Comparable [ ] array; // The heap array
+    private ComparableJ2me [ ] array; // The heap array
     
     /**
      * Internal method to percolate down in the heap.
@@ -138,7 +147,7 @@ public class BinaryHeap implements PriorityQueue {
      */
     private void percolateDown( int hole ) {
         int child;
-        Comparable tmp = array[ hole ];
+        ComparableJ2me tmp = array[ hole ];
         
         for( ; hole * 2 <= currentSize; hole = child ) {
             child = hole * 2;
@@ -157,15 +166,15 @@ public class BinaryHeap implements PriorityQueue {
      * Internal method to extend array.
      */
     private void doubleArray( ) {
-        Comparable [ ] newArray;
+        ComparableJ2me [ ] newArray;
         
-        newArray = new Comparable[ array.length * 2 ];
+        newArray = new ComparableJ2me[ array.length * 2 ];
         for( int i = 0; i < array.length; i++ )
             newArray[ i ] = array[ i ];
         array = newArray;
     }
     
-    // Test program
+/*    // Test program
     public static void main( String [ ] args ) {
         int numItems = 10000;
         BinaryHeap h1 = new BinaryHeap( );
@@ -181,12 +190,13 @@ public class BinaryHeap implements PriorityQueue {
         
         for( i = 1; i < numItems; i++ )
             if( ((Integer)( h1.deleteMin( ) )).intValue( ) != i )
-                System.out.println( Messages.getString("BinaryHeap.2") + i ); //$NON-NLS-1$
+                System.out.println( "Oops! " + i );
         
         BinaryHeap h2 = new BinaryHeap( items );
         for( i = 1; i < numItems; i++ )
             if( ((Integer)( h2.deleteMin( ) )).intValue( ) != i )
-                System.out.println( Messages.getString("BinaryHeap.3") + i ); //$NON-NLS-1$
+                System.out.println( "Oops! " + i );
     }
-}
+*/
+    }
 

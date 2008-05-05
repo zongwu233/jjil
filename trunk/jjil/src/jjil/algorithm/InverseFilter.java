@@ -25,6 +25,7 @@
 package jjil.algorithm;
 import jjil.core.Complex;
 import jjil.core.Complex32Image;
+import jjil.core.Error;
 import jjil.core.Gray8Image;
 import jjil.core.Image;
 import jjil.core.MathPlus;
@@ -50,10 +51,22 @@ public class InverseFilter extends PipelineStage {
      */
     public InverseFilter(Gray8Image psf, int nGamma) throws IllegalArgumentException {
         if (psf.getWidth() != psf.getHeight()) {
-            throw new IllegalArgumentException(Messages.getString("InverseFilter.0")); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+                	new Error(
+            				Error.PACKAGE.ALGORITHM,
+            				ErrorCodes.IMAGE_NOT_SQUARE,
+            				psf.toString(),
+            				null,
+            				null));
         }
         if (!(psf instanceof Gray8Image)) {
-            throw new IllegalArgumentException(Messages.getString("InverseFilter.1")); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+                	new Error(
+            				Error.PACKAGE.ALGORITHM,
+            				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
+            				psf.toString(),
+            				null,
+            				null));
         }
         this.nGamma = nGamma;
         this.fft = new FftGray8();
@@ -70,16 +83,32 @@ public class InverseFilter extends PipelineStage {
      */
     public void Push(Image im) throws IllegalArgumentException {
         if (im.getWidth() != im.getHeight()) {
-            throw new IllegalArgumentException(Messages.getString("InverseFilter.2")); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+                	new Error(
+            				Error.PACKAGE.ALGORITHM,
+            				ErrorCodes.IMAGE_NOT_SQUARE,
+            				im.toString(),
+            				null,
+            				null));
         }
-        if (im.getWidth() != this.cxmPsfInv.getWidth()) {
-            throw new IllegalArgumentException(Messages.getString("InverseFilter.3")); //$NON-NLS-1$
-        }
-        if (im.getHeight() != this.cxmPsfInv.getHeight()) {
-            throw new IllegalArgumentException(Messages.getString("InverseFilter.4")); //$NON-NLS-1$
+        if (im.getWidth() != this.cxmPsfInv.getWidth() ||
+        	im.getHeight() != this.cxmPsfInv.getHeight()) {
+            throw new IllegalArgumentException(
+                	new Error(
+            				Error.PACKAGE.ALGORITHM,
+            				ErrorCodes.IMAGE_SIZES_DIFFER,
+            				im.toString(),
+            				this.cxmPsfInv.toString(),
+            				null));
         }
         if (!(im instanceof Gray8Image)) {
-            throw new IllegalArgumentException(Messages.getString("InverseFilter.5")); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+                	new Error(
+            				Error.PACKAGE.ALGORITHM,
+            				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
+            				im.toString(),
+            				null,
+            				null));
         }
         this.fft.Push(im);
         Complex32Image cxmIm = (Complex32Image) this.fft.Front();

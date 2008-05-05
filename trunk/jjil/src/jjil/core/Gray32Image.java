@@ -91,7 +91,7 @@ public class Gray32Image extends Image {
      */
     public String toString()
     {
-        return super.toString() + " (" + getWidth() + Messages.getString("Gray32Image.1") + getHeight() + //$NON-NLS-1$ //$NON-NLS-2$
+        return super.toString() + " (" + getWidth() + "x" + getHeight() + //$NON-NLS-1$ //$NON-NLS-2$
                 ")"; //$NON-NLS-1$
     }
 

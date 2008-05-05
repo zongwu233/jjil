@@ -24,6 +24,7 @@ package jjil.algorithm;
 import java.util.Vector;
 
 import jjil.core.Complex;
+import jjil.core.Error;
 import jjil.core.MathPlus;
 
 /**
@@ -54,11 +55,23 @@ public class Fft1d {
     public Complex[] fft(Complex[] x) throws IllegalArgumentException {
         int N = x.length;
         if ((N & (N-1)) != 0) {
-            throw new IllegalArgumentException(Messages.getString("Fft1d.0") + //$NON-NLS-1$
-                    Messages.getString("Fft1d.1") + N); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+            	new Error(
+        			Error.PACKAGE.ALGORITHM,
+        			ErrorCodes.FFT_SIZE_NOT_POWER_OF_2,
+        			new Integer(N).toString(),
+        			null,
+        			null));
+
         }
         if (N > this.nMaxWidth) {
-            throw new IllegalArgumentException(Messages.getString("Fft1d.2") + N + Messages.getString("Fft1d.3")); //$NON-NLS-1$ //$NON-NLS-2$
+            throw new IllegalArgumentException(
+            	new Error(
+        			Error.PACKAGE.ALGORITHM,
+        			ErrorCodes.FFT_SIZE_LARGER_THAN_MAX,
+        			new Integer(N).toString(),
+        			null,
+        			null));
         }
         // compute log2 N
         int nLog = 1;
@@ -147,8 +160,13 @@ public class Fft1d {
      */
     public void setMaxWidth(int N) throws IllegalArgumentException {
         if ((N & (N-1)) != 0) {
-            throw new IllegalArgumentException(Messages.getString("Fft1d.4") + //$NON-NLS-1$
-                    Messages.getString("Fft1d.5") + N); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+                	new Error(
+            			Error.PACKAGE.ALGORITHM,
+            			ErrorCodes.FFT_SIZE_NOT_POWER_OF_2,
+            			new Integer(N).toString(),
+            			null,
+            			null));
         }
         // we precompute the coefficients (complex roots of unity)
         // used in the FFT calculation

@@ -23,6 +23,7 @@
  */
 
 package jjil.algorithm;
+import jjil.core.Error;
 import jjil.core.Gray8Image;
 import jjil.core.Image;
 import jjil.core.PipelineStage;
@@ -50,8 +51,13 @@ public class GrayHistEq extends PipelineStage {
      */
     public void Push(Image image) throws IllegalArgumentException {
         if (!(image instanceof Gray8Image)) {
-            throw new IllegalArgumentException(image.toString() + Messages.getString("GrayHistEq.0") + //$NON-NLS-1$
-                    Messages.getString("GrayHistEq.1")); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+                	new Error(
+            				Error.PACKAGE.ALGORITHM,
+            				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
+            				image.toString(),
+            				null,
+            				null));
         }
         Gray8Image gray = (Gray8Image) image;
         /* In order to avoid recreating histMatch every call, we recompute

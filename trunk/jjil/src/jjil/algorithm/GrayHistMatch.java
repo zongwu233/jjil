@@ -23,6 +23,7 @@
  */
 
 package jjil.algorithm;
+import jjil.core.Error;
 import jjil.core.Gray8Image;
 import jjil.core.Image;
 import jjil.core.PipelineStage;
@@ -94,8 +95,14 @@ public class GrayHistMatch extends PipelineStage {
      */
     public void Push(Image image) throws IllegalArgumentException {
         if (!(image instanceof Gray8Image)) {
-            throw new IllegalArgumentException(image.toString() + 
-                    Messages.getString("GrayHistMatch.0")); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+            	new Error(
+    				Error.PACKAGE.ALGORITHM,
+    				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
+    				image.toString(),
+    				null,
+    				null));
+
         }
         /* We could do a test here to make sure that the uppermost
          * element of histCumTarget equals the count of pixels in
@@ -129,7 +136,13 @@ public class GrayHistMatch extends PipelineStage {
      */
     public void setHistogram(int[] histTarget) throws IllegalArgumentException {
         if (histTarget.length != 256) {
-            throw new IllegalArgumentException(Messages.getString("GrayHistMatch.1")); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+            	new Error(
+    				Error.PACKAGE.ALGORITHM,
+    				ErrorCodes.HISTOGRAM_LENGTH_NOT_256,
+    				histTarget.toString(),
+    				null,
+    				null));
         }
         this.histCumTarget = new int[256];
         /* We actually store the cumulative histogram, not the original.

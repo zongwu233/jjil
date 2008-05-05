@@ -25,6 +25,7 @@
 package jjil.algorithm;
 import jjil.core.Complex;
 import jjil.core.Complex32Image;
+import jjil.core.Error;
 import jjil.core.Gray32Image;
 import jjil.core.Gray8Image;
 import jjil.core.Image;
@@ -46,10 +47,22 @@ public class WienerDeconv extends PipelineStage {
      */
     public WienerDeconv(Gray8Image psf, int nNoise) throws IllegalArgumentException {
         if (psf.getWidth() != psf.getHeight()) {
-            throw new IllegalArgumentException(Messages.getString("WienerDeconv.0")); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+                	new Error(
+            				Error.PACKAGE.ALGORITHM,
+            				ErrorCodes.IMAGE_NOT_SQUARE,
+            				psf.toString(),
+            				null,
+            				null));
         }
         if (!(psf instanceof Gray8Image)) {
-            throw new IllegalArgumentException(Messages.getString("WienerDeconv.1")); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+                	new Error(
+            				Error.PACKAGE.ALGORITHM,
+            				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
+            				psf.toString(),
+            				null,
+            				null));
         }
         this.nNoise = nNoise;
         this.fft = new FftGray8();
@@ -60,16 +73,32 @@ public class WienerDeconv extends PipelineStage {
     
     public void Push(Image im) {
         if (im.getWidth() != im.getHeight()) {
-            throw new IllegalArgumentException(Messages.getString("WienerDeconv.2")); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+                	new Error(
+            				Error.PACKAGE.ALGORITHM,
+            				ErrorCodes.IMAGE_NOT_SQUARE,
+            				im.toString(),
+            				null,
+            				null));
         }
-        if (im.getWidth() != this.cxmPsfInv.getWidth()) {
-            throw new IllegalArgumentException(Messages.getString("WienerDeconv.3")); //$NON-NLS-1$
-        }
-        if (im.getHeight() != this.cxmPsfInv.getHeight()) {
-            throw new IllegalArgumentException(Messages.getString("WienerDeconv.4")); //$NON-NLS-1$
+        if (im.getWidth() != this.cxmPsfInv.getWidth() ||
+        	im.getHeight() != this.cxmPsfInv.getHeight()) {
+            throw new IllegalArgumentException(
+                	new Error(
+            				Error.PACKAGE.ALGORITHM,
+            				ErrorCodes.IMAGE_SIZES_DIFFER,
+            				im.toString(),
+            				this.cxmPsfInv.toString(),
+            				null));
         }
         if (!(im instanceof Gray8Image)) {
-            throw new IllegalArgumentException(Messages.getString("WienerDeconv.5")); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+                	new Error(
+            				Error.PACKAGE.ALGORITHM,
+            				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
+            				im.toString(),
+            				null,
+            				null));
         }
         this.fft.Push(im);
         Complex32Image cxmIm = (Complex32Image) this.fft.Front();

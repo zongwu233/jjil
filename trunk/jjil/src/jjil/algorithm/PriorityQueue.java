@@ -6,8 +6,8 @@ package jjil.algorithm;
 //
 // ******************PUBLIC OPERATIONS*********************
 // Position insert( x )   --> Insert x
-// Comparable deleteMin( )--> Return and remove smallest item
-// Comparable findMin( )  --> Return smallest item
+// ComparableJ2me deleteMin( )--> Return and remove smallest item
+// ComparableJ2me findMin( )  --> Return smallest item
 // boolean isEmpty( )     --> Return true if empty; else false
 // void makeEmpty( )      --> Remove all items
 // int size( )            --> Return size
@@ -33,7 +33,7 @@ public interface PriorityQueue {
          * Returns the value stored at this position.
          * @return the value stored at this position.
          */
-        Comparable getValue( );
+        ComparableJ2me getValue( );
     }
     
     /**
@@ -42,21 +42,21 @@ public interface PriorityQueue {
      * @param x the item to insert.
      * @return may return a Position useful for decreaseKey.
      */
-    Position insert( Comparable x );
+    Position insert( ComparableJ2me x );
     
     /**
      * Find the smallest item in the priority queue.
      * @return the smallest item.
      * @throws UnderflowException if empty.
      */
-    Comparable findMin( );
+    ComparableJ2me findMin( );
     
     /**
      * Remove the smallest item from the priority queue.
      * @return the smallest item.
      * @throws UnderflowException if empty.
      */
-    Comparable deleteMin( );
+    ComparableJ2me deleteMin( );
     
     /**
      * Test if the priority queue is logically empty.
@@ -87,7 +87,8 @@ public interface PriorityQueue {
      * @throws IllegalArgumentException if p invalid.
      * @throws UnsupportedOperationException if appropriate.
      */
-    void decreaseKey( Position p, Comparable newVal );
+/*    void decreaseKey( Position p, ComparableJ2me newVal );
+*/
 }
 
 

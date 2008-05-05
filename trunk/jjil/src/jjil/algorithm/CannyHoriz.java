@@ -23,6 +23,7 @@
  */
 
 package jjil.algorithm;
+import jjil.core.Error;
 import jjil.core.Gray8Image;
 import jjil.core.Image;
 import jjil.core.PipelineStage;
@@ -178,8 +179,13 @@ public class CannyHoriz extends PipelineStage {
      */
     public void Push(Image image) throws IllegalArgumentException {
         if (!(image instanceof Gray8Image)) {
-            throw new IllegalArgumentException(image.toString() +
-                    Messages.getString("CannyHoriz.0")); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+            	new Error(
+        			Error.PACKAGE.ALGORITHM,
+        			ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
+        			image.toString(),
+        			null,
+        			null));
         }
         Gray8Image input = (Gray8Image) image;
         Gray8Image result = new Gray8Image(image.getWidth(), image.getHeight());
@@ -238,8 +244,13 @@ public class CannyHoriz extends PipelineStage {
      */
     public void setSigma(int cSigma) throws IllegalArgumentException {
         if (cSigma <= 1 || cSigma >= this.nCoeff.length) {
-            throw new IllegalArgumentException(cSigma + 
-                    Messages.getString("CannyHoriz.1")); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+            	new Error(
+        			Error.PACKAGE.ALGORITHM,
+        			ErrorCodes.PARAMETER_OUT_OF_RANGE,
+        			new Integer(cSigma).toString(),
+        			new Integer(1).toString(),
+        			new Integer(this.nCoeff.length).toString()));
         }
         this.cSigma = cSigma;
     }

@@ -23,6 +23,7 @@
  */
 package jjil.algorithm;
 
+import jjil.core.Error;
 import jjil.core.Image;
 import jjil.core.PipelineStage;
 import jjil.core.RgbImage;
@@ -55,8 +56,12 @@ public class Rgb3x3Average extends PipelineStage {
         if (!(imageInput instanceof RgbImage)) 
         {
             throw new IllegalArgumentException(
-                    Messages.getString("Rgb3x3Average.0") + //$NON-NLS-1$
-                    Messages.getString("Rgb3x3Average.1")); //$NON-NLS-1$
+                	new Error(
+                			Error.PACKAGE.ALGORITHM,
+                			ErrorCodes.IMAGE_NOT_RGBIMAGE,
+                			imageInput.toString(),
+                			null,
+                			null));
         }
         
         int cWidth  = imageInput.getWidth();

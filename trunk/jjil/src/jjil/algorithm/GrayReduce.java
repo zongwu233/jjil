@@ -23,6 +23,7 @@
  */
 
 package jjil.algorithm;
+import jjil.core.Error;
 import jjil.core.Gray8Image;
 import jjil.core.Image;
 import jjil.core.PipelineStage;
@@ -59,16 +60,31 @@ public class GrayReduce extends PipelineStage {
      */
     public void Push(Image image) throws IllegalArgumentException {
         if (!(image instanceof Gray8Image)) {
-            throw new IllegalArgumentException(image.toString() + 
-                    Messages.getString("GrayReduce.0")); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+                	new Error(
+            				Error.PACKAGE.ALGORITHM,
+            				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
+            				image.toString(),
+            				null,
+            				null));
         }
         if (image.getWidth() % this.cReduceWidth != 0) {
-            throw new IllegalArgumentException(image.toString() + 
-                    Messages.getString("GrayReduce.1") + this.cReduceWidth); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+                	new Error(
+            				Error.PACKAGE.ALGORITHM,
+            				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
+            				image.toString(),
+            				null,
+            				null));
         }
         if (image.getHeight() % this.cReduceHeight != 0) {
-            throw new IllegalArgumentException(image.toString() + 
-                    Messages.getString("GrayReduce.2") + this.cReduceHeight); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+                new Error(
+            		Error.PACKAGE.ALGORITHM,
+            		ErrorCodes.REDUCE_INPUT_IMAGE_NOT_MULTIPLE_OF_OUTPUT_SIZE,
+            		image.toString(),
+            		this.toString(),
+            		null));
         }
         Gray8Image gray = (Gray8Image) image;
         byte[] bIn = gray.getData();
@@ -121,8 +137,12 @@ public class GrayReduce extends PipelineStage {
         throws IllegalArgumentException {
         if (cReduceWidth <= 0 || cReduceHeight <= 0) {
             throw new IllegalArgumentException(
-                    Messages.getString("GrayReduce.3") + //$NON-NLS-1$
-                    Messages.getString("GrayReduce.4") + cReduceWidth + Messages.getString("Comma") + cReduceHeight + ")"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                	new Error(
+            				Error.PACKAGE.ALGORITHM,
+            				ErrorCodes.OUTPUT_IMAGE_SIZE_NEGATIVE,
+            				new Integer(cReduceWidth).toString(),
+            				new Integer(cReduceHeight).toString(),
+            				null));
         }
         this.cReduceWidth = cReduceWidth;
         this.cReduceHeight = cReduceHeight;
@@ -133,7 +153,7 @@ public class GrayReduce extends PipelineStage {
      * @return the string describing the reduction operation.
      */
     public String toString() {
-        return super.toString() + " (" + this.cReduceWidth + Messages.getString("Comma") +  //$NON-NLS-1$ //$NON-NLS-2$
+        return super.toString() + " (" + this.cReduceWidth + "," +  //$NON-NLS-1$ //$NON-NLS-2$
                 this.cReduceHeight + ")"; //$NON-NLS-1$
     }
 }

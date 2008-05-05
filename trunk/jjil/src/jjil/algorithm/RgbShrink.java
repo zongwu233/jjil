@@ -27,6 +27,7 @@
  */
 
 package jjil.algorithm;
+import jjil.core.Error;
 import jjil.core.Gray8Image;
 import jjil.core.Image;
 import jjil.core.PipelineStage;
@@ -51,8 +52,8 @@ public class RgbShrink extends PipelineStage {
      */
     public RgbShrink(int cWidth, int cHeight) 
         throws IllegalArgumentException {
-        this.cWidth = cWidth;
-        this.cHeight = cHeight;
+        setWidth(cWidth);
+        setHeight(cHeight);
         SetupPipeline();
     }
          
@@ -80,19 +81,26 @@ public class RgbShrink extends PipelineStage {
      */
     public void Push(Image image) throws IllegalArgumentException {
         if (!(image instanceof RgbImage)) {
-            throw new IllegalArgumentException(Messages.getString("RgbShrink.0") + image.toString() + //$NON-NLS-1$
-                    Messages.getString("RgbShrink.1")); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+                	new Error(
+                			Error.PACKAGE.ALGORITHM,
+                			ErrorCodes.IMAGE_NOT_RGBIMAGE,
+                			image.toString(),
+                			null,
+                			null));
         }
         if (image.getWidth() < this.cWidth || image.getHeight() < this.cHeight) {
-            throw new IllegalArgumentException(Messages.getString("RgbShrink.2") + //$NON-NLS-1$
-                    Messages.getString("RgbShrink.3") + //$NON-NLS-1$
-                    image.getWidth() + Messages.getString("Comma") + image.getHeight() + ") " + //$NON-NLS-1$ //$NON-NLS-2$
-                    Messages.getString("RgbShrink.6") + this.cWidth + Messages.getString("Comma") +  //$NON-NLS-1$ //$NON-NLS-2$
-                    this.cHeight + ")"); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+                	new Error(
+                			Error.PACKAGE.ALGORITHM,
+                			ErrorCodes.SHRINK_OUTPUT_LARGER_THAN_INPUT,
+                			image.toString(),
+                			this.toString(),
+                			null));
         }
         /* shrink R band */
         this.seqR.Push(image);
-        /* shirnk G band */
+        /* shrink G band */
         this.seqG.Push(image);
         /* shrink B band */
         this.seqB.Push(image);
@@ -111,8 +119,13 @@ public class RgbShrink extends PipelineStage {
      */
     public void setHeight(int cHeight) throws IllegalArgumentException {
         if (cHeight <= 0) {
-            throw new IllegalArgumentException(Messages.getString("RgbShrink.9") + //$NON-NLS-1$
-                    Messages.getString("Not") + cHeight); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+            	new Error(
+        			Error.PACKAGE.ALGORITHM,
+        			ErrorCodes.OUTPUT_IMAGE_SIZE_NEGATIVE,
+        			new Integer(cHeight).toString(),
+        			null,
+        			null));
         }
         this.cHeight = cHeight;
         SetupPipeline();
@@ -141,8 +154,13 @@ public class RgbShrink extends PipelineStage {
      */
     public void setWidth(int cWidth) throws IllegalArgumentException {
         if (cWidth <= 0) {
-            throw new IllegalArgumentException(Messages.getString("RgbShrink.11") + //$NON-NLS-1$
-                    Messages.getString("Not") + cWidth); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+                	new Error(
+                			Error.PACKAGE.ALGORITHM,
+                			ErrorCodes.OUTPUT_IMAGE_SIZE_NEGATIVE,
+                			new Integer(cWidth).toString(),
+                			null,
+                			null));
         }
         this.cWidth = cWidth;
         SetupPipeline();
@@ -155,6 +173,6 @@ public class RgbShrink extends PipelineStage {
      * @return the string describing the shrinking operation.
      */
     public String toString() {
-        return super.toString() + " (" + this.cWidth + Messages.getString("Comma") + this.cHeight + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        return super.toString() + " (" + this.cWidth + "," + this.cHeight + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
 }

@@ -26,6 +26,7 @@ package jjil.algorithm;
 
 import jjil.core.Complex;
 import jjil.core.Complex32Image;
+import jjil.core.Error;
 import jjil.core.Gray32Image;
 import jjil.core.Gray8Image;
 import jjil.core.Image;
@@ -57,19 +58,34 @@ public class IFftComplex32 extends PipelineStage {
      */
     public void Push(Image im) throws IllegalArgumentException {
         if (!(im instanceof Complex32Image)) {
-            throw new IllegalArgumentException(im.toString() + Messages.getString("IFftComplex32.0") + //$NON-NLS-1$
-                    Messages.getString("IFftComplex32.1")); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+                	new Error(
+            				Error.PACKAGE.ALGORITHM,
+            				ErrorCodes.IMAGE_NOT_COMPLEX32IMAGE,
+            				im.toString(),
+            				null,
+            				null));
         }
         // make sure the image width and height are powers of two
         int nWidth = im.getWidth();
         int nHeight = im.getHeight();
         if ((nWidth & (nWidth-1)) != 0) {
-            throw new IllegalArgumentException(Messages.getString("IFftComplex32.2") + //$NON-NLS-1$
-                    Messages.getString("IFftComplex32.3") + nWidth); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+            		new Error(
+            				Error.PACKAGE.ALGORITHM,
+            				ErrorCodes.FFT_SIZE_NOT_POWER_OF_2,
+            				im.toString(),
+            				null,
+            				null));
         }
         if ((nHeight & (nHeight-1)) != 0) {
-            throw new IllegalArgumentException(Messages.getString("IFftComplex32.4") + //$NON-NLS-1$
-                    Messages.getString("IFftComplex32.5") + nHeight); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+            		new Error(
+            				Error.PACKAGE.ALGORITHM,
+            				ErrorCodes.FFT_SIZE_NOT_POWER_OF_2,
+            				im.toString(),
+            				null,
+            				null));
         }
         // initialize FFT
         if (this.fft == null) {

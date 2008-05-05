@@ -23,6 +23,7 @@
  */
 
 package jjil.algorithm;
+import jjil.core.Error;
 import jjil.core.Gray8Image;
 import jjil.core.Image;
 import jjil.core.PipelineStage;
@@ -139,19 +140,24 @@ public class GrayTrapWarp extends PipelineStage {
      */
     public void Push(Image image) throws IllegalArgumentException {
         if (!(image instanceof Gray8Image)) {
-            throw new IllegalArgumentException(Messages.getString("GrayTrapWarp.0") + //$NON-NLS-1$
-                    image.toString());
+            throw new IllegalArgumentException(
+            	new Error(
+    				Error.PACKAGE.ALGORITHM,
+    				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
+    				image.toString(),
+    				null,
+    				null));
         }
         if (this.nColRightStart > image.getWidth() ||
             this.nColRightEnd > image.getWidth() ||
             this.nRowEnd > image.getHeight()) {
-            throw new IllegalArgumentException(Messages.getString("GrayTrapWarp.1") + //$NON-NLS-1$
-                    Messages.getString("GrayTrapWarp.2") + image.toString() + //$NON-NLS-1$
-                    Messages.getString("GrayTrapWarp.3") + image.toString() +  //$NON-NLS-1$
-                    Messages.getString("GrayTrapWarp.4") + //$NON-NLS-1$
-                    this.nColRightStart + Messages.getString("GrayTrapWarp.5") +  //$NON-NLS-1$
-                    this.nColRightEnd + Messages.getString("GrayTrapWarp.6") + //$NON-NLS-1$
-                    this.nRowEnd + ")"); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+            	new Error(
+    				Error.PACKAGE.ALGORITHM,
+    				ErrorCodes.BOUNDS_OUTSIDE_IMAGE,
+    				image.toString(),
+    				this.toString(),
+    				null));
         }
         int fLeft = (this.nColLeftStart * 256);
         int fRight = (this.nColRightStart * 256);
@@ -205,23 +211,32 @@ public class GrayTrapWarp extends PipelineStage {
 	    int nColLeftEnd, 
 	    int nColRightEnd) throws IllegalArgumentException {
         if (nRowStart >= nRowEnd) {
-            throw new IllegalArgumentException(Messages.getString("GrayTrapWarp.8") + //$NON-NLS-1$
-                    Messages.getString("GrayTrapWarp.9") + nRowStart + " >= " + //$NON-NLS-1$ //$NON-NLS-2$
-                    nRowEnd);
+            throw new IllegalArgumentException(
+                	new Error(
+            				Error.PACKAGE.ALGORITHM,
+            				ErrorCodes.WARP_START_ROW_GE_END_ROW,
+            				new Integer(nRowStart).toString(),
+            				new Integer(nRowEnd).toString(),
+            				null));
         }
         if (nColLeftStart >= nColRightStart) {
-            throw new IllegalArgumentException(Messages.getString("GrayTrapWarp.11") + //$NON-NLS-1$
-                    Messages.getString("GrayTrapWarp.12") +  //$NON-NLS-1$
-                    nColLeftStart + " >= " + nColRightStart); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+            	new Error(
+    				Error.PACKAGE.ALGORITHM,
+    				ErrorCodes.WARP_START_LEFT_COL_GE_START_RIGHT_COL,
+    				new Integer(nColLeftStart).toString(),
+    				new Integer(nColRightStart).toString(),
+    				null));
+
         }
         if (nColLeftEnd >= nColRightEnd) {
-            throw new IllegalArgumentException(Messages.getString("GrayTrapWarp.14") + //$NON-NLS-1$
-                    Messages.getString("GrayTrapWarp.15") +  //$NON-NLS-1$
-                    nColLeftEnd + Messages.getString("GrayTrapWarp.16") + nColRightEnd); //$NON-NLS-1$
-        }
-        if (nRowStart < 0) {
-            throw new IllegalArgumentException(Messages.getString("GrayTrapWarp.17") + //$NON-NLS-1$
-                    Messages.getString("GrayTrapWarp.18") + nRowStart); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+                new Error(
+    				Error.PACKAGE.ALGORITHM,
+    				ErrorCodes.WARP_END_LEFT_COL_GE_END_RIGHT_COL,
+    				new Integer(nColLeftEnd).toString(),
+    				new Integer(nColRightEnd).toString(),
+    				null));
         }
         this.nRowStart = nRowStart;
         this.nRowEnd = nRowEnd;
@@ -229,8 +244,17 @@ public class GrayTrapWarp extends PipelineStage {
         this.nColRightStart = nColRightStart;
         this.nColLeftEnd = nColLeftEnd;
         this.nColRightEnd = nColRightEnd;
+        if (this.nRowStart < 0 || this.nColLeftStart < 0 || this.nColRightStart < 0) {
+            throw new IllegalArgumentException(
+                new Error(
+    				Error.PACKAGE.ALGORITHM,
+    				ErrorCodes.BOUNDS_OUTSIDE_IMAGE,
+    				this.toString(),
+    				null,
+    				null));
+        }
         int nHeight = this.nRowEnd - this.nRowStart;
-	int nWidth = Math.max(
+	    int nWidth = Math.max(
                 this.nColRightStart - this.nColLeftStart, 
                 this.nColRightEnd - this.nColLeftEnd);
         this.imageOutput = new Gray8Image(nWidth, nHeight);
@@ -245,9 +269,9 @@ public class GrayTrapWarp extends PipelineStage {
      * rightColStart,leftColEnd,rightColEnd)"
      */
     public String toString() {
-        return super.toString() + " (" + this.nRowStart + Messages.getString("Comma") + //$NON-NLS-1$ //$NON-NLS-2$
-                this.nRowEnd + Messages.getString("Comma") + this.nColLeftStart + Messages.getString("Comma") + //$NON-NLS-1$ //$NON-NLS-2$
-                this.nColRightStart + Messages.getString("Comma") + this.nColLeftEnd + Messages.getString("Comma") + //$NON-NLS-1$ //$NON-NLS-2$
+        return super.toString() + " (" + this.nRowStart + "," + //$NON-NLS-1$ //$NON-NLS-2$
+                this.nRowEnd + "," + this.nColLeftStart + "," + //$NON-NLS-1$ //$NON-NLS-2$
+                this.nColRightStart + "," + this.nColLeftEnd + "," + //$NON-NLS-1$ //$NON-NLS-2$
                 this.nColRightEnd + ")"; //$NON-NLS-1$
     }
 }

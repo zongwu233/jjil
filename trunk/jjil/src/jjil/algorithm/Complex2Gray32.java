@@ -25,6 +25,7 @@
 package jjil.algorithm;
 import jjil.core.Complex;
 import jjil.core.Complex32Image;
+import jjil.core.Error;
 import jjil.core.Gray32Image;
 import jjil.core.Image;
 import jjil.core.PipelineStage;
@@ -49,8 +50,13 @@ public class Complex2Gray32 extends PipelineStage {
      */
     public void Push(Image im) throws IllegalArgumentException {
         if (!(im instanceof Complex32Image)) {
-            throw new IllegalArgumentException(im.toString() + Messages.getString("Complex2Gray32.0") + //$NON-NLS-1$
-                    Messages.getString("Complex2Gray32.1")); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+                	new Error(
+                			Error.PACKAGE.ALGORITHM,
+                			ErrorCodes.IMAGE_NOT_COMPLEX32IMAGE,
+                			im.toString(),
+                			null,
+                			null));
         }
         Gray32Image imResult = new Gray32Image(im.getWidth(), im.getHeight());
         Complex cData[] = ((Complex32Image) im).getData();

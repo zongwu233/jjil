@@ -23,6 +23,7 @@
  */
 
 package jjil.algorithm;
+import jjil.core.Error;
 import jjil.core.Gray8Image;
 import jjil.core.Image;
 import jjil.core.PipelineStage;
@@ -61,7 +62,13 @@ public class DeblurHorizHalftone extends PipelineStage {
      */
     public void Push(Image im) {
         if (!(im instanceof Gray8Image)) {
-            throw new IllegalArgumentException(Messages.getString("DeblurHorizHalftone.0")); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+                	new Error(
+                			Error.PACKAGE.ALGORITHM,
+                			ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
+                			im.toString(),
+                			null,
+                			null));
         }
         byte[] bData = ((Gray8Image) im).getData();
         for (int i=0; i<im.getHeight(); i++) {

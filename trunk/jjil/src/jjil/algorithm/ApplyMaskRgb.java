@@ -25,6 +25,7 @@
 */
 
 package jjil.algorithm;
+import jjil.core.Error;
 import jjil.core.Gray8Image;
 import jjil.core.RgbImage;
 import jjil.core.RgbVal;
@@ -53,9 +54,13 @@ public class ApplyMaskRgb {
             Gray8Image imMask) throws IllegalArgumentException {
         if (imRgb.getWidth() != imMask.getWidth() ||
             imRgb.getHeight() != imMask.getHeight()) {
-            throw new IllegalArgumentException(Messages.getString("ApplyMaskRgb.0") + //$NON-NLS-1$
-                    Messages.getString("ApplyMaskRgb.1") + imRgb.toString() + Messages.getString("ApplyMaskRgb.2") + //$NON-NLS-1$ //$NON-NLS-2$
-                    imMask.toString());
+            throw new IllegalArgumentException(
+            	new Error(
+            			Error.PACKAGE.CORE,
+            			jjil.core.ErrorCodes.IMAGE_MASK_SIZE_MISMATCH,
+            			imRgb.toString(),
+            			imMask.toString(),
+            			null));
         }
         int[] rgbData = imRgb.getData();
         byte[] maskData = imMask.getData();

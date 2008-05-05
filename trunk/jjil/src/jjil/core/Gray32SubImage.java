@@ -81,8 +81,8 @@ public class Gray32SubImage extends Gray32Image {
      */
     public String toString()
     {
-        return super.toString() + " (" + getWidth() + Messages.getString("Gray32SubImage.1") + getHeight() + //$NON-NLS-1$ //$NON-NLS-2$
-                Messages.getString("Gray32SubImage.2") + getXOffset() + Messages.getString("Gray32SubImage.3") + getYOffset() + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        return super.toString() + " (" + getWidth() + "x" + getHeight() + //$NON-NLS-1$ //$NON-NLS-2$
+                "," + getXOffset() + "," + getYOffset() + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
 
 

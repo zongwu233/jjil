@@ -26,6 +26,7 @@ package jjil.algorithm;
 import java.util.Enumeration;
 import java.util.Vector;
 
+import jjil.core.Error;
 import jjil.core.Point;
 
 /**
@@ -74,19 +75,33 @@ public class LinefitHough {
             int cMaxSlope, 
             int cSteps) throws IllegalArgumentException {
         if (cMaxY < cMinY) {
-            throw new IllegalArgumentException(Messages.getString("LinefitHough.0") + //$NON-NLS-1$
-                    Messages.getString("LinefitHough.1") + cMinY + Messages.getString("LinefitHough.2") + cMaxY); //$NON-NLS-1$ //$NON-NLS-2$
+            throw new IllegalArgumentException(
+                	new Error(
+                			Error.PACKAGE.ALGORITHM,
+                			ErrorCodes.PARAMETER_RANGE_NULL_OR_NEGATIVE,
+                			new Integer(cMinY).toString(),
+                			new Integer(cMaxY).toString(),
+                			null));
         }
         this.cMinY = cMinY;
         this.cMaxY = cMaxY;
         if (cMaxSlope < cMinSlope) {
-            throw new IllegalArgumentException(Messages.getString("LinefitHough.3") + //$NON-NLS-1$
-                    Messages.getString("LinefitHough.4") + cMinSlope +  //$NON-NLS-1$
-                    Messages.getString("LinefitHough.5") + cMaxSlope); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+                	new Error(
+                			Error.PACKAGE.ALGORITHM,
+                			ErrorCodes.PARAMETER_RANGE_NULL_OR_NEGATIVE,
+                			new Integer(cMinSlope).toString(),
+                			new Integer(cMaxSlope).toString(),
+                			null));
         }
         if (cSteps <= 0) {
-            throw new IllegalArgumentException(Messages.getString("LinefitHough.6") + //$NON-NLS-1$
-                    Messages.getString("LinefitHough.7") + cSteps); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+                	new Error(
+                			Error.PACKAGE.ALGORITHM,
+                			ErrorCodes.PARAMETER_OUT_OF_RANGE,
+                			new Integer(cSteps).toString(),
+                			new Integer(1).toString(),
+                			new Integer(Integer.MAX_VALUE).toString()));
         }
         this.cMinSlope = cMinSlope;
         this.cMaxSlope = cMaxSlope;
@@ -178,8 +193,13 @@ public class LinefitHough {
         for (Enumeration e = points.elements(); e.hasMoreElements();) {
             Object o = e.nextElement(); 
             if (!(o instanceof Point)) {
-                throw new IllegalArgumentException(Messages.getString("LinefitHough.8") + //$NON-NLS-1$
-                        Messages.getString("LinefitHough.9") + o.toString()); //$NON-NLS-1$
+                throw new IllegalArgumentException(
+                    	new Error(
+                    			Error.PACKAGE.ALGORITHM,
+                    			ErrorCodes.OBJECT_NOT_EXPECTED_TYPE,
+                    			o.toString(),
+                    			Point.class.toString(),
+                    			null));
             }
             Point p = (Point) o;
             AddPoint(p);
@@ -194,7 +214,7 @@ public class LinefitHough {
      * @return the string describing the current instance.
      */
     public String toString() {
-        return super.toString() + "(" + this.cMinY + Messages.getString("Comma") + this.cMaxY + Messages.getString("Comma") + //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-                this.cMinSlope + Messages.getString("Comma") + this.cMaxSlope + Messages.getString("Comma") + this.cSteps + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        return super.toString() + "(" + this.cMinY + "," + this.cMaxY + "," + //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                this.cMinSlope + "," + this.cMaxSlope + "," + this.cSteps + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
 }

@@ -32,6 +32,8 @@
  */
 
 package jjil.algorithm;
+import jjil.core.Error;
+import jjil.core.Gray32MaskedImage;
 import jjil.core.Gray8MaskedImage;
 import jjil.core.Gray8SubImage;
 import jjil.core.Image;
@@ -152,11 +154,22 @@ public class MaskedGray8SubImgGen extends PipelineStage {
         // reuse output image
         // check to make sure nobody damaged it somehow
         if (!(super.imageOutput instanceof Gray8SubImage)) {
-            throw new IllegalStateException(super.imageOutput.toString() + 
-                    Messages.getString("MaskedGray8SubImgGen.0")); //$NON-NLS-1$
+            throw new IllegalStateException(
+            		new Error(
+            				Error.PACKAGE.ALGORITHM,
+            				ErrorCodes.OBJECT_NOT_EXPECTED_TYPE,
+            				imageOutput.toString(),
+            				Gray8SubImage.class.toString(),
+            				null));
         }
         if (!advanceToNextSubImage()) {
-            throw new IllegalStateException(Messages.getString("MaskedGray8SubImgGen.1")); //$NON-NLS-1$
+            throw new IllegalStateException(
+            		new Error(
+            				Error.PACKAGE.ALGORITHM,
+            				ErrorCodes.SUBIMAGE_NO_IMAGE_AVAILABLE,
+            				this.toString(),
+            				null,
+            				null));
         }
         
         byte[] dataIn = this.imageInput.getData();
@@ -194,12 +207,22 @@ public class MaskedGray8SubImgGen extends PipelineStage {
      */
     public void Push(Image image) throws IllegalArgumentException {
         if (!(image instanceof Gray8MaskedImage)) {
-            throw new IllegalArgumentException(image.toString() +
-                    Messages.getString("MaskedGray8SubImgGen.2")); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+                	new Error(
+            				Error.PACKAGE.ALGORITHM,
+            				ErrorCodes.OBJECT_NOT_EXPECTED_TYPE,
+            				image.toString(),
+            				Gray8MaskedImage.class.toString(),
+            				null));
         }
         if (image.getWidth() < this.nWidth || image.getHeight() < this.nHeight) {
-            throw new IllegalArgumentException(image.toString() +
-                    Messages.getString("MaskedGray8SubImgGen.3"));             //$NON-NLS-1$
+            throw new IllegalArgumentException(
+                	new Error(
+            				Error.PACKAGE.ALGORITHM,
+            				ErrorCodes.IMAGE_TOO_SMALL,
+            				image.toString(),
+            				new Integer(this.nWidth).toString(),
+            				new Integer(this.nHeight).toString()));
         }
         this.imageInput = (Gray8MaskedImage) image;
         // we want to find the largest integer l such that

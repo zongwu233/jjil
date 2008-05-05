@@ -23,6 +23,7 @@
  */
 
 package jjil.algorithm;
+import jjil.core.Error;
 import jjil.core.Gray8Image;
 import jjil.core.Image;
 import jjil.core.MathPlus;
@@ -52,8 +53,13 @@ public class Gray8Statistics {
     public void Push(Image image) throws IllegalArgumentException
     {
         if (!(image instanceof Gray8Image)) {
-            throw new IllegalArgumentException(image.toString() + Messages.getString("Gray8Statistics.0") + //$NON-NLS-1$
-                    Messages.getString("Gray8Statistics.1")); //$NON-NLS-1$
+            throw new IllegalArgumentException(
+                	new Error(
+                			Error.PACKAGE.ALGORITHM,
+                			ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
+                			image.toString(),
+                			null,
+                			null));
         }
         Gray8Image gray = (Gray8Image) image;
         int nSum = 0, nSumSq = 0;
@@ -90,10 +96,16 @@ public class Gray8Statistics {
      * @return the standard deviation, times 256.
      * @throws java.lang.ArithmeticException if the variance computed in Push() is less than zero.
      */
-    public int getStdDev() throws ArithmeticException {
+    public int getStdDev() throws RuntimeException {
         // n = variance * 256 * 256 (for accuracy)
-        int n = getVariance() << 8;
-        if (n < 0) throw new ArithmeticException(Messages.getString("Gray8Statistics.2")); //$NON-NLS-1$
+        int n = getVariance() << 8; // getVariance() already is * 256
+        if (n < 0) throw new RuntimeException(
+            	new Error(
+            			Error.PACKAGE.ALGORITHM,
+            			ErrorCodes.STATISTICS_VARIANCE_LESS_THAN_ZERO,
+            			new Integer(n).toString(),
+            			null,
+            			null));
         // return standard deviation * 256 = sqrt(variance * 256 * 256)
         return MathPlus.sqrt(n);
     }
