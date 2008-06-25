@@ -47,7 +47,7 @@ public class DetectBarcode {
 	 * @param rgb: the input RgbImage
 	 * @return true iff a barcode appeared to have been found.
 	 */
-	public boolean Push(RgbImage rgb) {
+	public boolean Push(RgbImage rgb) throws jjil.core.Error {
 		final int nReducedHeight = 240;
 		final int nReducedWidth = 320;
 		// build pipeline
@@ -74,8 +74,12 @@ public class DetectBarcode {
 		// closest to a 4/3 ratio of width to height
 		Rect rReduced;
 		int nBestDiff = Integer.MAX_VALUE;
+		this.rDetected = null;
 		for (int i=0; i<gcc.getComponents(); i++) {
 			rReduced = gcc.getComponent(0);
+			// we detected the barcode at reduced resolution
+			// for speed. Stretch the rectangle back to its
+			// original size
 			Rect rThisDetected = new Rect(
 					(rReduced.getLeft() * rgb.getWidth()) / nReducedWidth,
 					(rReduced.getTop() * rgb.getHeight()) / nReducedHeight,
@@ -95,10 +99,7 @@ public class DetectBarcode {
 				break;
 			}
 		}
-		// we detected the barcode at reduced resolution
-		// for speed. Stretch the rectangle back to its
-		// original size
-		return true;
+		return this.rDetected != null;
 	}
 	
 }

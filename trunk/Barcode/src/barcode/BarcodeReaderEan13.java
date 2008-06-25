@@ -484,10 +484,14 @@ public class BarcodeReaderEan13 implements BarcodeReader {
      */
     
     public int Decode(Image image) 
-        throws IllegalArgumentException {
+        throws jjil.core.Error {
         if (!(image instanceof Gray8Image)) {
-            throw new IllegalArgumentException(image.toString() +
-                    Messages.getString("BarcodeReaderEan13.3")); //$NON-NLS-1$
+            throw new jjil.core.Error(
+            				jjil.core.Error.PACKAGE.ALGORITHM,
+            				jjil.algorithm.ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
+            				image.toString(),
+            				null,
+            				null);
         }
         Gray8Image gray = (Gray8Image) image;
         // number of pixels per bar
@@ -583,10 +587,14 @@ public class BarcodeReaderEan13 implements BarcodeReader {
     		int cYRight, 
     		int wSlopeLeft, 
     		int wSlopeRight) 
-        throws IllegalArgumentException {
+        throws jjil.core.Error {
         if (!(image instanceof Gray8Image)) {
-            throw new IllegalArgumentException(image.toString() +
-                    Messages.getString("BarcodeReaderEan13.4")); //$NON-NLS-1$
+            throw new jjil.core.Error(
+            			jjil.core.Error.PACKAGE.ALGORITHM,
+            			jjil.algorithm.ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
+            			image.toString(),
+            			null,
+            			null);
         }
         Gray8Image gray = (Gray8Image) image;
         // estimate the barcodes on the left and right side
@@ -622,7 +630,8 @@ public class BarcodeReaderEan13 implements BarcodeReader {
      *
      * @param image the input image.
      */
-    private boolean EstimateBarcodes(Gray8Image image) {
+    private boolean EstimateBarcodes(Gray8Image image) throws jjil.core.Error
+    {
     	{
     		Gray2Rgb g2r = new Gray2Rgb();
     		g2r.Push(image);
@@ -757,7 +766,8 @@ public class BarcodeReaderEan13 implements BarcodeReader {
     		int cYLeft,
     		int cYRight,
     		int wSlopeLeft,
-    		int wSlopeRight) {
+    		int wSlopeRight) throws jjil.core.Error
+    {
     	{
     		Gray2Rgb g2r = new Gray2Rgb();
     		g2r.Push(image);
@@ -1416,12 +1426,15 @@ public class BarcodeReaderEan13 implements BarcodeReader {
      * @return the new sum. 
      */
     private int[] SumStretchedImage(byte[] bInput, int nLength, int[] nSum) 
-    	throws IllegalArgumentException
+    	throws jjil.core.Error
     {
     	if (bInput.length % nLength != 0) {
-    		throw new IllegalArgumentException(
-    				Messages.getString("BarcodeReaderEan13.5") + bInput.length +
-    				Messages.getString("BarcodeReaderEan13.6") + nLength);
+    		throw new jjil.core.Error(
+    					jjil.core.Error.PACKAGE.ALGORITHM,
+    					jjil.algorithm.ErrorCodes.REDUCE_INPUT_IMAGE_NOT_MULTIPLE_OF_OUTPUT_SIZE,
+    					new Integer(bInput.length).toString(),
+    					new Integer(nLength).toString(),
+    					null);
     	}
     	if (nSum == null) {
     		nSum = new int[nLength];

@@ -50,7 +50,7 @@ public interface BarcodeReader {
      */
     
     int Decode(jjil.core.Image image) 
-        throws IllegalArgumentException;
+        throws jjil.core.Error;
     /**
      * This returns the barcode what was read from the image. If Decode
      * has not been called previously or no barcode was found this method
