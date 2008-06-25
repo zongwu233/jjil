@@ -78,7 +78,7 @@ public class DetectHaarMultiScale extends PipelineStage {
      * @param nMaxScale Maximum (coarsest) scale at which features will be detected.
      */
     public DetectHaarMultiScale(InputStream is, int nMinScale, int nMaxScale) 
-    	throws HaarClassifierCascade.ParseException, IOException
+    	throws jjil.core.Error, IOException
     {
         this.nMinScale = nMinScale;
         this.nMaxScale = nMaxScale;
@@ -95,28 +95,27 @@ public class DetectHaarMultiScale extends PipelineStage {
      * or is too small (smaller than the Haar cascade size).
      */
          
-    public void Push(Image image) throws IllegalArgumentException {
+    public void Push(Image image) throws jjil.core.Error
+    {
         Gray8Image imGray;
         if (image instanceof Gray8Image) {
             imGray = (Gray8Image) image;
         } else {
-            throw new IllegalArgumentException(
-            		new Error(
-            				Error.PACKAGE.ALGORITHM,
-            				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
-            				image.toString(),
-            				null,
-            				null));
+            throw new Error(
+                            Error.PACKAGE.ALGORITHM,
+                            ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
+                            image.toString(),
+                            null,
+                            null);
         }
         if (image.getWidth() < this.hcc.getWidth() ||
             image.getHeight() < this.hcc.getHeight()) {
-            throw new IllegalArgumentException(
-            		new Error(
-            				Error.PACKAGE.ALGORITHM,
-            				ErrorCodes.IMAGE_TOO_SMALL,
-            				image.toString(),
-            				this.hcc.toString(),
-            				null));
+            throw new Error(
+                            Error.PACKAGE.ALGORITHM,
+                            ErrorCodes.IMAGE_TOO_SMALL,
+                            image.toString(),
+                            this.hcc.toString(),
+                            null);
         }
         int nScale = Math.min(this.nMaxScale, 
                 Math.min(image.getWidth() / this.hcc.getWidth(),
@@ -153,20 +152,28 @@ public class DetectHaarMultiScale extends PipelineStage {
                 // the detector
                 if (imSub.getXOffset() > nxLastFound + hcc.getWidth() &&
                     imSub.getYOffset() > nyLastFound + hcc.getHeight()) {
-                    if (hcc.eval(imSub)) {
-                        // Found something. 
-                        nxLastFound = imSub.getXOffset();
-                        nyLastFound = imSub.getYOffset();
-                        // assign Byte.MAX_VALUE to the feature area so we don't
-                        // search it again
-                        Gray8Rect gr = new Gray8Rect(nxLastFound, 
-                                nyLastFound, 
-                                this.hcc.getWidth(), 
-                                this.hcc.getHeight(), 
-                                Byte.MAX_VALUE);
-                        gr.Push(imMask);
-                        imMask = (Gray8Image) gr.Front();
-                     }
+                    try {
+                        if (hcc.eval(imSub)) {
+                            // Found something. 
+                            nxLastFound = imSub.getXOffset();
+                            nyLastFound = imSub.getYOffset();
+                            // assign Byte.MAX_VALUE to the feature area so we don't
+                            // search it again
+                            Gray8Rect gr = new Gray8Rect(nxLastFound, 
+                                    nyLastFound, 
+                                    this.hcc.getWidth(), 
+                                    this.hcc.getHeight(), 
+                                    Byte.MAX_VALUE);
+                            gr.Push(imMask);
+                            imMask = (Gray8Image) gr.Front();
+                         }
+                    } catch (IOException ex) {
+                        throw new Error(jjil.core.Error.PACKAGE.ALGORITHM, 
+                                jjil.algorithm.ErrorCodes.IO_EXCEPTION,
+                                this.hcc.toString(),
+                                ex.getMessage(),
+                                null);
+                    }
                 }
             }
             nScale = nScale * 256 / this.nScaleChange;

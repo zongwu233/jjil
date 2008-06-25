@@ -87,12 +87,6 @@ public abstract class HaarClassifierCascade {
      * ParseException is thrown whenever the input doesn't match what is expected.
      */
     public static class ParseException extends Exception {
-        /**
-         * ParseException is used to describe parse errors encountered while reading
-         * the input stream.
-         * @param s A description of the type and location of the error.
-         */
-        public ParseException(Throwable t) { super(t); }
     }; 
     
     /**
@@ -102,7 +96,7 @@ public abstract class HaarClassifierCascade {
      * (as given by getWidth() and getHeight()).
      * @return true iff the input image passes all the tests in the Haar cascade.
      */
-    public abstract boolean eval(Image i);
+    public abstract boolean eval(Image i) throws jjil.core.Error, IOException;
     
     /**
      * Support method for reading integers from an input stream. The single-character
@@ -119,20 +113,19 @@ public abstract class HaarClassifierCascade {
      * separator character after the integer.)
      */
     protected static int readInt(InputStreamReader isr) 
-        throws IOException, ParseException 
+        throws jjil.core.Error, IOException, IOException
     {
         int n = 0;
         int sign = 1;
         do {
            int nChar = isr.read();
             if (nChar == -1) {
-                throw new ParseException(
-                	new Error(
-        				Error.PACKAGE.ALGORITHM,
-        				ErrorCodes.INPUT_TERMINATED_EARLY,
-        				isr.toString(),
-        				null,
-        				null));
+                throw new Error(
+                                Error.PACKAGE.ALGORITHM,
+                                ErrorCodes.INPUT_TERMINATED_EARLY,
+                                isr.toString(),
+                                null,
+                                null);
             }
             char c = (char) nChar;
             if (c == '-') {
@@ -357,19 +350,18 @@ public abstract class HaarClassifierCascade {
        // think of a better way to do this than to make this a member of
        // HaarFeature and make the name as below.
         private HaarRect makeHaarRectFromStream(InputStreamReader isr) 
-            throws IOException, ParseException 
+            throws jjil.core.Error, IOException
         {
 
             char[] rC = new char[4];
             isr.read(rC, 0, 4);
             if ("(hr ".compareTo(new String(rC)) != 0) { //$NON-NLS-1$
-                throw new ParseException(
-                    	new Error(
-                				Error.PACKAGE.ALGORITHM,
-                				ErrorCodes.PARSE_ERROR,
-                				new String(rC),
-                				"(hr ",
-                				isr.toString()));
+                throw new Error(
+                                Error.PACKAGE.ALGORITHM,
+                                ErrorCodes.PARSE_ERROR,
+                                new String(rC),
+                                "(hr ",
+                                isr.toString());
             }
 
             int tlx = readInt(isr);
@@ -411,18 +403,17 @@ public abstract class HaarClassifierCascade {
          * @throws jjil.algorithm.HaarClassifierCascade.ParseException if the input is not in the expected format.
          */
         public HaarFeature(InputStreamReader isr)
-           throws IOException, ParseException 
+           throws jjil.core.Error, IOException 
         {
             char[] rC = new char[4];
             isr.read(rC, 0, 4);
             if ("(hf ".compareTo(new String(rC)) != 0) { //$NON-NLS-1$
-                throw new ParseException(
-                    	new Error(
-                				Error.PACKAGE.ALGORITHM,
-                				ErrorCodes.PARSE_ERROR,
-                				new String(rC),
-                				"(hf ",
-                				isr.toString()));
+                throw new Error(
+                                Error.PACKAGE.ALGORITHM,
+                                ErrorCodes.PARSE_ERROR,
+                                new String(rC),
+                                "(hf ",
+                                isr.toString());
             }
             this.rect = new HaarRect[3];
             this.rect[0] = makeHaarRectFromStream(isr);
@@ -518,7 +509,7 @@ public abstract class HaarClassifierCascade {
      * @throws jjil.algorithm.HaarClassifierCascade.ParseException If the input doesn't match what is expected.
      */
     public static HaarClassifierCascade fromStream(InputStreamReader isr) 
-           throws IOException, ParseException 
+           throws jjil.core.Error, IOException 
     {
         // read the first token from the stream
         String szToken = ""; //$NON-NLS-1$
@@ -526,26 +517,24 @@ public abstract class HaarClassifierCascade {
         do {
             int nCh = isr.read();
             if (nCh == -1) {
-                throw new ParseException(
-                    	new Error(
-                				Error.PACKAGE.ALGORITHM,
-                				ErrorCodes.INPUT_TERMINATED_EARLY,
-                				isr.toString(),
-                				null,
-                				null));
+                throw new Error(
+                                Error.PACKAGE.ALGORITHM,
+                                ErrorCodes.INPUT_TERMINATED_EARLY,
+                                isr.toString(),
+                                null,
+                                null);
             }
             c = (char) nCh;
             szToken += c;
         } while (c != ' ');
         if (szToken.compareTo("(hcsb ") == 0) return new HaarClassifierStumpBase(isr); //$NON-NLS-1$
         else
-            throw new ParseException(
-                	new Error(
-            				Error.PACKAGE.ALGORITHM,
-            				ErrorCodes.PARSE_ERROR,
-            				szToken,
-            				"(hcsb ",
-            				isr.toString()));
+            throw new Error(
+                            Error.PACKAGE.ALGORITHM,
+                            ErrorCodes.PARSE_ERROR,
+                            szToken,
+                            "(hcsb ",
+                            isr.toString());
     }
     
 }
@@ -604,15 +593,14 @@ class HaarClassifierTreeBase extends HaarClassifierCascade
     private HaarStageClassifier child;
     private HaarClassifierTreeBase parent;
 
-    public boolean eval(Image image) {
+    public boolean eval(Image image) throws jjil.core.Error, IOException {
         if (!(image instanceof Gray32Image)) {
-             throw new IllegalArgumentException(
-                 	new Error(
+             throw new Error(
             				Error.PACKAGE.ALGORITHM,
             				ErrorCodes.IMAGE_NOT_GRAY32IMAGE,
             				image.toString(),
             				null,
-            				null));
+            				null);
         }
         Gray32Image g32 = (Gray32Image) image;
         int nSumHc = 0;
@@ -669,18 +657,17 @@ class  HaarClassifierStumpBase extends HaarClassifierCascade {
         // create from input stream
         // expected data: (hwcs <feature><threshold>,<alpha>)
         public HaarWeakClassifierStump(InputStreamReader isr, int width, int height) 
-           throws IOException, ParseException 
+           throws jjil.core.Error, IOException 
         {
             char[] rC = new char[6];
             isr.read(rC, 0, 6);
             if ("(hwcs ".compareTo(new String(rC)) != 0) { //$NON-NLS-1$
-                throw new ParseException(
-                    	new Error(
-                				Error.PACKAGE.ALGORITHM,
-                				ErrorCodes.PARSE_ERROR,
-                				new String(rC),
-                				"(hwcs ",
-                				isr.toString()));
+                throw new Error(
+                                Error.PACKAGE.ALGORITHM,
+                                ErrorCodes.PARSE_ERROR,
+                                new String(rC),
+                                "(hwcs ",
+                                isr.toString());
             }
             this.feature = new HaarFeature(isr);
             this.threshold = readInt(isr);
@@ -739,18 +726,17 @@ class  HaarClassifierStumpBase extends HaarClassifierCascade {
         // create from stream
         // expected input (hcs <count><HaarClassifierStumpLimb>^count<threshold>)
         public HaarClassifierStump(InputStreamReader isr, int width, int height) 
-           throws IOException, ParseException 
+           throws jjil.core.Error, IOException 
         {
             char[] rC = new char[5];
             isr.read(rC, 0, 5);
             if ("(hcs ".compareTo(new String(rC)) != 0) { //$NON-NLS-1$
-                throw new ParseException(
-                    	new Error(
-                				Error.PACKAGE.ALGORITHM,
-                				ErrorCodes.PARSE_ERROR,
-                				new String(rC),
-                				"(hcs ",
-                				isr.toString()));
+                throw new Error(
+                                Error.PACKAGE.ALGORITHM,
+                                ErrorCodes.PARSE_ERROR,
+                                new String(rC),
+                                "(hcs ",
+                                isr.toString());
             }
             int n = readInt(isr);
             this.hwcs = new HaarWeakClassifierStump[n];
@@ -791,15 +777,14 @@ class  HaarClassifierStumpBase extends HaarClassifierCascade {
     };
 
        
-        public boolean eval(Image image) throws IllegalArgumentException {
+        public boolean eval(Image image) throws jjil.core.Error, IOException {
             if (!(image instanceof Gray8Image)) {
-                 throw new IllegalArgumentException(
-                    	new Error(
-                				Error.PACKAGE.ALGORITHM,
-                				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
-                				image.toString(),
-                				null,
-                				null));
+                 throw new Error(
+                                 Error.PACKAGE.ALGORITHM,
+                                 ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
+                                 image.toString(),
+                                 null,
+                                 null);
             }
             // calculate the standard deviation of the input mage
             this.gs.Push(image);
@@ -829,7 +814,7 @@ class  HaarClassifierStumpBase extends HaarClassifierCascade {
     // Expected input (hcsb <width> <height> <count><HaarClassifierStump>^count)
     // the '(hcsb ' has already been read before this gets called
     public HaarClassifierStumpBase(InputStreamReader isr) 
-       throws IOException, ParseException 
+       throws jjil.core.Error, IOException 
     {
         /*
         char[] rC = new char[6];
@@ -848,23 +833,21 @@ class  HaarClassifierStumpBase extends HaarClassifierCascade {
         }
         n = isr.read();
         if (n == -1) {
-            throw new ParseException(
-                	new Error(
-            				Error.PACKAGE.ALGORITHM,
-            				ErrorCodes.INPUT_TERMINATED_EARLY,
-            				isr.toString(),
-            				null,
-            				null));
+            throw new Error(
+                            Error.PACKAGE.ALGORITHM,
+                            ErrorCodes.INPUT_TERMINATED_EARLY,
+                            isr.toString(),
+                            null,
+                            null);
         }
         char c = (char) n;
         if (c != ')') {
-            throw new ParseException(
-                	new Error(
-            				Error.PACKAGE.ALGORITHM,
-            				ErrorCodes.PARSE_ERROR,
-            				new Character(c).toString(),
-            				")",
-            				isr.toString()));
+            throw new Error(
+                            Error.PACKAGE.ALGORITHM,
+                            ErrorCodes.PARSE_ERROR,
+                            new Character(c).toString(),
+                            ")",
+                            isr.toString());
         }
     }
         

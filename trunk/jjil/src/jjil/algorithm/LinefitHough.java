@@ -65,7 +65,7 @@ public class LinefitHough {
      * @param cMaxSlope maximum slope (multiplied by 256)
      * @param cSteps steps taken in Hough accumulator between minimum and
      * maximum slope.
-     * @throws IllegalArgumentException if Y or slope range is empty, or
+     * @throws jjil.core.Error if Y or slope range is empty, or
      * cSteps is not positive.
      */
     public LinefitHough(
@@ -73,35 +73,32 @@ public class LinefitHough {
             int cMaxY, 
             int cMinSlope, 
             int cMaxSlope, 
-            int cSteps) throws IllegalArgumentException {
+            int cSteps) throws jjil.core.Error {
         if (cMaxY < cMinY) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
                 			Error.PACKAGE.ALGORITHM,
                 			ErrorCodes.PARAMETER_RANGE_NULL_OR_NEGATIVE,
                 			new Integer(cMinY).toString(),
                 			new Integer(cMaxY).toString(),
-                			null));
+                			null);
         }
         this.cMinY = cMinY;
         this.cMaxY = cMaxY;
         if (cMaxSlope < cMinSlope) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
                 			Error.PACKAGE.ALGORITHM,
                 			ErrorCodes.PARAMETER_RANGE_NULL_OR_NEGATIVE,
                 			new Integer(cMinSlope).toString(),
                 			new Integer(cMaxSlope).toString(),
-                			null));
+                			null);
         }
         if (cSteps <= 0) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
                 			Error.PACKAGE.ALGORITHM,
                 			ErrorCodes.PARAMETER_OUT_OF_RANGE,
                 			new Integer(cSteps).toString(),
                 			new Integer(1).toString(),
-                			new Integer(Integer.MAX_VALUE).toString()));
+                			new Integer(Integer.MAX_VALUE).toString());
         }
         this.cMinSlope = cMinSlope;
         this.cMaxSlope = cMaxSlope;
@@ -181,10 +178,10 @@ public class LinefitHough {
     /** Finds the most likely line passing through the points in the Vector.
      * 
      * @param points the input Vector of point positions
-     * @throws IllegalArgumentException if points is not a Vector of 
+     * @throws jjil.core.Error if points is not a Vector of 
      * point objects.
      */
-    public void Push(Vector points) throws IllegalArgumentException {
+    public void Push(Vector points) throws jjil.core.Error {
         /* create Hough accumulator */
         this.cHoughAccum = 
                 new int[this.cSteps][this.cMaxY-this.cMinY];
@@ -193,13 +190,12 @@ public class LinefitHough {
         for (Enumeration e = points.elements(); e.hasMoreElements();) {
             Object o = e.nextElement(); 
             if (!(o instanceof Point)) {
-                throw new IllegalArgumentException(
-                    	new Error(
+                throw new Error(
                     			Error.PACKAGE.ALGORITHM,
                     			ErrorCodes.OBJECT_NOT_EXPECTED_TYPE,
                     			o.toString(),
-                    			Point.class.toString(),
-                    			null));
+                    			"Point",
+                    			null);
             }
             Point p = (Point) o;
             AddPoint(p);

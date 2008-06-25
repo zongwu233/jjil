@@ -51,16 +51,15 @@ public class ApplyMaskRgb {
      */
     public RgbImage Push(
             RgbImage imRgb,
-            Gray8Image imMask) throws IllegalArgumentException {
+            Gray8Image imMask) throws jjil.core.Error {
         if (imRgb.getWidth() != imMask.getWidth() ||
             imRgb.getHeight() != imMask.getHeight()) {
-            throw new IllegalArgumentException(
-            	new Error(
-            			Error.PACKAGE.CORE,
-            			jjil.core.ErrorCodes.IMAGE_MASK_SIZE_MISMATCH,
-            			imRgb.toString(),
-            			imMask.toString(),
-            			null));
+            throw new Error(
+                            Error.PACKAGE.CORE,
+                            jjil.core.ErrorCodes.IMAGE_MASK_SIZE_MISMATCH,
+                            imRgb.toString(),
+                            imMask.toString(),
+                            null);
         }
         int[] rgbData = imRgb.getData();
         byte[] maskData = imMask.getData();

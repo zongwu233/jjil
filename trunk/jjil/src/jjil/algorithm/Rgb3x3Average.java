@@ -49,19 +49,18 @@ public class Rgb3x3Average extends PipelineStage {
      * with 0, when doing the average.
      *
      * @param imageInput the input image
-     * @throws IllegalArgumentException if imageInput is not an RgbImage
+     * @throws jjil.core.Error if imageInput is not an RgbImage
      */
-    public void Push(Image imageInput) throws IllegalArgumentException 
+    public void Push(Image imageInput) throws jjil.core.Error 
    {
         if (!(imageInput instanceof RgbImage)) 
         {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
                 			Error.PACKAGE.ALGORITHM,
                 			ErrorCodes.IMAGE_NOT_RGBIMAGE,
                 			imageInput.toString(),
                 			null,
-                			null));
+                			null);
         }
         
         int cWidth  = imageInput.getWidth();

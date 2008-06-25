@@ -54,38 +54,35 @@ public class IFftComplex32 extends PipelineStage {
     /**
      * Perform the inverse FFT on the input Complex32Image, producing a Gray8Image.
      * @param im Input image. Must be a power of 2 in size and of type Complex32Image.
-     * @throws java.lang.IllegalArgumentException if the input is not a power of 2 in size or not a Complex32Image.
+     * @throws java.lang.jjil.core.Error if the input is not a power of 2 in size or not a Complex32Image.
      */
-    public void Push(Image im) throws IllegalArgumentException {
+    public void Push(Image im) throws jjil.core.Error {
         if (!(im instanceof Complex32Image)) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
             				Error.PACKAGE.ALGORITHM,
             				ErrorCodes.IMAGE_NOT_COMPLEX32IMAGE,
             				im.toString(),
             				null,
-            				null));
+            				null);
         }
         // make sure the image width and height are powers of two
         int nWidth = im.getWidth();
         int nHeight = im.getHeight();
         if ((nWidth & (nWidth-1)) != 0) {
-            throw new IllegalArgumentException(
-            		new Error(
+            throw new Error(
             				Error.PACKAGE.ALGORITHM,
             				ErrorCodes.FFT_SIZE_NOT_POWER_OF_2,
             				im.toString(),
             				null,
-            				null));
+            				null);
         }
         if ((nHeight & (nHeight-1)) != 0) {
-            throw new IllegalArgumentException(
-            		new Error(
+            throw new Error(
             				Error.PACKAGE.ALGORITHM,
             				ErrorCodes.FFT_SIZE_NOT_POWER_OF_2,
             				im.toString(),
             				null,
-            				null));
+            				null);
         }
         // initialize FFT
         if (this.fft == null) {

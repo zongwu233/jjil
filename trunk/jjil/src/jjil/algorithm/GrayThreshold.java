@@ -45,20 +45,19 @@ public class GrayThreshold extends PipelineStage {
      * Byte.MIN_VALUE under.
      *
      * @param image the input image (and output)
-     * @throws IllegalArgumentException if the image is not a gray 8-bit
+     * @throws jjil.core.Error if the image is not a gray 8-bit
      * image.
      */
     public void Push(Image image)
-        throws IllegalArgumentException
+        throws jjil.core.Error
     {
         if (!(image instanceof Gray8Image)) {
-            throw new IllegalArgumentException(
-            		new Error(
+            throw new Error(
             				Error.PACKAGE.ALGORITHM,
             				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
             				image.toString(),
             				null,
-            				null));
+            				null);
         }
         Gray8Image gray = (Gray8Image) image;
         byte[] data = gray.getData();

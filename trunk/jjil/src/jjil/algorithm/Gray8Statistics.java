@@ -48,18 +48,17 @@ public class Gray8Statistics {
     /** Estimate the mean and variance of an input gray image.
      *
      * @param image the input image.
-     * @throws IllegalArgumentException if the input image is not gray.
+     * @throws jjil.core.Error if the input image is not gray.
      */
-    public void Push(Image image) throws IllegalArgumentException
+    public void Push(Image image) throws jjil.core.Error
     {
         if (!(image instanceof Gray8Image)) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
                 			Error.PACKAGE.ALGORITHM,
                 			ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
                 			image.toString(),
                 			null,
-                			null));
+                			null);
         }
         Gray8Image gray = (Gray8Image) image;
         int nSum = 0, nSumSq = 0;
@@ -96,16 +95,15 @@ public class Gray8Statistics {
      * @return the standard deviation, times 256.
      * @throws java.lang.ArithmeticException if the variance computed in Push() is less than zero.
      */
-    public int getStdDev() throws RuntimeException {
+    public int getStdDev() throws jjil.core.Error {
         // n = variance * 256 * 256 (for accuracy)
         int n = getVariance() << 8; // getVariance() already is * 256
-        if (n < 0) throw new RuntimeException(
-            	new Error(
+        if (n < 0) throw new Error(
             			Error.PACKAGE.ALGORITHM,
             			ErrorCodes.STATISTICS_VARIANCE_LESS_THAN_ZERO,
             			new Integer(n).toString(),
             			null,
-            			null));
+            			null);
         // return standard deviation * 256 = sqrt(variance * 256 * 256)
         return MathPlus.sqrt(n);
     }

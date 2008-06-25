@@ -50,21 +50,20 @@ public class Gray32MaskedImage extends Gray32Image {
      * image and mask.
      * @param imData the data image.
      * @param imMask the mask
-     * @throws java.lang.IllegalArgumentException If either input is not a Gray8Image or the sizes are not the same.
+     * @throws java.lang.jjil.core.Error If either input is not a Gray8Image or the sizes are not the same.
      */
     public Gray32MaskedImage(Gray32Image imData, Gray8Image imMask) 
-        throws IllegalArgumentException
+        throws jjil.core.Error
     {
         super(imData.getWidth(), imData.getHeight());
         if (imData.getWidth() != imMask.getWidth() ||
             imData.getHeight() != imMask.getHeight()) {
-            throw new IllegalArgumentException(
-            		new Error(
+            throw new Error(
             				Error.PACKAGE.CORE,
             				ErrorCodes.IMAGE_MASK_SIZE_MISMATCH,
             				imData.toString(),
             				imMask.toString(),
-            				null));
+            				null);
         }
         System.arraycopy(
                 imData.getData(),
@@ -79,7 +78,7 @@ public class Gray32MaskedImage extends Gray32Image {
      *
      * @return the image copy.
      */
-    public Image Clone()
+    public Image Clone() throws jjil.core.Error
     {
         Gray32MaskedImage image = new Gray32MaskedImage(
                 (Gray32Image) this, 

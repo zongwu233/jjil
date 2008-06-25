@@ -45,39 +45,36 @@ public class GraySub implements Ladder.Join {
      * @param imageFirst the first image (and output)
      * @param imageSecond the second image
      * @return the difference of the two byte images, replacing the first
-     * @throws IllegalArgumentException if either image is not a gray 8-bit
+     * @throws jjil.core.Error if either image is not a gray 8-bit
      * image, or they are of different sizes.
      */
     public Image DoJoin(Image imageFirst, Image imageSecond)
-        throws IllegalArgumentException
+        throws jjil.core.Error
     {
         if (!(imageFirst instanceof Gray8Image)) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
             				Error.PACKAGE.ALGORITHM,
             				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
             				imageFirst.toString(),
             				null,
-            				null));
+            				null);
         }
         if (!(imageSecond instanceof Gray8Image)) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
             				Error.PACKAGE.ALGORITHM,
             				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
             				imageSecond.toString(),
             				null,
-            				null));
+            				null);
         }
         if (imageFirst.getWidth() != imageSecond.getWidth() ||
         	imageSecond.getHeight() != imageSecond.getHeight()) {
-        	throw new IllegalArgumentException(
-            	new Error(
+        	throw new Error(
         				Error.PACKAGE.ALGORITHM,
         				ErrorCodes.IMAGE_SIZES_DIFFER,
         				imageFirst.toString(),
         				imageSecond.toString(),
-        				null));
+        				null);
         
         }
         Gray8Image gray1 = (Gray8Image) imageFirst;

@@ -164,7 +164,7 @@ public class CannyHoriz extends PipelineStage {
      * in the Gaussian distribution multipied by 10.0 and converted to integer.
      * @throws IllegalArgumentException is sigma is out of range.
      */
-    public CannyHoriz(int cSigma) throws IllegalArgumentException {
+    public CannyHoriz(int cSigma) throws jjil.core.Error {
         this.setSigma(cSigma);
     }
     
@@ -177,15 +177,14 @@ public class CannyHoriz extends PipelineStage {
      * @param image the input Gray8Image
      * @throws IllegalArgumentException if image is not a Gray8Image
      */
-    public void Push(Image image) throws IllegalArgumentException {
+    public void Push(Image image) throws jjil.core.Error {
         if (!(image instanceof Gray8Image)) {
-            throw new IllegalArgumentException(
-            	new Error(
+            throw new Error(
         			Error.PACKAGE.ALGORITHM,
         			ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
         			image.toString(),
         			null,
-        			null));
+        			null);
         }
         Gray8Image input = (Gray8Image) image;
         Gray8Image result = new Gray8Image(image.getWidth(), image.getHeight());
@@ -242,15 +241,14 @@ public class CannyHoriz extends PipelineStage {
      * less than or equal to 1 or greater than the number of coefficients
      * we're precomputed.
      */
-    public void setSigma(int cSigma) throws IllegalArgumentException {
+    public void setSigma(int cSigma) throws jjil.core.Error {
         if (cSigma <= 1 || cSigma >= this.nCoeff.length) {
-            throw new IllegalArgumentException(
-            	new Error(
+            throw new Error(
         			Error.PACKAGE.ALGORITHM,
         			ErrorCodes.PARAMETER_OUT_OF_RANGE,
         			new Integer(cSigma).toString(),
         			new Integer(1).toString(),
-        			new Integer(this.nCoeff.length).toString()));
+        			new Integer(this.nCoeff.length).toString());
         }
         this.cSigma = cSigma;
     }

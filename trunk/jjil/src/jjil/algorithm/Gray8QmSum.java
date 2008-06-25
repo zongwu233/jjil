@@ -49,17 +49,16 @@ public class Gray8QmSum extends PipelineStage {
      *  Input is 8-bit gray image.
      *
      * @param image the input image.
-     * @throws IllegalArgumentException if the input is not a Gray8Image
+     * @throws jjil.core.Error if the input is not a Gray8Image
      */
-    public void Push(Image image) throws IllegalArgumentException {
+    public void Push(Image image) throws jjil.core.Error {
         if (!(image instanceof Gray8Image)) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
             				Error.PACKAGE.ALGORITHM,
             				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
             				image.toString(),
             				null,
-            				null));
+            				null);
         }
         Gray8Image gray = (Gray8Image) image;
         Gray32Image gray32 = new Gray32Image(image.getWidth(), image.getHeight());

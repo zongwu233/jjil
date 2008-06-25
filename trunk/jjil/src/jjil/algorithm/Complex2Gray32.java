@@ -48,15 +48,14 @@ public class Complex2Gray32 extends PipelineStage {
      * @param im Input image. Must be a Complex32Image.
      * @throws java.lang.IllegalArgumentException If the input is not a Complex32Image.
      */
-    public void Push(Image im) throws IllegalArgumentException {
+    public void Push(Image im) throws jjil.core.Error {
         if (!(im instanceof Complex32Image)) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
                 			Error.PACKAGE.ALGORITHM,
                 			ErrorCodes.IMAGE_NOT_COMPLEX32IMAGE,
                 			im.toString(),
                 			null,
-                			null));
+                			null);
         }
         Gray32Image imResult = new Gray32Image(im.getWidth(), im.getHeight());
         Complex cData[] = ((Complex32Image) im).getData();

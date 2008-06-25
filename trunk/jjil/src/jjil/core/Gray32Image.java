@@ -62,7 +62,7 @@ public class Gray32Image extends Image {
      *
      * @return the image copy.
      */
-    public Image Clone()
+    public Image Clone() throws jjil.core.Error
     {
         Gray8Image image = new Gray8Image(getWidth(),getHeight());
         System.arraycopy(

@@ -119,9 +119,9 @@ public class RgbSelect2Gray extends PipelineStage {
     /**
      * Creates a new instance of RgbSelect2Gray.
      * @param color the color selected from the color image to create the gray image.
-     * @throws IllegalArgumentException if color is not RED, GREEN, or BLUE.
+     * @throws jjil.core.Error if color is not RED, GREEN, or BLUE.
      */
-    public RgbSelect2Gray(ColorClass color) throws IllegalArgumentException {
+    public RgbSelect2Gray(ColorClass color) throws jjil.core.Error {
         setColor(color);
     }
     
@@ -140,18 +140,17 @@ public class RgbSelect2Gray extends PipelineStage {
      * is from -128->127 instead of the 0-255 value in the ARGB word.
      *
      * @param image the input image
-     * @throws IllegalArgumentException if the input image is not a color
+     * @throws jjil.core.Error if the input image is not a color
      *   image.
      */
-    public void Push(Image image) throws IllegalArgumentException {
+    public void Push(Image image) throws jjil.core.Error {
         if (!(image instanceof RgbImage)) {
-            throw new IllegalArgumentException(
-            	new Error(
+            throw new Error(
             			Error.PACKAGE.ALGORITHM,
             			ErrorCodes.IMAGE_NOT_RGBIMAGE,
             			image.toString(),
             			null,
-            			null));
+            			null);
         }
         RgbImage rgb = (RgbImage) image;
         int[] rgbData = rgb.getData();
@@ -184,22 +183,21 @@ public class RgbSelect2Gray extends PipelineStage {
     /**
      * Changes the color selected.
      * @param color the new color selected
-     * @throws java.lang.IllegalArgumentException if the input color is not ColorClass.RED, GREEN, or BLUE.
+     * @throws java.lang.jjil.core.Error if the input color is not ColorClass.RED, GREEN, or BLUE.
      */
-    public void setColor(ColorClass color) throws IllegalArgumentException {
+    public void setColor(ColorClass color) throws jjil.core.Error {
         /* as I understand the language this can't happen, but just in
          * case...
          */
         if (!(color.equals(RgbSelect2Gray.RED) || 
                 color.equals(RgbSelect2Gray.GREEN) || 
                 color.equals(RgbSelect2Gray.BLUE))) {
-            throw new IllegalArgumentException(
-            	new Error(
+            throw new Error(
         			Error.PACKAGE.ALGORITHM,
         			ErrorCodes.ILLEGAL_COLOR_CHOICE,
         			color.toString(),
         			null,
-        			null));
+        			null);
 
         }
         this.colorChosen = color;

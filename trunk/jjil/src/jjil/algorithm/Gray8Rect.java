@@ -45,7 +45,8 @@ public class Gray8Rect extends PipelineStage {
      * @param nHeight the height of the rectangle.
      * @param bValue the value to be assigned to the rectangle.
      */
-    public Gray8Rect(int cX, int cY, int nWidth, int nHeight, byte bValue) {
+    public Gray8Rect(int cX, int cY, int nWidth, int nHeight, byte bValue) 
+    	throws jjil.core.Error {
     	setWindow(cX, cY, nWidth, nHeight);
         this.bValue = bValue;
     }
@@ -53,17 +54,16 @@ public class Gray8Rect extends PipelineStage {
     /**
      * Assigns a constant rectangle to the input Gray8Image, replacing values in the image.
      * @param image the input image (output replaces input).
-     * @throws java.lang.IllegalArgumentException if image is not a Gray8Image.
+     * @throws java.lang.jjil.core.Error if image is not a Gray8Image.
      */
-    public void Push(Image image) throws IllegalArgumentException {
+    public void Push(Image image) throws jjil.core.Error {
         if (!(image instanceof Gray8Image)) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
             				Error.PACKAGE.ALGORITHM,
             				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
             				image.toString(),
             				null,
-            				null));
+            				null);
         }
         Gray8Image input = (Gray8Image) image;
         byte[] data = input.getData();
@@ -78,15 +78,15 @@ public class Gray8Rect extends PipelineStage {
          super.setOutput(input);
     }
     
-    public void setWindow(int cX, int cY, int nWidth, int nHeight) {
+    public void setWindow(int cX, int cY, int nWidth, int nHeight) 
+    	throws jjil.core.Error {
     	if (nWidth <= 0 || nHeight <= 0) {
-            throw new IllegalArgumentException(
-               	new Error(
+            throw new Error(
             		Error.PACKAGE.ALGORITHM,
             		ErrorCodes.OUTPUT_IMAGE_SIZE_NEGATIVE,
             		new Integer(nWidth).toString(),
             		new Integer(nHeight).toString(),
-            		null));
+            		null);
     	}
         this.cX = cX;
         this.cY = cY;

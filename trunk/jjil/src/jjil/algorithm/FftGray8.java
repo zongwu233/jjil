@@ -54,37 +54,34 @@ public class FftGray8 extends PipelineStage {
      * and the output is a Complex32Image. The input is scaled by shifting left SCALE
      * bits before the transformation, for accuracy.
      * @param im Input image. Must be a Gray8Image.
-     * @throws java.lang.IllegalArgumentException If the input is not a Gray8Image or the image size is not a power of two.
+     * @throws java.lang.jjil.core.Error If the input is not a Gray8Image or the image size is not a power of two.
      */
-    public void Push(Image im) throws IllegalArgumentException {
+    public void Push(Image im) throws jjil.core.Error {
         if (!(im instanceof Gray8Image)) {
-            throw new IllegalArgumentException(
-            		new Error(
+            throw new Error(
             				Error.PACKAGE.ALGORITHM,
             				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
             				im.toString(),
             				null,
-            				null));
+            				null);
         }
         int nWidth = im.getWidth();
         int nHeight = im.getHeight();
         if ((nWidth & (nWidth-1)) != 0) {
-            throw new IllegalArgumentException(
-            		new Error(
+            throw new Error(
             				Error.PACKAGE.ALGORITHM,
             				ErrorCodes.FFT_SIZE_NOT_POWER_OF_2,
             				im.toString(),
             				null,
-            				null));
+            				null);
         }
         if ((nHeight & (nHeight-1)) != 0) {
-            throw new IllegalArgumentException(
-            		new Error(
+            throw new Error(
             				Error.PACKAGE.ALGORITHM,
             				ErrorCodes.FFT_SIZE_NOT_POWER_OF_2,
             				im.toString(),
             				null,
-            				null));
+            				null);
         }
         // initialize FFT
         if (this.fft == null) {

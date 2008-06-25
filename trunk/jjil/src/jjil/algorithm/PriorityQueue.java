@@ -42,21 +42,21 @@ public interface PriorityQueue {
      * @param x the item to insert.
      * @return may return a Position useful for decreaseKey.
      */
-    Position insert( ComparableJ2me x );
+    Position insert( ComparableJ2me x ) throws jjil.core.Error;
     
     /**
      * Find the smallest item in the priority queue.
      * @return the smallest item.
      * @throws UnderflowException if empty.
      */
-    ComparableJ2me findMin( );
+    ComparableJ2me findMin( ) throws jjil.core.Error;
     
     /**
      * Remove the smallest item from the priority queue.
      * @return the smallest item.
      * @throws UnderflowException if empty.
      */
-    ComparableJ2me deleteMin( );
+    ComparableJ2me deleteMin( ) throws jjil.core.Error;
     
     /**
      * Test if the priority queue is logically empty.

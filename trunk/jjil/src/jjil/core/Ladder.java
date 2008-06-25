@@ -41,7 +41,7 @@ public class Ladder extends PipelineStage {
          * @param imageSecond Second image
          * @return the combined image
          */
-        Image DoJoin(Image imageFirst, Image imageSecond);
+        Image DoJoin(Image imageFirst, Image imageSecond) throws jjil.core.Error;
     }
     
     /**
@@ -79,27 +79,25 @@ public class Ladder extends PipelineStage {
      * @throws IllegalStateException if either pipeline does not produce an output
      * after being supplied with the input.
      */
-    public void Push(Image image) throws IllegalStateException {
+    public void Push(Image image) throws jjil.core.Error {
         Image imageCopy = image.Clone();
         pipeFirst.Push(image);
         pipeSecond.Push(imageCopy);
         if (pipeFirst.Empty()) {
-            throw new IllegalStateException(
-            		new Error(
-            				Error.PACKAGE.CORE,
-            				ErrorCodes.PIPELINE_NO_RESULT,
-            				pipeFirst.toString(),
-            				null,
-            				null));
+            throw new Error(
+                            Error.PACKAGE.CORE,
+                            ErrorCodes.PIPELINE_NO_RESULT,
+                            pipeFirst.toString(),
+                            null,
+                            null);
         }
         if (pipeSecond.Empty()) {
-            throw new IllegalStateException(
-            		new Error(
-            				Error.PACKAGE.CORE,
-            				ErrorCodes.PIPELINE_NO_RESULT,
-            				pipeSecond.toString(),
-            				null,
-            				null));
+            throw new Error(
+                                Error.PACKAGE.CORE,
+                                ErrorCodes.PIPELINE_NO_RESULT,
+                                pipeSecond.toString(),
+                                null,
+                                null);
         }
         super.setOutput(
                 join.DoJoin(pipeFirst.Front(), pipeSecond.Front())

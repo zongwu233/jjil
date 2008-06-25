@@ -156,18 +156,17 @@ public class MathPlus {
     /**
      * Computes square root using Newton's iteration.
      * @param x number to take square root of
-     * @throws IllegalArgumentException if x < 0
+     * @throws jjil.core.Error if x < 0
      * @return the square root of x
      */
-    public static int sqrt(int x) throws IllegalArgumentException {
+    public static int sqrt(int x) throws jjil.core.Error {
         if (x < 0) {
-            throw new IllegalArgumentException(
-            		new Error(
+            throw new Error(
             				Error.PACKAGE.CORE,
             				ErrorCodes.MATH_NEGATIVE_SQRT,
             				new Integer(x).toString(),
             				null,
-            				null));
+            				null);
         }
         // special case for 0
         if (x == 0) {

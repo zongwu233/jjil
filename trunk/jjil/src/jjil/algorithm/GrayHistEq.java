@@ -39,7 +39,7 @@ public class GrayHistEq extends PipelineStage {
     private GrayHistMatch histMatch;
     
     /** Creates a new instance of GrayHistEq */
-    public GrayHistEq() {
+    public GrayHistEq() throws jjil.core.Error {
         int[] nullHist = new int[256];
         this.histMatch = new GrayHistMatch(nullHist);
     }
@@ -47,17 +47,16 @@ public class GrayHistEq extends PipelineStage {
     /** Equalize the histogram of an input gray image.
      *
      * @param image the input image.
-     * @throws IllegalArgumentException if the input image is not gray.
+     * @throws jjil.core.Error if the input image is not gray.
      */
-    public void Push(Image image) throws IllegalArgumentException {
+    public void Push(Image image) throws jjil.core.Error {
         if (!(image instanceof Gray8Image)) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
             				Error.PACKAGE.ALGORITHM,
             				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
             				image.toString(),
             				null,
-            				null));
+            				null);
         }
         Gray8Image gray = (Gray8Image) image;
         /* In order to avoid recreating histMatch every call, we recompute

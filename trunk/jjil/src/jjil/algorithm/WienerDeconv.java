@@ -45,24 +45,22 @@ public class WienerDeconv extends PipelineStage {
     /**
      * Creates a new instance of WienerDeconv
      */
-    public WienerDeconv(Gray8Image psf, int nNoise) throws IllegalArgumentException {
+    public WienerDeconv(Gray8Image psf, int nNoise) throws jjil.core.Error {
         if (psf.getWidth() != psf.getHeight()) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
             				Error.PACKAGE.ALGORITHM,
             				ErrorCodes.IMAGE_NOT_SQUARE,
             				psf.toString(),
             				null,
-            				null));
+            				null);
         }
         if (!(psf instanceof Gray8Image)) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
             				Error.PACKAGE.ALGORITHM,
             				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
             				psf.toString(),
             				null,
-            				null));
+            				null);
         }
         this.nNoise = nNoise;
         this.fft = new FftGray8();
@@ -71,34 +69,31 @@ public class WienerDeconv extends PipelineStage {
         invertPsf();
     }
     
-    public void Push(Image im) {
+    public void Push(Image im) throws jjil.core.Error {
         if (im.getWidth() != im.getHeight()) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
             				Error.PACKAGE.ALGORITHM,
             				ErrorCodes.IMAGE_NOT_SQUARE,
             				im.toString(),
             				null,
-            				null));
+            				null);
         }
         if (im.getWidth() != this.cxmPsfInv.getWidth() ||
         	im.getHeight() != this.cxmPsfInv.getHeight()) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
             				Error.PACKAGE.ALGORITHM,
             				ErrorCodes.IMAGE_SIZES_DIFFER,
             				im.toString(),
             				this.cxmPsfInv.toString(),
-            				null));
+            				null);
         }
         if (!(im instanceof Gray8Image)) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
             				Error.PACKAGE.ALGORITHM,
             				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
             				im.toString(),
             				null,
-            				null));
+            				null);
         }
         this.fft.Push(im);
         Complex32Image cxmIm = (Complex32Image) this.fft.Front();
@@ -116,7 +111,7 @@ public class WienerDeconv extends PipelineStage {
         super.setOutput(cxmResult);
     }
     
-    private void invertPsf() {
+    private void invertPsf() throws jjil.core.Error {
         this.gPsfSq = new Gray32Image(this.cxmPsfInv.getWidth(), this.cxmPsfInv.getHeight());
         Complex cxPsf[] = this.cxmPsfInv.getData();
         int nData[] = this.gPsfSq.getData();
