@@ -16,7 +16,8 @@ class ReadBarJ extends Frame
 		this.setVisible(true);
 		RgbImageJ2se debug = new RgbImageJ2se(this.getGraphics());
 		Debug.setShow(debug);
-		Image image = getToolkit().getImage("Z:\\Data transfer\\101_PANA\\P1010106.JPG"); //$NON-NLS-1$
+		//Image image = getToolkit().getImage("Z:\\Data transfer\\101_PANA\\P1010106.JPG"); //$NON-NLS-1$
+		Image image = getToolkit().getImage("C:\\Documents and Settings\\webb.PEP-SYSTEMS\\workspace\\ReadBarJ-J2ME\\src\\images\\barcode.png");
 		jjil.core.RgbImage inimg = RgbImageJ2se.toRgbImage(image);
 		DetectBarcode db = new DetectBarcode(20000);
 		try {
@@ -41,13 +42,9 @@ class ReadBarJ extends Frame
 					System.out.println(Messages.getString("ReadBarJ.3") + rb.getCode()); //$NON-NLS-1$
 				}
 			}
-		} catch (Exception ex) {
-			Throwable t = ex.getCause();
-			if (t instanceof jjil.core.Error) {
-				jjil.j2se.Error e = new jjil.j2se.Error((jjil.core.Error) t);
-				System.out.println(e.getLocalizedMessage());
-			}
-			ex.printStackTrace();
+		} catch (Throwable t) {
+			System.out.println(t.getLocalizedMessage());
+			t.printStackTrace();
 		}
 	  }
 }
