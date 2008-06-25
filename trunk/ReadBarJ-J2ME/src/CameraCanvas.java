@@ -39,7 +39,6 @@ import javax.microedition.media.*;
 import javax.microedition.media.control.*;
 import javax.microedition.rms.*;
 
-
 public class CameraCanvas
         extends Canvas
         implements CommandListener
@@ -51,14 +50,18 @@ public class CameraCanvas
     private CharacterizeCamera cc;
     private Command cmdCapture=null;
     private final Command cmdExit;
-    private final Command cmdFileCapture;
+    private Command cmdFileCapture;
+    private Hashtable htFormatCmds = new Hashtable();
     private Hashtable htSourceCmds = new Hashtable();
     private Hashtable htResCmds = new Hashtable();
     private final ReadBarJ midlet;
-    private int nCurrentHeight = 240;
-    private int nCurrentWidth = 320;
-    private final int nIdSettings = 2;
-    private final int nIdSource = 1;
+    private int nCurrentHeight = 0;
+    private int nCurrentWidth = 0;
+    
+    private int nCaptureSource = 0;
+
+    private final int nIdSettings = 0;
+    
     private String szCurrentSource;
     //Two strings for displaying error messages
     private String szMessage1=null;
@@ -68,23 +71,16 @@ public class CameraCanvas
     private boolean oResultShown = false;
     private boolean oScreenUpdated = false;
     private Player player=null;
+    // there doesn't appear to be a reliable way to determine the
+    // legal camera resolutions from the API. So here are some
+    // reasonable guesses.
     private final int[][] rgxnCameraResolutions =
-        {{320, 240},
-        {640, 480},
-        {1280, 960}
+        {{160,120}, 
+         {320, 240},
+         {640, 480},
+         {1280, 960}
         };
-    private int nCurrentBarcodeIndex = 1;
-    // note: these coordinates are measured as fractions of a 640 x 480
-    // image. 
-    private final int[][] rgxnBarcodeParams = 
-    {
-        {195, 116, 253, 250},
-//        {70, 116, 506, 250},
-        {242, 192, 150, 61},
-        {70, 178, 506, 125},
-	{195, 178, 253, 125},
-        {0, 0, 640, 480}
-    };
+
     private String szCaptureFormat = null;
     private VideoControl videoControl=null;
 
@@ -95,32 +91,22 @@ public class CameraCanvas
         cmdExit=new Command("Exit",Command.EXIT,1);
         addCommand(cmdExit);
         setCommandListener(this);
-        this.cc = new CharacterizeCamera();
-        int nCaptureSource = 0;
-        for (Enumeration e = cc.getCaptureSources(); e.hasMoreElements();)  {
-                String szSource = (String) e.nextElement();
-                if (this.szCurrentSource == null) {
-                    this.szCurrentSource = szSource;
-                }
-                Command comSource = 
-                    new Command(
-                        "Choose " + nCaptureSource++,
-                        "Capture from " + szSource,
-                        Command.ITEM, 
-                        2);
-                this.htSourceCmds.put(comSource, szSource);
-                addCommand(comSource);
-        }
+
+        // add a special command for capturing from file
         this.cmdFileCapture = new Command(
-                        "Choose " + nCaptureSource++,
-                        "Capture from file",
-                        Command.ITEM, 
-                        2);
+            "Choose " + this.nCaptureSource++,
+            "Photo from file",
+            Command.ITEM, 
+            2);
         addCommand(this.cmdFileCapture);
+ 
+        this.cc = new CharacterizeCamera();
         restoreSettings();
-        setBcpFromIndex();
+        this.bcp = new BarcodeParam();
+        // add a command for vanilla capture. if it works add the other
+        // source, resolution, and format commands
         if (addcmdCapture()) {
-            addResolutionCommands();
+            setupCommands();
         } else {
             Alert a = new Alert(
                     "No camera!", 
@@ -139,13 +125,50 @@ public class CameraCanvas
     
     private boolean addcmdCapture()
     {
+        // if a source hasn't already been set use the first
+        Enumeration e = cc.getCaptureSources();
+        String szSource = (String) e.nextElement();
+        // make sure there's a valid capture source
+        if (this.szCurrentSource == null || this.szCurrentSource == "") {
+            this.szCurrentSource = szSource;
+        }
+
         if (createPlayer(this.szCurrentSource)) {
             cmdCapture = new Command("Capture", Command.SCREEN, 1);
             addCommand(cmdCapture);
-            setCaptureFormat();
             return true;
         }
         return false;
+    }
+    
+    /**
+     * The format and resolution commands are stored in a hashtable so
+     * that when we get an input of one of them we can look up the appropriate
+     * hashed value and determine what format or resolution we should switch
+     * to.
+     */
+    private void addFormatCommands()
+    {
+        for (Enumeration e = this.cc.getCaptureFormats(); e.hasMoreElements();) {
+            VideoFormat v = (VideoFormat) e.nextElement();
+            String szFormat = v.getEncoding();
+            int n = szFormat.indexOf("=");
+            if (n >= 0) {
+                szFormat = szFormat.substring(n+1);
+            }
+            String szCmdStr = "Photo in " + szFormat;
+            if (this.szCaptureFormat == v.getEncoding()) {
+                szCmdStr = "+ " + szCmdStr;
+            }
+            Command command = new Command(
+                szFormat,
+                szCmdStr,
+                Command.ITEM,
+                3
+            );
+            addCommand(command);
+            this.htFormatCmds.put(command, v.getEncoding());
+        }
     }
     
     private void addResolutionCommands()
@@ -154,15 +177,58 @@ public class CameraCanvas
             String szRes = Integer.toString(this.rgxnCameraResolutions[i][0]) +
                 "x" +
                 Integer.toString(this.rgxnCameraResolutions[i][1]);
+            String szCmdStr = "Photo at " + szRes;
+            if (this.nCurrentHeight == this.rgxnCameraResolutions[i][1]) {
+                szCmdStr = "+ " + szCmdStr;
+            }
             Command command = new Command(
                 szRes,
-                "Capture at " + szRes,
+                szCmdStr,
                 Command.ITEM,
                 3
             );
             addCommand(command);
             this.htResCmds.put(command, this.rgxnCameraResolutions[i]);
         }
+    }
+    
+    private void addSourceCommands() 
+    {
+        for (Enumeration e = cc.getCaptureSources(); e.hasMoreElements();)  {
+            String szSource = (String) e.nextElement();
+            // make sure there's a valid capture source
+            if (this.szCurrentSource == null || this.szCurrentSource == "") {
+                this.szCurrentSource = szSource;
+            }
+            Command comSource = 
+                new Command(
+                    "Choose " + nCaptureSource++,
+                    "Photo from " + szSource,
+                    Command.ITEM, 
+                    2);
+            this.htSourceCmds.put(comSource, szSource);
+            addCommand(comSource);
+        }
+
+    }
+    
+    private void clearCommands() 
+    {
+        for (Enumeration e = this.htFormatCmds.keys(); e.hasMoreElements();) {
+            Command cmd = (Command) e.nextElement();
+            removeCommand(cmd);
+        }
+        for (Enumeration e = this.htResCmds.keys(); e.hasMoreElements();) {
+            Command cmd = (Command) e.nextElement();
+            removeCommand(cmd);
+        }
+        for (Enumeration e = this.htSourceCmds.keys(); e.hasMoreElements();) {
+            Command cmd = (Command) e.nextElement();
+            removeCommand(cmd);
+        }
+        this.htFormatCmds.clear();
+        this.htResCmds.clear();
+        this.htSourceCmds.clear();
     }
     
     private boolean createPlayer(String szSource)
@@ -242,39 +308,18 @@ public class CameraCanvas
     public void paint(Graphics g)
     {
         if (this.bcp.imageInput == null) {
-            g.setColor(0x00FF0000); // red
+            g.setColor(0x00808080); // gray
             g.fillRect(0,0,getWidth(),getHeight());
-            g.setColor(0x0000FF00); // green
-            int clipLeft = this.bcp.dCropLeft * 
-                    videoControl.getDisplayWidth() / 640 + 
-                    videoControl.getDisplayX();
-            int clipTop = this.bcp.dCropTop * 
-                    videoControl.getDisplayHeight() / 480 +
-                    videoControl.getDisplayY();
-            int clipWidth = this.bcp.cCropWidth * 
-                    videoControl.getDisplayWidth() / 640;
-            int clipHeight = this.bcp.cCropHeight * 
-                    videoControl.getDisplayWidth() / 480;
-            g.fillRect(clipLeft, 0, clipWidth, getHeight());
-            g.fillRect(0, clipTop, getWidth(), clipHeight);
         }
         this.bcp.Paint(g);
         if (!this.oResultShown) {
             if (bcp.getSuccessful()) {
-                String sz = bcp.getBarcode();
-                Alert a = new Alert("Barcode found: " + sz, 
-                        sz, 
-                        null, 
-                        AlertType.INFO);
-                a.setTimeout(1000);
-                Display.getDisplay(this.midlet).setCurrent(a);
-                this.oResultShown = true;
-                //this.bcp.imageInput = null;
+                // successful results are shown by the bcp Paint method
             } else if (bcp.getAttempted()) {
                 Alert a = new Alert("Barcode not found", 
                         "No barcode found", 
                         null, 
-                        AlertType.ERROR);
+                        AlertType.WARNING);
                 a.setTimeout(1000);
                 Display.getDisplay(this.midlet).setCurrent(a);
                 this.oResultShown = true;
@@ -291,10 +336,12 @@ public class CameraCanvas
         }
     } 
     
-    private void setCaptureFormat() {
-        Enumeration e = this.cc.getCaptureFormats();
-        VideoFormat v = (VideoFormat) e.nextElement();
-        this.szCaptureFormat = v.getEncoding();
+    
+    private void setupCommands() {
+        clearCommands();
+        addSourceCommands();
+        addFormatCommands();
+        addResolutionCommands();
     }
     
      synchronized void start()
@@ -337,14 +384,6 @@ public class CameraCanvas
     {
         if(c==cmdExit)
         {
-            try {
-               saveSettings();
-            } catch (Exception ex) {
-                Alert a = new Alert("Could not save settings: " + ex.getMessage());
-                a.setTimeout(Alert.FOREVER);
-                a.setType(AlertType.ERROR);
-                Display.getDisplay(this.midlet).setCurrent(a);
-           }
             midlet.cameraCanvasExit();
         } 
         else if(c==cmdCapture)
@@ -376,16 +415,36 @@ public class CameraCanvas
                     }
                 }
             }
-            for (Enumeration cmds = this.htResCmds.keys();
+            for (Enumeration cmds = this.htFormatCmds.keys();
                 cmds.hasMoreElements() && !oCommandFound;) {
                 Command cmd = (Command) cmds.nextElement();
                 if (cmd == c) {
                     oCommandFound = true;
-                    int[] rgnRes = (int[]) this.htResCmds.get(cmd);
-                    this.nCurrentWidth = rgnRes[0];
-                    this.nCurrentHeight = rgnRes[1];
+                    this.szCaptureFormat = (String) this.htFormatCmds.get(cmd);
                 }
             }
+            if (!oCommandFound) {
+                for (Enumeration cmds = this.htResCmds.keys();
+                    cmds.hasMoreElements() && !oCommandFound;) {
+                    Command cmd = (Command) cmds.nextElement();
+                    if (cmd == c) {
+                        oCommandFound = true;
+                        int[] rgnRes = (int[]) this.htResCmds.get(cmd);
+                        this.nCurrentWidth = rgnRes[0];
+                        this.nCurrentHeight = rgnRes[1];
+                    }
+                }
+            }
+            try {
+               saveSettings();
+            } catch (Exception ex) {
+                Alert a = new Alert("Could not save settings: " + ex.getMessage());
+                a.setTimeout(Alert.FOREVER);
+                a.setType(AlertType.ERROR);
+                Display.getDisplay(this.midlet).setCurrent(a);
+           }
+            // redisplay commands to show current selection
+            setupCommands();
         }
     }
     
@@ -395,43 +454,55 @@ public class CameraCanvas
             case FIRE:
                 doCapture();
                 break;
-            case UP:
-                if (this.nCurrentBarcodeIndex > 0) {
-                    this.nCurrentBarcodeIndex --;
-                } else {
-                    this.nCurrentBarcodeIndex = this.rgxnBarcodeParams.length-1;
-                }
-                setBcpFromIndex();
-                repaint();
-                break;
-            case DOWN:
-                if (this.nCurrentBarcodeIndex < this.rgxnBarcodeParams.length-1) {
-                    this.nCurrentBarcodeIndex ++;
-                } else {
-                    this.nCurrentBarcodeIndex = 0;
-                }
-                setBcpFromIndex();
-                repaint();
-                break;
             default:
         }
     }
     
+    /**
+     * Note that this and the saveSettings procedure have to stay in sync
+     */
     private void restoreSettings()
     {
         try {
             RecordStore rs = RecordStore.openRecordStore(this.szRsSettings, 
                     true);
             try {
-                byte[] bSource = rs.getRecord(this.nIdSource);
-                this.szCurrentSource = new String(bSource);
-                bSource = rs.getRecord(this.nIdSettings);
-                ByteArrayInputStream bais = new ByteArrayInputStream(bSource);
-                DataInputStream dis = new DataInputStream(bais);
-                this.nCurrentHeight = dis.readInt();
-                this.nCurrentWidth = dis.readInt();
-                dis = null;
-                bais = null;
+                RecordEnumeration re = rs.enumerateRecords(null, null, false);
+                if (this.cc != null && re.hasNextElement()) {
+                    byte[] bSource = re.nextRecord();
+                    re.destroy();
+                    if (bSource != null) {
+                        ByteArrayInputStream bais = new ByteArrayInputStream(bSource);
+                        DataInputStream dis = new DataInputStream(bais);
+                        int nSource = dis.readInt();
+                        int nCapture = dis.readInt();
+                        this.nCurrentHeight = dis.readInt();
+                        this.nCurrentWidth = dis.readInt();
+                        dis = null;
+                        bais = null;
+                        int n=0;
+                        // translate stored indices for source and format back into
+                        // strings
+                        for (Enumeration e = this.cc.getCaptureSources(); e.hasMoreElements(); n++) {
+                            if (n == nSource) {
+                                this.szCurrentSource = (String) e.nextElement();
+                                break;
+                            } else {
+                                e.nextElement();
+                            }
+                        }
+                        n = 0;
+                        for (Enumeration e = this.cc.getCaptureFormats(); e.hasMoreElements(); n++) {
+                            if (n == nCapture) {
+                                Object vFormat = e.nextElement();
+                                this.szCaptureFormat = vFormat.toString();
+                                break;
+                            } else {
+                                e.nextElement();
+                            }
+                        }
+                   }
+                }
                 rs.closeRecordStore();
             } catch (Exception ex) {
                 /* the record store might not be created yet. We use the
@@ -445,15 +516,42 @@ public class CameraCanvas
         }
     }
     
+    /**
+     * Note that this and the restoreSettings procedure have to stay in sync
+     */
     private void saveSettings() 
     {
         try {
             RecordStore rs = RecordStore.openRecordStore(this.szRsSettings, true);
-            byte[] bSource = this.szCurrentSource.getBytes();
-            setRecord(rs, this.nIdSource, bSource);
-            bSource = null;
+            // first clear all existing records
+            for (RecordEnumeration e = rs.enumerateRecords(null, null, false);
+                e.hasNextElement();) {
+                rs.deleteRecord(e.nextRecordId());
+            }
+            // I tried storing the source as a string but couldn't read it back
+            // in for some reason. So I store it as an index into the list
+            // of sources, which shouldn't change
+            int nSource = 0;
+            for (Enumeration e = this.cc.getCaptureSources(); e.hasMoreElements(); nSource++) {
+                String szSource = (String) e.nextElement();
+                if (szSource == this.szCurrentSource) {
+                    break;
+                }
+            }
+            // Similarly, couldn't store capture format as a string,
+            // so store it as an index instead
+            int nCapture = 0;
+            for (Enumeration e = this.cc.getCaptureFormats(); e.hasMoreElements(); nCapture++) {
+                Object vFormat = e.nextElement();
+                String szFormat = vFormat.toString();
+                if (szFormat == this.szCaptureFormat) {
+                    break;
+                }
+            }
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             DataOutputStream dos = new DataOutputStream(baos);
+            dos.writeInt(nSource);
+            dos.writeInt(nCapture);
             dos.writeInt(this.nCurrentHeight);
             dos.writeInt(this.nCurrentWidth);
             dos.flush();
@@ -461,7 +559,7 @@ public class CameraCanvas
             byte[] bRes = baos.toByteArray();
             dos = null;
             baos = null;
-            setRecord(rs, this.nIdSettings, bRes);
+            rs.addRecord(bRes, 0, bRes.length);
             bRes = null;
             rs.closeRecordStore();
         } catch (Exception ex) {
@@ -474,11 +572,7 @@ public class CameraCanvas
     
     private void setBcpFromIndex() 
     {
-        this.bcp = new BarcodeParam(
-                this.rgxnBarcodeParams[nCurrentBarcodeIndex][0],
-                this.rgxnBarcodeParams[nCurrentBarcodeIndex][1],
-                this.rgxnBarcodeParams[nCurrentBarcodeIndex][2],
-                this.rgxnBarcodeParams[nCurrentBarcodeIndex][3]);        
+        this.bcp = new BarcodeParam();        
     }
     
     /** set a particular record in an open record store to a particular 
@@ -533,21 +627,18 @@ public class CameraCanvas
                     lcdImage = javax.microedition.lcdui.Image.createImage(
                          "/images/barcode.png"
                     );
-                } else if (this.szCaptureFormat != null) {
-                    String szCapture = this.szCaptureFormat + "&width=" +
-                            this.nCurrentWidth + "&height=" +
-                            this.nCurrentHeight;
+                } else {
+                    String szCapture = this.szCaptureFormat;
+                    if (this.nCurrentWidth != 0) {
+                        if (szCapture != null && szCapture != "") {
+                            szCapture += "&";
+                        }
+                        szCapture += "width=" + this.nCurrentWidth + 
+                                "&height=" + this.nCurrentHeight;
+                    }
                     byte [] image=videoControl.getSnapshot(szCapture);
-                    //this.player.stop();
                     midlet.cameraCanvasCaptured();
                     lcdImage = Image.createImage(image, 0, image.length);
-                } else {
-                    Alert a = new Alert("Error while capturing image");
-                    a.setString("No legal capture format exists!");
-                    a.setType(AlertType.ERROR);
-                    a.setTimeout(Alert.FOREVER);
-                    Display.getDisplay(this.midlet).setCurrent(a);
-                    return;
                 }
                 this.player.stop();
                 this.videoControl.setVisible(false);
