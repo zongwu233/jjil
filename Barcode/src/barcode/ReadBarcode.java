@@ -86,7 +86,7 @@ public class ReadBarcode {
             int dTopLeftX, 
             int dTopLeftY,
             int cWidth, 
-            int cHeight)
+            int cHeight) throws jjil.core.Error
     {
         /* Build an image pipeline to do the work.
          */
@@ -108,8 +108,12 @@ public class ReadBarcode {
         seq.Push(image);
         Image imageResult = seq.Front();
         if (!(imageResult instanceof Gray8Image)) {
-            throw new IllegalStateException(imageResult.toString() +
-                    Messages.getString("ReadBarcode.0")); //$NON-NLS-1$
+            throw new jjil.core.Error(
+    				jjil.core.Error.PACKAGE.ALGORITHM,
+    				jjil.algorithm.ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
+    				imageResult.toString(),
+    				null,
+    				null);
         }
         this.imageCropped = (Gray8Image) imageResult;
         {   Debug debug = new Debug();
@@ -131,8 +135,12 @@ public class ReadBarcode {
          */
         imageResult = canny.Front();
         if (!(imageResult instanceof Gray8Image)) {
-            throw new IllegalStateException(imageResult.toString() +
-                    Messages.getString("ReadBarcode.2")); //$NON-NLS-1$
+            throw new jjil.core.Error(
+    				jjil.core.Error.PACKAGE.ALGORITHM,
+    				jjil.algorithm.ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
+    				imageResult.toString(),
+    				null,
+    				null);
         }
         this.imageEdge = (Gray8Image) imageResult;
         {   
@@ -150,7 +158,7 @@ public class ReadBarcode {
             int dRight, 
             int cHeightReduce, 
             int cInputWidth,
-            int cTargetWidth)
+            int cTargetWidth) throws jjil.core.Error
     {
         // so it is divisible by cHeightReduce, a power of 2
         int cCroppedHeight = cHeightReduce * 
@@ -170,7 +178,7 @@ public class ReadBarcode {
         return seq.Front();
     }
     
-    private boolean FindBarcodeEdges()
+    private boolean FindBarcodeEdges() throws jjil.core.Error
     {
         ZeroCrossingHoriz zeroesFind = new ZeroCrossingHoriz(8);
         int[][] wZeroes = zeroesFind.Push(this.imageEdge);
@@ -322,7 +330,7 @@ public class ReadBarcode {
      * @throws java.lang.IllegalArgumentException if the input image is not
      * an 8-bit gray image.
      */
-    public void Push(Image image) throws IllegalArgumentException {
+    public void Push(Image image) throws jjil.core.Error {
         int dTopLeftX = this.rectBarcode.getLeft();
         int dTopLeftY = this.rectBarcode.getTop();
         int cWidth = this.rectBarcode.getWidth();
@@ -335,10 +343,12 @@ public class ReadBarcode {
             dTopLeftY < 0 || dTopLeftY > image.getHeight() ||
             cWidth < 0 || dTopLeftX + cWidth > image.getWidth() ||
             cHeight < 0 || dTopLeftY + cHeight > image.getHeight()) {
-            throw new IllegalArgumentException(Messages.getString("ReadBarcode.5") + //$NON-NLS-1$
-                    "(" + dTopLeftX + Messages.getString("Comma") + dTopLeftY + Messages.getString("Comma") + cWidth + Messages.getString("Comma") + //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-                    cHeight + Messages.getString("ReadBarcode.10") +  //$NON-NLS-1$
-                    image.toString());
+            throw new jjil.core.Error(
+    				jjil.core.Error.PACKAGE.ALGORITHM,
+    				jjil.algorithm.ErrorCodes.BOUNDS_OUTSIDE_IMAGE,
+    				"(" + dTopLeftX + "," + dTopLeftY + "," + cWidth + "," + cHeight + ")",
+    				image.toString(),
+    				null);
         }
         /* Convert the RGB input image to gray, crop, and detect edges. This
          * initializes imageCropped and imageEdge.
@@ -398,7 +408,7 @@ public class ReadBarcode {
     }
     
     private void RectifyBarcode()
-        throws IllegalStateException
+        throws jjil.core.Error
     {
         int cYLeft = Math.max(0, this.cYLeft - this.imageCropped.getWidth() / 8);
 
@@ -423,8 +433,12 @@ public class ReadBarcode {
         warp.Push(this.imageCropped);
         Image imageResult = warp.Front();
         if (!(imageResult instanceof Gray8Image)) {
-            throw new IllegalStateException(imageResult.toString() +
-                    Messages.getString("ReadBarcode.11")); //$NON-NLS-1$
+            throw new jjil.core.Error(
+    				jjil.core.Error.PACKAGE.ALGORITHM,
+    				jjil.algorithm.ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
+    				imageResult.toString(),
+    				null,
+    				null);
         }
         {
         	Debug debug = new Debug();
@@ -440,6 +454,7 @@ public class ReadBarcode {
     }
     
     private void TryWidth(int cInputWidth, int cJitter, BarcodeReader reader)
+    	throws jjil.core.Error
     {
         // find smallest cTargetWidth that is a cMultiple of reader.Width()
         // and larger than cInputWidth.

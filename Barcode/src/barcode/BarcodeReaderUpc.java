@@ -438,10 +438,14 @@ public class BarcodeReaderUpc implements BarcodeReader {
      */
     
     public int Decode(Image image) 
-        throws IllegalArgumentException {
+        throws jjil.core.Error {
         if (!(image instanceof Gray8Image)) {
-            throw new IllegalArgumentException(image.toString() +
-                    Messages.getString("BarcodeReaderUpc.3")); //$NON-NLS-1$
+            throw new jjil.core.Error(
+    				jjil.core.Error.PACKAGE.ALGORITHM,
+    				jjil.algorithm.ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
+    				image.toString(),
+    				null,
+    				null);
         }
         Gray8Image gray = (Gray8Image) image;
         // number of pixels per bar
@@ -721,7 +725,7 @@ public class BarcodeReaderUpc implements BarcodeReader {
      * @return "UPC" -- the name of this barcode reader.
      */
     public String getName() {
-        return Messages.getString("UPC"); //$NON-NLS-1$
+        return "UPC"; //$NON-NLS-1$
     }
     
     
