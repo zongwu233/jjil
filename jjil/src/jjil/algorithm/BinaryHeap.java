@@ -35,7 +35,7 @@ public class BinaryHeap implements PriorityQueue {
      * Construct the binary heap from an array.
      * @param items the inital items in the binary heap.
      */
-    public BinaryHeap( ComparableJ2me [ ] items ) {
+    public BinaryHeap( ComparableJ2me [ ] items ) throws jjil.core.Error {
         currentSize = items.length;
         array = new ComparableJ2me[ items.length + 1 ];
         
@@ -50,7 +50,7 @@ public class BinaryHeap implements PriorityQueue {
      * @param x the item to insert.
      * @return null, signifying that decreaseKey cannot be used.
      */
-    public PriorityQueue.Position insert( ComparableJ2me x ) {
+    public PriorityQueue.Position insert( ComparableJ2me x ) throws jjil.core.Error {
         if( currentSize + 1 == array.length )
             doubleArray( );
         
@@ -78,16 +78,14 @@ public class BinaryHeap implements PriorityQueue {
      * @return the smallest item.
      * @throws UnderflowException if empty.
      */
-    public ComparableJ2me findMin( ) {
+    public ComparableJ2me findMin() throws jjil.core.Error {
         if( isEmpty( ) )
-            throw new UnderflowException(
-                	new Error(
+            throw new Error(
                 			Error.PACKAGE.ALGORITHM,
                 			ErrorCodes.HEAP_EMPTY,
                 			this.toString(),
                 			null,
-                			null)
-                	);
+                			null);
         return array[ 1 ];
     }
     
@@ -96,7 +94,7 @@ public class BinaryHeap implements PriorityQueue {
      * @return the smallest item.
      * @throws UnderflowException if empty.
      */
-    public ComparableJ2me deleteMin( ) {
+    public ComparableJ2me deleteMin() throws jjil.core.Error {
         ComparableJ2me minItem = findMin( );
         array[ 1 ] = array[ currentSize-- ];
         percolateDown( 1 );
@@ -108,7 +106,7 @@ public class BinaryHeap implements PriorityQueue {
      * Establish heap order property from an arbitrary
      * arrangement of items. Runs in linear time.
      */
-    private void buildHeap( ) {
+    private void buildHeap( ) throws jjil.core.Error {
         for( int i = currentSize / 2; i > 0; i-- )
             percolateDown( i );
     }
@@ -145,7 +143,7 @@ public class BinaryHeap implements PriorityQueue {
      * Internal method to percolate down in the heap.
      * @param hole the index at which the percolate begins.
      */
-    private void percolateDown( int hole ) {
+    private void percolateDown( int hole ) throws jjil.core.Error {
         int child;
         ComparableJ2me tmp = array[ hole ];
         

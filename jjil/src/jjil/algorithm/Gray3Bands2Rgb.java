@@ -49,23 +49,22 @@ public class Gray3Bands2Rgb {
      * @param imGreen the input green image.
      * @param imBlue the input blue image.
      * @return the color image
-     * @throws IllegalArgumentException if the input sizes do not match
+     * @throws jjil.core.Error if the input sizes do not match
      */
     public RgbImage Push(
             Gray8Image imRed, 
             Gray8Image imGreen, 
-            Gray8Image imBlue) throws IllegalArgumentException {
+            Gray8Image imBlue) throws jjil.core.Error {
         if (imRed.getWidth() != imGreen.getWidth() ||
             imGreen.getWidth() != imBlue.getWidth() ||
             imRed.getHeight() != imGreen.getHeight() ||
             imGreen.getHeight() != imBlue.getHeight()) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
                 			Error.PACKAGE.ALGORITHM,
                 			ErrorCodes.IMAGE_SIZES_DIFFER,
                 			imRed.toString(),
                 			imGreen.toString(),
-                			imBlue.toString()));
+                			imBlue.toString());
         }
         RgbImage rgb = new RgbImage(imRed.getWidth(), imRed.getHeight());
         byte[] redData = imRed.getData();

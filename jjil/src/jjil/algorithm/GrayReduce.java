@@ -46,7 +46,8 @@ public class GrayReduce extends PipelineStage {
      * @param cReduceWidth amount to reduce the width by
      * @param cReduceHeight amount to reduce the height by
      */
-    public GrayReduce(int cReduceWidth, int cReduceHeight) {
+    public GrayReduce(int cReduceWidth, int cReduceHeight) 
+    	throws jjil.core.Error {
         setReductionFactor(cReduceWidth, cReduceHeight);
     }
     
@@ -55,36 +56,33 @@ public class GrayReduce extends PipelineStage {
      * size.
      *
      * @param image the input image.
-     * @throws IllegalArgumentException if the input image is not gray, or
+     * @throws jjil.core.Error if the input image is not gray, or
      * the reduction factor does not evenly divide the image size.
      */
-    public void Push(Image image) throws IllegalArgumentException {
+    public void Push(Image image) throws jjil.core.Error {
         if (!(image instanceof Gray8Image)) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
             				Error.PACKAGE.ALGORITHM,
             				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
             				image.toString(),
             				null,
-            				null));
+            				null);
         }
         if (image.getWidth() % this.cReduceWidth != 0) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
             				Error.PACKAGE.ALGORITHM,
             				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
             				image.toString(),
             				null,
-            				null));
+            				null);
         }
         if (image.getHeight() % this.cReduceHeight != 0) {
-            throw new IllegalArgumentException(
-                new Error(
+            throw new Error(
             		Error.PACKAGE.ALGORITHM,
             		ErrorCodes.REDUCE_INPUT_IMAGE_NOT_MULTIPLE_OF_OUTPUT_SIZE,
             		image.toString(),
             		this.toString(),
-            		null));
+            		null);
         }
         Gray8Image gray = (Gray8Image) image;
         byte[] bIn = gray.getData();
@@ -130,19 +128,18 @@ public class GrayReduce extends PipelineStage {
      *
      * @param cReduceWidth the amount by which to reduce the image width.
      * @param cReduceHeight the amount by which to reduce the image height.
-     * @throws IllegalArgumentException if either cReduceWidth or cReduceHeight
+     * @throws jjil.core.Error if either cReduceWidth or cReduceHeight
      * is less than or equal to 0.
      */
     public void setReductionFactor(int cReduceWidth, int cReduceHeight) 
-        throws IllegalArgumentException {
+        throws jjil.core.Error {
         if (cReduceWidth <= 0 || cReduceHeight <= 0) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
             				Error.PACKAGE.ALGORITHM,
             				ErrorCodes.OUTPUT_IMAGE_SIZE_NEGATIVE,
             				new Integer(cReduceWidth).toString(),
             				new Integer(cReduceHeight).toString(),
-            				null));
+            				null);
         }
         this.cReduceWidth = cReduceWidth;
         this.cReduceHeight = cReduceHeight;

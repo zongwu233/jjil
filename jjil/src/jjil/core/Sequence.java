@@ -90,7 +90,7 @@ public class Sequence extends PipelineStage {
      *
      * @return the Image produced by the pipeline.
      */
-    public Image Front()
+    public Image Front() throws jjil.core.Error
     {
         if (pNext == null) {
             return pFirst.Front();
@@ -111,26 +111,24 @@ public class Sequence extends PipelineStage {
      *    did not return a result and is not the last stage
      *    in the pipeline.
      */
-    public void Push(Image i) throws IllegalStateException
+    public void Push(Image i) throws jjil.core.Error
     {
         if (pFirst == null) {
-            throw new IllegalStateException(
-            		new Error(
-            				Error.PACKAGE.CORE,
-            				ErrorCodes.PIPELINE_EMPTY_PUSH,
-            				this.toString(),
-            				null,
-            				null));
+            throw new Error(
+                            Error.PACKAGE.CORE,
+                            ErrorCodes.PIPELINE_EMPTY_PUSH,
+                            this.toString(),
+                            null,
+                            null);
         }
         pFirst.Push(i);
         if (pFirst.Empty()) {
-            throw new IllegalStateException(
-            		new Error(
-            				Error.PACKAGE.CORE,
-            				ErrorCodes.PIPELINE_NO_RESULT,
-            				pFirst.toString(),
-            				null,
-            				null));
+            throw new Error(
+                            Error.PACKAGE.CORE,
+                            ErrorCodes.PIPELINE_NO_RESULT,
+                            pFirst.toString(),
+                            null,
+                            null);
         }
         if (pNext != null) {
             pNext.Push(pFirst.Front());

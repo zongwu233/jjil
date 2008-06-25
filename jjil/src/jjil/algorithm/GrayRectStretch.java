@@ -44,10 +44,10 @@ public class GrayRectStretch extends PipelineStage {
      *
      * @param cWidth new image width
      * @param cHeight new image height
-     * @throws IllegalArgumentException if either is less than or equal to zero.
+     * @throws jjil.core.Error if either is less than or equal to zero.
      */
     public GrayRectStretch(int cWidth, int cHeight) 
-        throws IllegalArgumentException {
+        throws jjil.core.Error {
         setWidth(cWidth);
         setHeight(cHeight);
     }
@@ -72,28 +72,26 @@ public class GrayRectStretch extends PipelineStage {
      * Does this in two passes, for more efficient computation.
      * 
      * @param image the input image
-     * @throws IllegalArgumentException if input image is not gray 8 bits,
+     * @throws jjil.core.Error if input image is not gray 8 bits,
      * or the input image size is larger than the target size. This class
      * does not do subsampling, only interpolation.
      */
-    public void Push(Image image) throws IllegalArgumentException {
+    public void Push(Image image) throws jjil.core.Error {
         if (!(image instanceof Gray8Image)) {
-            throw new IllegalArgumentException(
-		            new Error(
+            throw new Error(
 			        		Error.PACKAGE.ALGORITHM,
 			        		ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
 			        		image.toString(),
 			        		null,
-			        		null));
+			        		null);
         }
         if (image.getWidth() > this.cWidth || image.getHeight() > this.cHeight) {
-            throw new IllegalArgumentException(
-		            new Error(
+            throw new Error(
 			        		Error.PACKAGE.ALGORITHM,
 			        		ErrorCodes.STRETCH_OUTPUT_SMALLER_THAN_INPUT,
 			        		image.toString(),
 			        		new Integer(this.cWidth).toString(),
-			        		new Integer(this.cHeight).toString()));
+			        		new Integer(this.cHeight).toString());
         }
         Gray8Image input = (Gray8Image) image;
         /** we do the stretch in to passes, one horizontal and the other
@@ -110,17 +108,16 @@ public class GrayRectStretch extends PipelineStage {
     /** Changes target height
      * 
      * @param cHeight the new target height.
-     * @throws IllegalArgumentException if height is not positive
+     * @throws jjil.core.Error if height is not positive
      */
-    public void setHeight(int cHeight) throws IllegalArgumentException {
+    public void setHeight(int cHeight) throws jjil.core.Error {
         if (cHeight <= 0) {
-            throw new IllegalArgumentException(
-		        new Error(
+            throw new Error(
 			        Error.PACKAGE.ALGORITHM,
 			        ErrorCodes.OUTPUT_IMAGE_SIZE_NEGATIVE,
 			        new Integer(cHeight).toString(),
 			        null,
-			        null));
+			        null);
         }
         this.cHeight = cHeight;
     }
@@ -128,17 +125,16 @@ public class GrayRectStretch extends PipelineStage {
     /** Changes target width
      * 
      * @param cWidth the new target width.
-     * @throws IllegalArgumentException if height is not positive
+     * @throws jjil.core.Error if height is not positive
      */
-    public void setWidth(int cWidth) throws IllegalArgumentException {
+    public void setWidth(int cWidth) throws jjil.core.Error {
         if (cWidth <= 0) {
-            throw new IllegalArgumentException(
-    		        new Error(
+            throw new Error(
     				        Error.PACKAGE.ALGORITHM,
     				        ErrorCodes.OUTPUT_IMAGE_SIZE_NEGATIVE,
     				        new Integer(cWidth).toString(),
     				        null,
-    				        null));
+    				        null);
         }
         this.cWidth = cWidth;
     }

@@ -49,10 +49,10 @@ public class ZeroCrossingHoriz {
      *
      * @param wThreshold -- the minimum strength for a zero crossing to
      * be considered significant.
-     * @throws IllegalArgumentException if the threshold is less than 0. Use
+     * @throws jjil.core.Error if the threshold is less than 0. Use
      * 0 if you want all zero crossings.
      */
-    public ZeroCrossingHoriz(int wThreshold) throws IllegalArgumentException {
+    public ZeroCrossingHoriz(int wThreshold) throws jjil.core.Error {
         setThreshold(wThreshold);
     }
     
@@ -174,18 +174,17 @@ public class ZeroCrossingHoriz {
     /** Changes the zero crossing threshold.
      *
      * @param wThreshold the new threshold.
-     * @throws IllegalArgumentException if wThreshold is less than 0. Use 0
+     * @throws jjil.core.Error if wThreshold is less than 0. Use 0
      * if you want all zero crossings.
      */
-    public void setThreshold(int wThreshold) throws IllegalArgumentException {
+    public void setThreshold(int wThreshold) throws jjil.core.Error {
         if (wThreshold < 0) {
-            throw new IllegalArgumentException(
-            	new Error(
+            throw new Error(
         			Error.PACKAGE.CORE,
         			ErrorCodes.THRESHOLD_NEGATIVE,
         			new Integer(wThreshold).toString(),
         			null,
-        			null));
+        			null);
             }
         this.wThreshold = wThreshold;
     }

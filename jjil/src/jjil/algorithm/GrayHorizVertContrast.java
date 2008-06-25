@@ -57,9 +57,9 @@ public class GrayHorizVertContrast extends PipelineStage {
     
     /** Apply the contrast measure to the input input image.
      * @param image the input Gray16Image
-     * @throws IllegalArgumentException if image is not a Gray16Image
+     * @throws jjil.core.Error if image is not a Gray16Image
      */
-    public void Push(Image image) throws IllegalArgumentException {
+    public void Push(Image image) throws jjil.core.Error {
     	this.pipe.Push(image);
         super.setOutput(this.pipe.Front());
     }

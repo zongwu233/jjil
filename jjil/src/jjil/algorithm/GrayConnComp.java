@@ -56,24 +56,22 @@ public class GrayConnComp {
 			this.nPixelCount++;
 		}
 
-		public int compareTo(Object o) {
+		public int compareTo(Object o) throws jjil.core.Error {
 			if (o == null) {
-				throw new RuntimeException(
-		            new Error(
+				throw new Error(
 		        		Error.PACKAGE.ALGORITHM,
 		        		ErrorCodes.CONN_COMP_LABEL_COMPARETO_NULL,
 		        		null,
 		        		null,
-		        		null));
+		        		null);
 			}
 			if (!(o instanceof Label)) {
-				throw new RuntimeException(
-			        new Error(
+				throw new Error(
 				    	Error.PACKAGE.ALGORITHM,
 				    	ErrorCodes.OBJECT_NOT_EXPECTED_TYPE,
 				    	o.toString(),
-				    	Label.class.toString(),
-				    	null));
+				    	"Label",
+				    	null);
 			}
 			Label l = (Label) o;
 			if (l.nPixelCount == this.nPixelCount) {
@@ -118,7 +116,7 @@ public class GrayConnComp {
 	 * @return the nComponent'th bounding rectangle, ordered by pixel count,
 	 *         largest first
 	 */
-	public Rect getComponent(int nComponent) {
+	public Rect getComponent(int nComponent) throws jjil.core.Error {
 		// see if we've created the sorted labels array
 		// allocate it if we haven't.
 		// If the components haven't been computed getComponents()
@@ -129,13 +127,12 @@ public class GrayConnComp {
 		}
 		// see if the requested component is out of bounds
 		if (nComponent >= this.rSortedLabels.length) {
-			throw new RuntimeException(
-			        new Error(
-					    	Error.PACKAGE.ALGORITHM,
-					    	ErrorCodes.CONN_COMP_LABEL_OUT_OF_BOUNDS,
-					    	new Integer(nComponent).toString(),
-					    	this.rSortedLabels.toString(),
-					    	null));
+			throw new Error(
+                                        Error.PACKAGE.ALGORITHM,
+                                        ErrorCodes.CONN_COMP_LABEL_OUT_OF_BOUNDS,
+                                        new Integer(nComponent).toString(),
+                                        this.rSortedLabels.toString(),
+                                        null);
 		}
 		// now see if we've figured out what the nComponent'th
 		// component is. If not compute it by finding and
@@ -156,7 +153,7 @@ public class GrayConnComp {
 	 * 
 	 * @return the number of connected components.
 	 */
-	public int getComponents() {
+	public int getComponents() throws jjil.core.Error {
 		// see if we've already calculated the components
 		if (this.bComponents) {
 			return this.pqLabels.size();
@@ -220,18 +217,17 @@ public class GrayConnComp {
 	 * 
 	 * @param image
 	 *            the input image.
-	 * @throws IllegalArgumentException
+	 * @throws jjil.core.Error
 	 *             if the image is not a gray 8-bit image.
 	 */
-	public void Push(Image image) throws IllegalArgumentException {
+	public void Push(Image image) throws jjil.core.Error {
 		if (!(image instanceof Gray8Image)) {
-			throw new IllegalArgumentException(
-			    new Error(
+			throw new Error(
 				   	Error.PACKAGE.ALGORITHM,
 				   	ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
 				   	image.toString(),
 				   	null,
-				   	null));
+				   	null);
 		}
 		// initialize the label lookup array
 		this.reClasses = new EquivalenceClass[image.getWidth() * image.getHeight()];

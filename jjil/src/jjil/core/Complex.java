@@ -83,15 +83,14 @@ public class Complex {
         return this;
     }
         
-    public Complex div(int n) throws IllegalArgumentException {
+    public Complex div(int n) throws jjil.core.Error {
         if (n==0) {
-            throw new IllegalArgumentException(
-            		new Error(
+            throw new Error(
             				Error.PACKAGE.CORE,
             				ErrorCodes.MATH_DIVISION_ZERO, 
             				this.toString(), 
             				new Integer(n).toString(), 
-            				null));
+            				null);
         }
         this.nReal /= n;
         this.nImag /= n;
@@ -101,10 +100,10 @@ public class Complex {
    /**
      * Divides one complex number by another
      * @param cx The complex number to divide by.
-     * @throws java.lang.IllegalArgumentException If division by 0 is attempted, i.e., cx.square() is 0.
+     * @throws java.lang.jjil.core.Error If division by 0 is attempted, i.e., cx.square() is 0.
      * @return the result of dividing this number by cx.
      */
-    public Complex div(Complex cx) throws IllegalArgumentException {
+    public Complex div(Complex cx) throws jjil.core.Error {
         int nShift = 0;
         if (Math.abs(cx.real()) >= MathPlus.SCALE ||
             Math.abs(cx.imag()) >= MathPlus.SCALE) {
@@ -113,13 +112,12 @@ public class Complex {
         }
         int nSq = cx.square();
         if (nSq == 0) {
-            throw new IllegalArgumentException(
-            		new Error(
+            throw new Error(
             				Error.PACKAGE.CORE,
             				ErrorCodes.MATH_PRODUCT_TOO_LARGE,
             				this.toString(),
             				cx.toString(),
-            				null));
+            				null);
         }
         // cx is right shifted by SHIFT bits. So multiplying by it and 
         // dividing by its square shifts left by SHIFT bits. We shift back to
@@ -163,7 +161,7 @@ public class Complex {
      * Complex magnitude.
      * @return the magnitude of this number, i.e., sqrt(real**2 + imag**2)
      */
-    public int magnitude() {
+    public int magnitude() throws jjil.core.Error {
         // special case when one component is 0
         if (this.nReal == 0 || this.nImag == 0) {
             return Math.abs(this.nReal) + Math.abs(this.nImag);
@@ -228,16 +226,15 @@ public class Complex {
      * @return The absolute square, i.e, real**2 + imag**2.
      * @throws RuntimeException if Complex value is too large.
      */
-    public int square() throws RuntimeException {
+    public int square() throws jjil.core.Error {
         if (Math.abs(this.nReal) > MathPlus.SCALE ||
             Math.abs(this.nImag) > MathPlus.SCALE) {
-            throw new RuntimeException(
-            		new Error(
-            				Error.PACKAGE.CORE,
-            				ErrorCodes.MATH_SQUARE_TOO_LARGE,
-            				this.toString(),
-            				null,
-            				null));
+            throw new Error(
+                            Error.PACKAGE.CORE,
+                            ErrorCodes.MATH_SQUARE_TOO_LARGE,
+                            this.toString(),
+                            null,
+                            null);
         }
         return this.nReal * this.nReal + this.nImag * this.nImag;
     }

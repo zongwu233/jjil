@@ -54,17 +54,16 @@ public class GrayVertVar extends PipelineStage {
     /** Compute the vertical variance of pixels within nWindow
      * of the current pixel.
      * @param image the input Gray8Image
-     * @throws IllegalArgumentException if image is not a Gray8Image
+     * @throws jjil.core.Error if image is not a Gray8Image
      */
-    public void Push(Image image) throws IllegalArgumentException {
+    public void Push(Image image) throws jjil.core.Error {
         if (!(image instanceof Gray8Image)) {
-            throw new IllegalArgumentException(
-            	new Error(
+            throw new Error(
     				Error.PACKAGE.ALGORITHM,
     				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
     				image.toString(),
     				null,
-    				null));
+    				null);
         }
         if (this.g16 == null || 
         	this.g16.getWidth() != image.getWidth() ||

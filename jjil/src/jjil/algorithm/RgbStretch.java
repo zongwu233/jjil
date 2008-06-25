@@ -47,10 +47,10 @@ public class RgbStretch extends PipelineStage {
      *
      * @param cWidth new image width
      * @param cHeight new image height
-     * @throws IllegalArgumentException if either is less than or equal to zero.
+     * @throws jjil.core.Error if either is less than or equal to zero.
      */
     public RgbStretch(int cWidth, int cHeight) 
-        throws IllegalArgumentException {
+        throws jjil.core.Error {
         this.cWidth = cWidth;
         this.cHeight = cHeight;
         SetupPipeline();
@@ -75,27 +75,25 @@ public class RgbStretch extends PipelineStage {
     /**
      * Process an image.
      * @param image the input RgbImage.
-     * @throws java.lang.IllegalArgumentException if the input is not an RgbImage, or is smaller than the target image either
+     * @throws java.lang.jjil.core.Error if the input is not an RgbImage, or is smaller than the target image either
      * horizontally or vertically.
      */
-    public void Push(Image image) throws IllegalArgumentException {
+    public void Push(Image image) throws jjil.core.Error {
         if (!(image instanceof RgbImage)) {
-            throw new IllegalArgumentException(
-            	new Error(
+            throw new Error(
         			Error.PACKAGE.ALGORITHM,
         			ErrorCodes.IMAGE_NOT_RGBIMAGE,
         			image.toString(),
         			null,
-        			null));
+        			null);
         }
         if (image.getWidth() < this.cWidth || image.getHeight() < this.cHeight) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
             			Error.PACKAGE.ALGORITHM,
             			ErrorCodes.STRETCH_OUTPUT_SMALLER_THAN_INPUT,
             			image.toString(),
             			this.toString(),
-            			null));
+            			null);
         }
         /* stretch R band */
         this.seqR.Push(image);
@@ -114,23 +112,22 @@ public class RgbStretch extends PipelineStage {
     /** Changes target height
      * 
      * @param cHeight the new target height.
-     * @throws IllegalArgumentException if height is not positive
+     * @throws jjil.core.Error if height is not positive
      */
-    public void setHeight(int cHeight) throws IllegalArgumentException {
+    public void setHeight(int cHeight) throws jjil.core.Error {
         if (cHeight <= 0) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
                 			Error.PACKAGE.ALGORITHM,
                 			ErrorCodes.OUTPUT_IMAGE_SIZE_NEGATIVE,
                 			new Integer(cHeight).toString(),
                 			null,
-                			null));
+                			null);
         }
         this.cHeight = cHeight;
         SetupPipeline();
     }
     
-    private void SetupPipeline()
+    private void SetupPipeline() throws jjil.core.Error
     {
         RgbSelect2Gray sel = new RgbSelect2Gray(RgbSelect2Gray.RED);
         this.seqR = new Sequence(sel);
@@ -149,17 +146,16 @@ public class RgbStretch extends PipelineStage {
     /** Changes target width
      * 
      * @param cWidth the new target width.
-     * @throws IllegalArgumentException if height is not positive
+     * @throws jjil.core.Error if height is not positive
      */
-    public void setWidth(int cWidth) throws IllegalArgumentException {
+    public void setWidth(int cWidth) throws jjil.core.Error {
         if (cWidth <= 0) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
                 			Error.PACKAGE.ALGORITHM,
                 			ErrorCodes.OUTPUT_IMAGE_SIZE_NEGATIVE,
                 			new Integer(cWidth).toString(),
                 			null,
-                			null));
+                			null);
         }
         this.cWidth = cWidth;
         SetupPipeline();

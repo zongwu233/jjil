@@ -64,16 +64,15 @@ public abstract class PipelineStage
      * @return the current output
      * @throws IllegalStateException if no output is available
      */
-    public Image Front() throws IllegalStateException
+    public Image Front() throws jjil.core.Error
     {
         if (!this.fReady) {
-            throw new IllegalStateException(
-            		new Error(
-            				Error.PACKAGE.CORE,
-            				ErrorCodes.PIPELINE_NO_RESULT,
-            				this.toString(),
-            				null,
-            				null));
+            throw new Error(
+                            Error.PACKAGE.CORE,
+                            ErrorCodes.PIPELINE_NO_RESULT,
+                            this.toString(),
+                            null,
+                            null);
         }
         Image imageResult = this.imageOutput;
         this.imageOutput = null;
@@ -85,7 +84,7 @@ public abstract class PipelineStage
      *
      * @param imageInput the input image
      */
-    public abstract void Push(Image imageInput);
+    public abstract void Push(Image imageInput) throws jjil.core.Error;
     
     /** Derived classes use setOutput to pass their result back
      * here.

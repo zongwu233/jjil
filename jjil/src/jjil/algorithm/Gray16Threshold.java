@@ -47,15 +47,19 @@ public class Gray16Threshold extends PipelineStage {
      * Byte.MIN_VALUE under.
      *
      * @param image the input image
-     * @throws IllegalArgumentException if the image is not a gray 16-bit
+     * @throws jjil.core.Error if the image is not a gray 16-bit
      * image.
      */
     public void Push(Image image)
-        throws IllegalArgumentException
+        throws jjil.core.Error
     {
         if (!(image instanceof Gray16Image)) {
-            throw new IllegalArgumentException(
-                    image.toString() + " should be a Gray16Image");
+            throw new jjil.core.Error(
+            		jjil.core.Error.PACKAGE.ALGORITHM,
+            		jjil.algorithm.ErrorCodes.IMAGE_NOT_GRAY16IMAGE,
+                    image.toString(),
+                    null,
+                    null);
         }
         if (this.imageOutput == null ||
         	this.imageOutput.getWidth() != image.getWidth() ||

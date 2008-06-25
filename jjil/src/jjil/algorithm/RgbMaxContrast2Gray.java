@@ -55,17 +55,16 @@ public class RgbMaxContrast2Gray extends PipelineStage {
      * because byte is a signed type.
      *
      * @param image the input image
-     * @throws IllegalArgumentException if image is not an RgbImage
+     * @throws jjil.core.Error if image is not an RgbImage
      */
-    public void Push(Image image) throws IllegalArgumentException {
+    public void Push(Image image) throws jjil.core.Error {
         if (!(image instanceof RgbImage)) {
-            throw new IllegalArgumentException(
-            	new Error(
+            throw new Error(
         			Error.PACKAGE.CORE,
         			ErrorCodes.IMAGE_NOT_RGBIMAGE,
         			image.toString(),
         			null,
-        			null));
+        			null);
         }
         RgbImage rgb = (RgbImage) image;
         int[] rgbData = rgb.getData();

@@ -51,7 +51,7 @@ public class DeblurHorizHalftone extends PipelineStage {
      * @throws java.lang.IllegalArgumentException If the standard deviation is less than 0 or greater than the maximum number
      * of precomputed components -- currently 100 = a standard deviation of 1.00.
      */
-    public DeblurHorizHalftone() throws IllegalArgumentException {
+    public DeblurHorizHalftone() {
    }
     
     /**
@@ -60,15 +60,14 @@ public class DeblurHorizHalftone extends PipelineStage {
      * than the given level.
      * @param im Input Gray8Image.
      */
-    public void Push(Image im) {
+    public void Push(Image im) throws jjil.core.Error {
         if (!(im instanceof Gray8Image)) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
                 			Error.PACKAGE.ALGORITHM,
                 			ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
                 			im.toString(),
                 			null,
-                			null));
+                			null);
         }
         byte[] bData = ((Gray8Image) im).getData();
         for (int i=0; i<im.getHeight(); i++) {

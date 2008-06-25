@@ -167,9 +167,9 @@ public class GaussHoriz extends PipelineStage {
      *
      * @param cSigma the sigma value for the operator, which is the sigma
      * in the Gaussian distribution multipied by 10.0 and converted to integer.
-     * @throws IllegalArgumentException is sigma is out of range.
+     * @throws jjil.core.Error is sigma is out of range.
      */
-    public GaussHoriz(int cSigma) throws IllegalArgumentException {
+    public GaussHoriz(int cSigma) throws jjil.core.Error {
         this.setSigma(cSigma);
     }
     
@@ -180,17 +180,16 @@ public class GaussHoriz extends PipelineStage {
      * that image(0,-1), for example, is made equal to image(0,1). 
      *
      * @param image the input Gray8Image
-     * @throws IllegalArgumentException if image is not a Gray8Image
+     * @throws jjil.core.Error if image is not a Gray8Image
      */
-    public void Push(Image image) throws IllegalArgumentException {
+    public void Push(Image image) throws jjil.core.Error {
         if (!(image instanceof Gray8Image)) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
                 			Error.PACKAGE.ALGORITHM,
                 			ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
                 			image.toString(),
                 			null,
-                			null));
+                			null);
         }
         Gray8Image input = (Gray8Image) image;
         Gray8Image result = new Gray8Image(image.getWidth(), image.getHeight());
@@ -241,19 +240,18 @@ public class GaussHoriz extends PipelineStage {
      * that the operator responds to. A small sigma value gives less blur.
      *
      * @param cSigma the new sigma value
-     * @throws IllegalArgumentException if cSigma is out of range --
+     * @throws jjil.core.Error if cSigma is out of range --
      * less than or equal to 1 or greater than the number of coefficients
      * we're precomputed.
      */
-    public void setSigma(int cSigma) throws IllegalArgumentException {
+    public void setSigma(int cSigma) throws jjil.core.Error {
         if (cSigma <= 1 || cSigma >= this.nCoeff.length) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
                 			Error.PACKAGE.ALGORITHM,
                 			ErrorCodes.PARAMETER_OUT_OF_RANGE,
                 			new Integer(cSigma).toString(),
                 			new Integer(1).toString(),
-                			new Integer(this.nCoeff.length).toString()));
+                			new Integer(this.nCoeff.length).toString());
         }
         this.cSigma = cSigma;
     }

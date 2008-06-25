@@ -41,9 +41,9 @@ public class GrayLookup extends PipelineStage {
     /**
      * Creates a new instance of GrayLookup.
      * @param table The mapping table. Element i maps gray value Byte.MinValue + i to table[i].
-     * @throws java.lang.IllegalArgumentException when table is not a 256-element array.
+     * @throws java.lang.jjil.core.Error when table is not a 256-element array.
      */
-    public GrayLookup(byte[] table) throws IllegalArgumentException {
+    public GrayLookup(byte[] table) throws jjil.core.Error {
         setTable(table);
     }
     
@@ -60,17 +60,16 @@ public class GrayLookup extends PipelineStage {
     /**
      * Maps input Gray8Image through the lookup table, replacing values in the image.
      * @param image the input image (output replaces input).
-     * @throws java.lang.IllegalArgumentException if image is not a Gray8Image.
+     * @throws java.lang.jjil.core.Error if image is not a Gray8Image.
      */
-    public void Push(Image image) throws IllegalArgumentException {
+    public void Push(Image image) throws jjil.core.Error {
         if (!(image instanceof Gray8Image)) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
             				Error.PACKAGE.ALGORITHM,
             				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
             				image.toString(),
             				null,
-            				null));
+            				null);
         }
         Gray8Image input = (Gray8Image) image;
         byte[] data = input.getData();
@@ -84,17 +83,16 @@ public class GrayLookup extends PipelineStage {
      * Assign a new lookup table. Images passed to Push() after setTable is called
      * will be mapped by the new image.
      * @param table The lookup table. Input image value g is mapped to table[g + Byte.MinValue]
-     * @throws java.lang.IllegalArgumentException if table is not a 256-element array.
+     * @throws java.lang.jjil.core.Error if table is not a 256-element array.
      */
-    public void setTable(byte[] table) throws IllegalArgumentException {
+    public void setTable(byte[] table) throws jjil.core.Error {
         if (table.length != 256) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
             				Error.PACKAGE.ALGORITHM,
             				ErrorCodes.LOOKUP_TABLE_LENGTH_NOT_256,
             				table.toString(),
             				null,
-            				null));
+            				null);
         }
         this.table = new byte[256];
         System.arraycopy(table, 0, this.table, 0, this.table.length);

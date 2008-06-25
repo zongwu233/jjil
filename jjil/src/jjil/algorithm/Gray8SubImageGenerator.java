@@ -95,7 +95,7 @@ public class Gray8SubImageGenerator extends PipelineStage {
      * @throws java.lang.IllegalStateException when there are no more subimages available (Empty() would return
      * true.)
      */
-     public Image Front() throws IllegalStateException
+     public Image Front() throws jjil.core.Error
     {
         // offset of first pixel of the subimage within the
         // larget image.
@@ -105,13 +105,12 @@ public class Gray8SubImageGenerator extends PipelineStage {
         // reuse output image
         // check to make sure nobody damaged it somehow
         if (!(super.imageOutput instanceof Gray8SubImage)) {
-            throw new IllegalStateException(
-            		new Error(
-            				Error.PACKAGE.ALGORITHM,
-            				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
-            				imageOutput.toString(),
-            				null,
-            				null));
+            throw new Error(
+                            Error.PACKAGE.ALGORITHM,
+                            ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
+                            imageOutput.toString(),
+                            null,
+                            null);
         }
         Gray8SubImage imageResult = (Gray8SubImage) super.imageOutput;
         imageResult.setXOffset(nHOffset);
@@ -139,28 +138,26 @@ public class Gray8SubImageGenerator extends PipelineStage {
      * Reinitializes the subimage generator and prepares it to generate the first
      * Gray8SubImage for the new input.
      * @param image The new input image (which must be of type Gray8Image).
-     * @throws java.lang.IllegalArgumentException if image is not of type Gray8Image, or is too small
+     * @throws java.lang.jjil.core.Error if image is not of type Gray8Image, or is too small
      * (less than the size of the subimages we're supposed to
      * be generating).
      */
-    public void Push(Image image) throws IllegalArgumentException {
+    public void Push(Image image) throws jjil.core.Error {
         if (!(image instanceof Gray8Image)) {
-            throw new IllegalArgumentException(
-            		new Error(
+            throw new Error(
             				Error.PACKAGE.ALGORITHM,
             				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
             				image.toString(),
             				null,
-            				null));
+            				null);
         }
         if (image.getWidth() < this.nWidth || image.getHeight() < this.nHeight) {
-            throw new IllegalArgumentException(
-            		new Error(
+            throw new Error(
             				Error.PACKAGE.ALGORITHM,
             				ErrorCodes.IMAGE_TOO_SMALL,
             				image.toString(),
             				new Integer(this.nWidth).toString(),
-            				new Integer(this.nHeight).toString()));
+            				new Integer(this.nHeight).toString());
         }
         this.imageInput = (Gray8Image) image;
         // we want to find the largest integer l such that

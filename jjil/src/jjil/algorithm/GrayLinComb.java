@@ -47,17 +47,16 @@ public class GrayLinComb implements Ladder.Join {
      * @param a Multiplier for first image.
      * @param b Multiplier for second image.
      * @param c Divisor for linear combination.
-     * @throws java.lang.IllegalArgumentException if the divisor (c) is 0.
+     * @throws java.lang.jjil.core.Error if the divisor (c) is 0.
      */
-    public GrayLinComb(int a, int b, int c) throws IllegalArgumentException {
+    public GrayLinComb(int a, int b, int c) throws jjil.core.Error {
         if (c == 0) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
             				Error.PACKAGE.CORE,
             				jjil.core.ErrorCodes.MATH_DIVISION_ZERO,
             				null,
             				null,
-            				null));
+            				null);
         }
         this.nA = a;
         this.nB = b;
@@ -70,39 +69,36 @@ public class GrayLinComb implements Ladder.Join {
      * @param imageFirst the first image (and output)
      * @param imageSecond the second image
      * @return the linear combination of the two byte images, replacing the first.
-     * @throws IllegalArgumentException if either image is not a gray 8-bit
+     * @throws jjil.core.Error if either image is not a gray 8-bit
      * image, or they are of different sizes.
      */
     public Image DoJoin(Image imageFirst, Image imageSecond)
-        throws IllegalArgumentException
+        throws jjil.core.Error
     {
         if (!(imageFirst instanceof Gray8Image)) {
-                throw new IllegalArgumentException(
-                    	new Error(
+                throw new Error(
                 				Error.PACKAGE.ALGORITHM,
                 				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
                 				imageFirst.toString(),
                 				null,
-                				null));
+                				null);
             }
         if (!(imageSecond instanceof Gray8Image)) {
-                throw new IllegalArgumentException(
-                    	new Error(
+                throw new Error(
                 				Error.PACKAGE.ALGORITHM,
                 				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
                 				imageSecond.toString(),
                 				null,
-                				null));
+                				null);
             }
         if (imageFirst.getWidth() != imageSecond.getWidth() ||
             imageSecond.getHeight() != imageSecond.getHeight()) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
             				Error.PACKAGE.ALGORITHM,
             				ErrorCodes.IMAGE_SIZES_DIFFER,
             				imageFirst.toString(),
             				imageSecond.toString(),
-            				null));
+            				null);
        }
         Gray8Image gray1 = (Gray8Image) imageFirst;
         Gray8Image gray2 = (Gray8Image) imageSecond;

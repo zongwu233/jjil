@@ -149,27 +149,25 @@ public class MaskedGray8SubImgGen extends PipelineStage {
      * given input if the entire image is masked.) Also throws if the output
      * image (stored in the superclass) has been changed in type.
      */
-     public Image Front() throws IllegalStateException
+     public Image Front() throws jjil.core.Error
     {
         // reuse output image
         // check to make sure nobody damaged it somehow
         if (!(super.imageOutput instanceof Gray8SubImage)) {
-            throw new IllegalStateException(
-            		new Error(
-            				Error.PACKAGE.ALGORITHM,
-            				ErrorCodes.OBJECT_NOT_EXPECTED_TYPE,
-            				imageOutput.toString(),
-            				Gray8SubImage.class.toString(),
-            				null));
+            throw new Error(
+                            Error.PACKAGE.ALGORITHM,
+                            ErrorCodes.OBJECT_NOT_EXPECTED_TYPE,
+                            imageOutput.toString(),
+                            "Gray8SubImage",
+                            null);
         }
         if (!advanceToNextSubImage()) {
-            throw new IllegalStateException(
-            		new Error(
-            				Error.PACKAGE.ALGORITHM,
-            				ErrorCodes.SUBIMAGE_NO_IMAGE_AVAILABLE,
-            				this.toString(),
-            				null,
-            				null));
+            throw new Error(
+                            Error.PACKAGE.ALGORITHM,
+                            ErrorCodes.SUBIMAGE_NO_IMAGE_AVAILABLE,
+                            this.toString(),
+                            null,
+                            null);
         }
         
         byte[] dataIn = this.imageInput.getData();
@@ -202,27 +200,25 @@ public class MaskedGray8SubImgGen extends PipelineStage {
     /**
      * Accepts a new MaskedGray8Image and initializes all the generator indices.
      * @param image The input MaskedGray8Image.
-     * @throws java.lang.IllegalArgumentException if the input is not of type MaskedGray8Image or is smaller than the
+     * @throws java.lang.jjil.core.Error if the input is not of type MaskedGray8Image or is smaller than the
      * subimages to be generated.
      */
-    public void Push(Image image) throws IllegalArgumentException {
+    public void Push(Image image) throws jjil.core.Error {
         if (!(image instanceof Gray8MaskedImage)) {
-            throw new IllegalArgumentException(
-                	new Error(
-            				Error.PACKAGE.ALGORITHM,
-            				ErrorCodes.OBJECT_NOT_EXPECTED_TYPE,
-            				image.toString(),
-            				Gray8MaskedImage.class.toString(),
-            				null));
+            throw new Error(
+                            Error.PACKAGE.ALGORITHM,
+                            ErrorCodes.OBJECT_NOT_EXPECTED_TYPE,
+                            image.toString(),
+                            "Gray8MaskedImage",
+                            null);
         }
         if (image.getWidth() < this.nWidth || image.getHeight() < this.nHeight) {
-            throw new IllegalArgumentException(
-                	new Error(
-            				Error.PACKAGE.ALGORITHM,
-            				ErrorCodes.IMAGE_TOO_SMALL,
-            				image.toString(),
-            				new Integer(this.nWidth).toString(),
-            				new Integer(this.nHeight).toString()));
+            throw new Error(
+                            Error.PACKAGE.ALGORITHM,
+                            ErrorCodes.IMAGE_TOO_SMALL,
+                            image.toString(),
+                            new Integer(this.nWidth).toString(),
+                            new Integer(this.nHeight).toString());
         }
         this.imageInput = (Gray8MaskedImage) image;
         // we want to find the largest integer l such that

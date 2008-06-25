@@ -46,10 +46,10 @@ public class GrayShrink extends PipelineStage {
      *
      * @param cWidth new image width
      * @param cHeight new image height
-     * @throws IllegalArgumentException if either is less than or equal to zero.
+     * @throws jjil.core.Error if either is less than or equal to zero.
      */
     public GrayShrink(int cWidth, int cHeight) 
-        throws IllegalArgumentException {
+        throws jjil.core.Error {
         setWidth(cWidth);
         setHeight(cHeight);
     }
@@ -73,27 +73,25 @@ public class GrayShrink extends PipelineStage {
     /**
      * Process an input Gray8Image, producing a new shrunk output image.
      * @param image The input Gray8Image.
-     * @throws java.lang.IllegalArgumentException if input is not a Gray8Image, or the input image size is smaller (either 
+     * @throws java.lang.jjil.core.Error if input is not a Gray8Image, or the input image size is smaller (either 
      * horizontally or vertically) than the desired size.
      */
-    public void Push(Image image) throws IllegalArgumentException {
+    public void Push(Image image) throws jjil.core.Error {
         if (!(image instanceof Gray8Image)) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
                 			Error.PACKAGE.ALGORITHM,
                 			ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
                 			image.toString(),
                 			null,
-                			null));
+                			null);
         }
         if (image.getWidth() < this.cWidth || image.getHeight() < this.cHeight) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
                 			Error.PACKAGE.ALGORITHM,
                 			ErrorCodes.SHRINK_OUTPUT_LARGER_THAN_INPUT,
                 			image.toString(),
                 			this.toString(),
-                			null));
+                			null);
         }
         Gray8Image input = (Gray8Image) image;
         /* horizontal shrink */
@@ -106,17 +104,16 @@ public class GrayShrink extends PipelineStage {
     /** Changes target height
      * 
      * @param cHeight the new target height.
-     * @throws IllegalArgumentException if height is not positive
+     * @throws jjil.core.Error if height is not positive
      */
-    public void setHeight(int cHeight) throws IllegalArgumentException {
+    public void setHeight(int cHeight) throws jjil.core.Error {
         if (cHeight <= 0) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
                 			Error.PACKAGE.ALGORITHM,
                 			ErrorCodes.OUTPUT_IMAGE_SIZE_NEGATIVE,
                 			new Integer(cHeight).toString(),
                 			this.toString(),
-                			null));
+                			null);
         }
         this.cHeight = cHeight;
     }
@@ -124,17 +121,16 @@ public class GrayShrink extends PipelineStage {
     /** Changes target width
      * 
      * @param cWidth the new target width.
-     * @throws IllegalArgumentException if height is not positive
+     * @throws jjil.core.Error if height is not positive
      */
-    public void setWidth(int cWidth) throws IllegalArgumentException {
+    public void setWidth(int cWidth) throws jjil.core.Error {
         if (cWidth <= 0) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
                 			Error.PACKAGE.ALGORITHM,
                 			ErrorCodes.OUTPUT_IMAGE_SIZE_NEGATIVE,
                 			new Integer(cWidth).toString(),
                 			this.toString(),
-                			null));
+                			null);
         }
         this.cWidth = cWidth;
     }

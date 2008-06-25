@@ -169,10 +169,10 @@ public class GaussDeblurHoriz extends PipelineStage {
      * frequency domain) less than this value. The Gaussian elements have been scaled
      * by 256, so a value equal to, say, 64 keeps the maximum amplification of the
      * deconvolution less than 256/64 = 4.
-     * @throws java.lang.IllegalArgumentException If the standard deviation is less than 0 or greater than the maximum number
+     * @throws java.lang.jjil.core.Error If the standard deviation is less than 0 or greater than the maximum number
      * of precomputed components -- currently 100 = a standard deviation of 1.00.
      */
-    public GaussDeblurHoriz(int nStdDev, int nNoise) throws IllegalArgumentException {
+    public GaussDeblurHoriz(int nStdDev, int nNoise) throws jjil.core.Error {
         setStdDev(nStdDev);
         this.nNoise = nNoise;
         this.fft = new FftGray8();
@@ -185,24 +185,22 @@ public class GaussDeblurHoriz extends PipelineStage {
      * than the given level.
      * @param im Input Gray8Image.
      */
-    public void Push(Image im) {
+    public void Push(Image im) throws jjil.core.Error {
         if (im.getWidth() != im.getHeight()) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
             				Error.PACKAGE.ALGORITHM,
             				ErrorCodes.IMAGE_NOT_SQUARE,
             				im.toString(),
             				null,
-            				null));
+            				null);
         }
         if (!(im instanceof Gray8Image)) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
             				Error.PACKAGE.ALGORITHM,
             				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
             				im.toString(),
             				null,
-            				null));
+            				null);
         }
         this.fft.Push(im);
         Complex32Image cxmIm = (Complex32Image) this.fft.Front();
@@ -237,18 +235,17 @@ public class GaussDeblurHoriz extends PipelineStage {
     /**
      * Changes current standard deviation value.
      * @param nStdDev Input standard deviation, multiplied by 100.
-     * @throws java.lang.IllegalArgumentException If the stanard deviation is less than 0 or greater than the maximum --
+     * @throws java.lang.jjil.core.Error If the stanard deviation is less than 0 or greater than the maximum --
      * currently 100 = a standard deviation of 1.00.
      */
-    public void setStdDev(int nStdDev) throws IllegalArgumentException {
+    public void setStdDev(int nStdDev) throws jjil.core.Error {
         if (nStdDev < 0 || nStdDev > this.rxnCoeffs.length) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
                 			Error.PACKAGE.ALGORITHM,
                 			ErrorCodes.PARAMETER_OUT_OF_RANGE,
                 			new Integer(nStdDev).toString(),
                 			new Integer(0).toString(),
-                			new Integer(this.rxnCoeffs.length).toString()));
+                			new Integer(this.rxnCoeffs.length).toString());
         }
         this.nStdDev = nStdDev;
     }

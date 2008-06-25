@@ -57,7 +57,7 @@ public abstract class Image {
      *
      * @return the image copy
      */
-    public abstract Image Clone();
+    public abstract Image Clone() throws jjil.core.Error;
     
     /** Returns the image height 
      *

@@ -64,7 +64,7 @@ public class GrayTrapWarp extends PipelineStage {
      * past the actual last column processed in the input image. The row
      * referred to as the ending row is the one above the bounding row, i.e.,
      * nRowEnd.
-     * @throws IllegalArgumentException if the trapezoid is empty or outside
+     * @throws jjil.core.Error if the trapezoid is empty or outside
      * the bounds of any image, i.e., if nRowStart < 0, or nRowEnd <= nRowStart,
      * or nColLeftStart <= nColRightStart, or nColLeftEnd <= nColRightEnd.
      */
@@ -74,7 +74,7 @@ public class GrayTrapWarp extends PipelineStage {
 	    int nColLeftStart, 
 	    int nColRightStart,
 	    int nColLeftEnd, 
-	    int nColRightEnd) throws IllegalArgumentException {
+	    int nColRightEnd) throws jjil.core.Error {
         setTrapezoid(nRowStart, nRowEnd, nColLeftStart, nColRightStart,
                 nColLeftEnd, nColRightEnd);
     }
@@ -135,29 +135,27 @@ public class GrayTrapWarp extends PipelineStage {
      * to avoid floating point computation.
      *
      * @param image the input gray image.
-     * @throws IllegalArgumentException if the input image is not gray,
+     * @throws jjil.core.Error if the input image is not gray,
      * or the trapezoid already specified extends outside its bounds.
      */
-    public void Push(Image image) throws IllegalArgumentException {
+    public void Push(Image image) throws jjil.core.Error {
         if (!(image instanceof Gray8Image)) {
-            throw new IllegalArgumentException(
-            	new Error(
+            throw new Error(
     				Error.PACKAGE.ALGORITHM,
     				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
     				image.toString(),
     				null,
-    				null));
+    				null);
         }
         if (this.nColRightStart > image.getWidth() ||
             this.nColRightEnd > image.getWidth() ||
             this.nRowEnd > image.getHeight()) {
-            throw new IllegalArgumentException(
-            	new Error(
+            throw new Error(
     				Error.PACKAGE.ALGORITHM,
     				ErrorCodes.BOUNDS_OUTSIDE_IMAGE,
     				image.toString(),
     				this.toString(),
-    				null));
+    				null);
         }
         int fLeft = (this.nColLeftStart * 256);
         int fRight = (this.nColRightStart * 256);
@@ -199,7 +197,7 @@ public class GrayTrapWarp extends PipelineStage {
      * @param nColRightStart right edge of trapezoid on starting row
      * @param nColLeftEnd left edge of trapezoid on ending row
      * @param nColRightEnd right edge of trapezoid on ending row
-     * @throws IllegalArgumentException if the trapezoid is empty or outside
+     * @throws jjil.core.Error if the trapezoid is empty or outside
      * the bounds of any image, i.e., if nRowStart < 0, or nRowEnd <= nRowStart,
      * or nColLeftStart <= nColRightStart, or nColLeftEnd <= nColRightEnd.
      */
@@ -209,34 +207,31 @@ public class GrayTrapWarp extends PipelineStage {
 	    int nColLeftStart, 
 	    int nColRightStart,
 	    int nColLeftEnd, 
-	    int nColRightEnd) throws IllegalArgumentException {
+	    int nColRightEnd) throws jjil.core.Error {
         if (nRowStart >= nRowEnd) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
             				Error.PACKAGE.ALGORITHM,
             				ErrorCodes.WARP_START_ROW_GE_END_ROW,
             				new Integer(nRowStart).toString(),
             				new Integer(nRowEnd).toString(),
-            				null));
+            				null);
         }
         if (nColLeftStart >= nColRightStart) {
-            throw new IllegalArgumentException(
-            	new Error(
+            throw new Error(
     				Error.PACKAGE.ALGORITHM,
     				ErrorCodes.WARP_START_LEFT_COL_GE_START_RIGHT_COL,
     				new Integer(nColLeftStart).toString(),
     				new Integer(nColRightStart).toString(),
-    				null));
+    				null);
 
         }
         if (nColLeftEnd >= nColRightEnd) {
-            throw new IllegalArgumentException(
-                new Error(
+            throw new Error(
     				Error.PACKAGE.ALGORITHM,
     				ErrorCodes.WARP_END_LEFT_COL_GE_END_RIGHT_COL,
     				new Integer(nColLeftEnd).toString(),
     				new Integer(nColRightEnd).toString(),
-    				null));
+    				null);
         }
         this.nRowStart = nRowStart;
         this.nRowEnd = nRowEnd;
@@ -245,13 +240,12 @@ public class GrayTrapWarp extends PipelineStage {
         this.nColLeftEnd = nColLeftEnd;
         this.nColRightEnd = nColRightEnd;
         if (this.nRowStart < 0 || this.nColLeftStart < 0 || this.nColRightStart < 0) {
-            throw new IllegalArgumentException(
-                new Error(
+            throw new Error(
     				Error.PACKAGE.ALGORITHM,
     				ErrorCodes.BOUNDS_OUTSIDE_IMAGE,
     				this.toString(),
     				null,
-    				null));
+    				null);
         }
         int nHeight = this.nRowEnd - this.nRowStart;
 	    int nWidth = Math.max(

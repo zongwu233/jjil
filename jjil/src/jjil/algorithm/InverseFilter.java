@@ -47,26 +47,24 @@ public class InverseFilter extends PipelineStage {
      * @param nGamma The gamma parameter from the inverse filter operation, corresponding to
      * a noise level. Higher gamma values imply a higher noise level and keep
      * the inverse filter from amplifying noisy components.
-     * @throws java.lang.IllegalArgumentException If the point spread function is not square or a power of 2 in size.
+     * @throws java.lang.jjil.core.Error If the point spread function is not square or a power of 2 in size.
      */
-    public InverseFilter(Gray8Image psf, int nGamma) throws IllegalArgumentException {
+    public InverseFilter(Gray8Image psf, int nGamma) throws jjil.core.Error {
         if (psf.getWidth() != psf.getHeight()) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
             				Error.PACKAGE.ALGORITHM,
             				ErrorCodes.IMAGE_NOT_SQUARE,
             				psf.toString(),
             				null,
-            				null));
+            				null);
         }
         if (!(psf instanceof Gray8Image)) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
             				Error.PACKAGE.ALGORITHM,
             				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
             				psf.toString(),
             				null,
-            				null));
+            				null);
         }
         this.nGamma = nGamma;
         this.fft = new FftGray8();
@@ -78,37 +76,34 @@ public class InverseFilter extends PipelineStage {
     /**
      * Compute the inverse filter of the given image.
      * @param im the Gray8Image to compute the inverse filter on.
-     * @throws java.lang.IllegalArgumentException If the input image is not a Gray8Image or not the same size as the 
+     * @throws java.lang.jjil.core.Error If the input image is not a Gray8Image or not the same size as the 
      * point spread function.
      */
-    public void Push(Image im) throws IllegalArgumentException {
+    public void Push(Image im) throws jjil.core.Error {
         if (im.getWidth() != im.getHeight()) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
             				Error.PACKAGE.ALGORITHM,
             				ErrorCodes.IMAGE_NOT_SQUARE,
             				im.toString(),
             				null,
-            				null));
+            				null);
         }
         if (im.getWidth() != this.cxmPsfInv.getWidth() ||
         	im.getHeight() != this.cxmPsfInv.getHeight()) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
             				Error.PACKAGE.ALGORITHM,
             				ErrorCodes.IMAGE_SIZES_DIFFER,
             				im.toString(),
             				this.cxmPsfInv.toString(),
-            				null));
+            				null);
         }
         if (!(im instanceof Gray8Image)) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
             				Error.PACKAGE.ALGORITHM,
             				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
             				im.toString(),
             				null,
-            				null));
+            				null);
         }
         this.fft.Push(im);
         Complex32Image cxmIm = (Complex32Image) this.fft.Front();

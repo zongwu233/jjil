@@ -47,7 +47,8 @@ public class RgbSubSample extends PipelineStage {
      * @param cReduceWidth amount to reduce the width by
      * @param cReduceHeight amount to reduce the height by
      */
-    public RgbSubSample(int cTargetWidth, int cTargetHeight) {
+    public RgbSubSample(int cTargetWidth, int cTargetHeight)
+    	throws jjil.core.Error {
         setTargetSize(cTargetWidth, cTargetHeight);
     }
     
@@ -56,36 +57,33 @@ public class RgbSubSample extends PipelineStage {
      * size.
      *
      * @param image the input image.
-     * @throws IllegalArgumentException if the input image is not gray, or
+     * @throws jjil.core.Error if the input image is not gray, or
      * the reduction factor does not evenly divide the image size.
      */
-    public void Push(Image image) throws IllegalArgumentException {
+    public void Push(Image image) throws jjil.core.Error {
         if (!(image instanceof RgbImage)) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
                 			Error.PACKAGE.ALGORITHM,
                 			ErrorCodes.IMAGE_NOT_RGBIMAGE,
                 			image.toString(),
                 			null,
-                			null));
+                			null);
         }
         if (image.getWidth() < this.cTargetWidth) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
                 			Error.PACKAGE.ALGORITHM,
                 			ErrorCodes.SHRINK_OUTPUT_LARGER_THAN_INPUT,
                 			image.toString(),
                 			this.toString(),
-                			null));
+                			null);
         }
         if (image.getHeight() < this.cTargetHeight) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
                 			Error.PACKAGE.ALGORITHM,
                 			ErrorCodes.SHRINK_OUTPUT_LARGER_THAN_INPUT,
                 			image.toString(),
                 			this.toString(),
-                			null));
+                			null);
         }
         // note that Java division truncates. So 
         // e.g. cReduceWidth * this.cTargetWidth <= image.getWidth
@@ -130,19 +128,18 @@ public class RgbSubSample extends PipelineStage {
      *
      * @param cTargetWidth the target image width.
      * @param cTargetHeight the target image height.
-     * @throws IllegalArgumentException if either cTargetWidth or cTargetHeight
+     * @throws jjil.core.Error if either cTargetWidth or cTargetHeight
      * is less than or equal to 0.
      */
     public void setTargetSize(int cTargetWidth, int cTargetHeight) 
-        throws IllegalArgumentException {
+        throws jjil.core.Error {
         if (cTargetWidth <= 0 || cTargetHeight <= 0) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
                 			Error.PACKAGE.ALGORITHM,
                 			ErrorCodes.OUTPUT_IMAGE_SIZE_NEGATIVE,
                 			new Integer(cTargetWidth).toString(),
                 			new Integer(cTargetHeight).toString(),
-                			null));
+                			null);
         }
         this.cTargetWidth = cTargetWidth;
         this.cTargetHeight = cTargetHeight;

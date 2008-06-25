@@ -45,17 +45,16 @@ public class Gray2Rgb extends PipelineStage {
      * from -128->127 to 0->255.
      *
      * @param image the input image.
-     * @throws IllegalArgumentException if the input is not a Gray8Image
+     * @throws jjil.core.Error if the input is not a Gray8Image
      */
-    public void Push(Image image) throws IllegalArgumentException {
+    public void Push(Image image) throws jjil.core.Error {
         if (!(image instanceof Gray8Image)) {
-            throw new IllegalArgumentException(
-                new Error(
+            throw new Error(
                 	Error.PACKAGE.ALGORITHM,
                 	ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
                 	image.toString(),
                 	null,
-                	null));
+                	null);
         }
         Gray8Image gray = (Gray8Image) image;
         RgbImage rgb = new RgbImage(image.getWidth(), image.getHeight());

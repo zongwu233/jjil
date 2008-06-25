@@ -47,14 +47,14 @@ public class GrayCrop extends PipelineStage {
      * @param y top edge of cropping window
      * @param width width of cropping window
      * @param height height of cropping window
-     * @throws IllegalArgumentException if the top left corner of the
+     * @throws jjil.core.Error if the top left corner of the
      * window is negative, or the window area is non-positive.
      */
     public GrayCrop(
             int x,
             int y,
             int width,
-            int height) throws IllegalArgumentException {
+            int height) throws jjil.core.Error {
     	setWindow(x, y, width, height);
     }
     
@@ -62,30 +62,28 @@ public class GrayCrop extends PipelineStage {
      * specified in the constructor.
      *
      * @param image the input image.
-     * @throws IllegalArgumentException if the cropping window
+     * @throws jjil.core.Error if the cropping window
      *    extends outside the input image, or the input image
      *    is not a Gray8Image.
      */
-    public void Push(Image image) throws IllegalArgumentException {
+    public void Push(Image image) throws jjil.core.Error {
         if (!(image instanceof Gray8Image)) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
                 			Error.PACKAGE.ALGORITHM,
                 			ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
                 			image.toString(),
                 			null,
-                			null));
+                			null);
         }
         Gray8Image imageInput = (Gray8Image) image;
         if (this.cX + this.cWidth > image.getWidth() ||
             this.cY + this.cHeight > image.getHeight()) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
                 			Error.PACKAGE.ALGORITHM,
                 			ErrorCodes.BOUNDS_OUTSIDE_IMAGE,
                 			image.toString(),
                 			this.toString(),
-                			null));
+                			null);
         }
         Gray8Image imageResult = new Gray8Image(this.cWidth,this.cHeight);
         byte[] src = imageInput.getData();
@@ -139,31 +137,29 @@ public class GrayCrop extends PipelineStage {
      * @param y top edge of cropping window
      * @param width width of cropping window
      * @param height height of cropping window
-     * @throws IllegalArgumentException if the top left corner of the
+     * @throws jjil.core.Error if the top left corner of the
      * window is negative, or the window area is non-positive.
      */
     public void setWindow(
             int x,
             int y,
             int width,
-            int height) throws IllegalArgumentException {
+            int height) throws jjil.core.Error {
         if (x<0 || y<0) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
                 			Error.PACKAGE.ALGORITHM,
                 			ErrorCodes.BOUNDS_OUTSIDE_IMAGE,
                 			new Integer(x).toString(),
                 			new Integer(y).toString(),
-                			null));
+                			null);
         }
         if (width<=0 || height<=0) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
                 			Error.PACKAGE.ALGORITHM,
                 			ErrorCodes.INPUT_IMAGE_SIZE_NEGATIVE,
                 			new Integer(width).toString(),
                 			new Integer(height).toString(),
-                			null));
+                			null);
         }
         this.cX = x;
         this.cY = y;

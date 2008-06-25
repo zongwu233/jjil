@@ -45,10 +45,10 @@ public class GrayHistMatch extends PipelineStage {
     /** Creates a new instance of GrayHistMatch 
      *
      * @param histTarget the input histogram.
-     * @throws IllegalArgumentException if the input histogram does not have
+     * @throws jjil.core.Error if the input histogram does not have
      * 256 elements.
      */
-    public GrayHistMatch(int[] histTarget) throws IllegalArgumentException {
+    public GrayHistMatch(int[] histTarget) throws jjil.core.Error {
         setHistogram(histTarget);
     }
     
@@ -91,17 +91,16 @@ public class GrayHistMatch extends PipelineStage {
      * output grayvalue.
      *
      * @param image the input image.
-     * @throws IllegalArgumentException if the input image is not gray.
+     * @throws jjil.core.Error if the input image is not gray.
      */
-    public void Push(Image image) throws IllegalArgumentException {
+    public void Push(Image image) throws jjil.core.Error {
         if (!(image instanceof Gray8Image)) {
-            throw new IllegalArgumentException(
-            	new Error(
+            throw new Error(
     				Error.PACKAGE.ALGORITHM,
     				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
     				image.toString(),
     				null,
-    				null));
+    				null);
 
         }
         /* We could do a test here to make sure that the uppermost
@@ -131,18 +130,17 @@ public class GrayHistMatch extends PipelineStage {
     /** setHistogram sets a new target histogram.
      *
      * @param histTarget the new target histogram
-     * @throws IllegalArgumentException if histTarget does not have 256
+     * @throws jjil.core.Error if histTarget does not have 256
      * elements.
      */
-    public void setHistogram(int[] histTarget) throws IllegalArgumentException {
+    public void setHistogram(int[] histTarget) throws jjil.core.Error {
         if (histTarget.length != 256) {
-            throw new IllegalArgumentException(
-            	new Error(
+            throw new Error(
     				Error.PACKAGE.ALGORITHM,
     				ErrorCodes.HISTOGRAM_LENGTH_NOT_256,
     				histTarget.toString(),
     				null,
-    				null));
+    				null);
         }
         this.histCumTarget = new int[256];
         /* We actually store the cumulative histogram, not the original.

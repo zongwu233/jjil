@@ -39,9 +39,9 @@ public class Fft1d {
      * width.
      * @param nMaxWidth The maximum width to compute FFTs for. This is used to precompute the complex
      * roots of unity used in the FFT calculation. Must be a power of 2.
-     * @throws java.lang.IllegalArgumentException If nMaxWidth is not a power of 2.
+     * @throws java.lang.jjil.core.Error If nMaxWidth is not a power of 2.
      */
-    public Fft1d(int nMaxWidth) throws IllegalArgumentException {
+    public Fft1d(int nMaxWidth) throws jjil.core.Error {
         setMaxWidth(nMaxWidth);
     }
     
@@ -49,29 +49,27 @@ public class Fft1d {
      * Computes forward FFT of the complex array.
      * @param x The complex array to compute the FFT of.
      * @return The FFT of the input.
-     * @throws java.lang.IllegalArgumentException If the length of the arra is not a power of 2, or greater than the previosly
+     * @throws java.lang.jjil.core.Error If the length of the arra is not a power of 2, or greater than the previosly
      * specified maximum width.
      */
-    public Complex[] fft(Complex[] x) throws IllegalArgumentException {
+    public Complex[] fft(Complex[] x) throws jjil.core.Error {
         int N = x.length;
         if ((N & (N-1)) != 0) {
-            throw new IllegalArgumentException(
-            	new Error(
+            throw new Error(
         			Error.PACKAGE.ALGORITHM,
         			ErrorCodes.FFT_SIZE_NOT_POWER_OF_2,
         			new Integer(N).toString(),
         			null,
-        			null));
+        			null);
 
         }
         if (N > this.nMaxWidth) {
-            throw new IllegalArgumentException(
-            	new Error(
+            throw new Error(
         			Error.PACKAGE.ALGORITHM,
         			ErrorCodes.FFT_SIZE_LARGER_THAN_MAX,
         			new Integer(N).toString(),
         			null,
-        			null));
+        			null);
         }
         // compute log2 N
         int nLog = 1;
@@ -85,7 +83,7 @@ public class Fft1d {
  
     // compute the FFT of x[], for lengths a power of 2
     // nLog is the logarithm of the length of x to base 2
-    private Complex[] fft(Complex[] x, int nLog) throws IllegalArgumentException {
+    private Complex[] fft(Complex[] x, int nLog) throws jjil.core.Error {
         int N = x.length;
 
         // base case
@@ -127,11 +125,11 @@ public class Fft1d {
     /**
      * Computes inverse FFT of the input complex array.
      * @param x The input complex array.
-     * @throws java.lang.IllegalArgumentException If the input array length is not a power of 2 or is greater than the 
+     * @throws java.lang.jjil.core.Error If the input array length is not a power of 2 or is greater than the 
      * previously specified maximum width.
      * @return The FFT of the input.
      */
-    public Complex[] ifft(Complex[] x) throws IllegalArgumentException {
+    public Complex[] ifft(Complex[] x) throws jjil.core.Error {
         int N = x.length;
         Complex[] y = new Complex[N];
 
@@ -156,17 +154,16 @@ public class Fft1d {
      * Sets a new maximum width. If smaller than what has been specified before, no
      * effect. Otherwise computes some more complex roots of unity.
      * @param N The new maximum width.
-     * @throws java.lang.IllegalArgumentException If N is not a power of 2.
+     * @throws jjil.core.Error If N is not a power of 2.
      */
-    public void setMaxWidth(int N) throws IllegalArgumentException {
+    public void setMaxWidth(int N) throws jjil.core.Error {
         if ((N & (N-1)) != 0) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
             			Error.PACKAGE.ALGORITHM,
             			ErrorCodes.FFT_SIZE_NOT_POWER_OF_2,
             			new Integer(N).toString(),
             			null,
-            			null));
+            			null);
         }
         // we precompute the coefficients (complex roots of unity)
         // used in the FFT calculation

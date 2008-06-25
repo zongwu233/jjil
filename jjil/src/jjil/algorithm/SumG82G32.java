@@ -35,16 +35,15 @@ public class SumG82G32 extends PipelineStage {
     public SumG82G32() {
     }
     
-    public void Push(Image image) throws IllegalArgumentException
+    public void Push(Image image) throws jjil.core.Error
     {
         if (!(image instanceof Gray8Image)) {
-            throw new IllegalArgumentException(
-                	new Error(
+            throw new Error(
                 			Error.PACKAGE.ALGORITHM,
                 			ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
                 			image.toString(),
                 			null,
-                			null));
+                			null);
         }
         Gray32Image imageResult;
         if (image instanceof Gray8SubImage) {

@@ -43,17 +43,16 @@ public class Gray162Gray8 extends PipelineStage {
      * the top 8 bits of every pixel.
      *
      * @param image the input image.
-     * @throws IllegalArgumentException if the input is not a Gray8Image
+     * @throws jjil.core.Error if the input is not a Gray8Image
      */
-    public void Push(Image image) throws IllegalArgumentException {
+    public void Push(Image image) throws jjil.core.Error {
         if (!(image instanceof Gray16Image)) {
-            throw new IllegalArgumentException(
-            	new Error(
+            throw new Error(
     				Error.PACKAGE.ALGORITHM,
     				ErrorCodes.IMAGE_NOT_GRAY16IMAGE,
     				image.toString(),
     				null,
-    				null));
+    				null);
         }
         Gray16Image gray = (Gray16Image) image;
         Gray8Image gray8 = new Gray8Image(image.getWidth(), image.getHeight());

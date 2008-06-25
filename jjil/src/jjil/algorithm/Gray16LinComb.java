@@ -52,26 +52,36 @@ public class Gray16LinComb implements Ladder.Join {
      * Subtract one Gray16Image from another.
      * @param imageFirst the left-hand image image (and output)
      * @param imageSecond the right-hand image image
-     * @throws IllegalArgumentException if the image is not a gray 16-bit
+     * @throws jjil.core.Error if the image is not a gray 16-bit
      * image.
      */
     public Image DoJoin(Image imageFirst, Image imageSecond)
-        throws IllegalArgumentException
+        throws jjil.core.Error
     {
         if (!(imageFirst instanceof Gray16Image)) {
-            throw new IllegalArgumentException(
-            		imageFirst.toString() + " should be a Gray16Image");
+            throw new jjil.core.Error(
+            		jjil.core.Error.PACKAGE.ALGORITHM,
+            		jjil.algorithm.ErrorCodes.IMAGE_NOT_GRAY16IMAGE,
+            		imageFirst.toString(),
+            		null,
+            		null);
         }
         if (!(imageSecond instanceof Gray16Image)) {
-            throw new IllegalArgumentException(
-            		imageSecond.toString() + " should be a Gray16Image");
+            throw new jjil.core.Error(
+            		jjil.core.Error.PACKAGE.ALGORITHM,
+            		jjil.algorithm.ErrorCodes.IMAGE_NOT_GRAY16IMAGE,
+            		imageSecond.toString(),
+            		null,
+            		null);
         }
         if (imageFirst.getWidth() != imageSecond.getWidth() ||
         	imageFirst.getHeight() != imageSecond.getHeight()) {
-        	throw new IllegalArgumentException(
-        			imageFirst.toString() + " and " + 
-        			imageSecond.toString() +
-        			" are not the same size");
+        	throw new jjil.core.Error(
+            		jjil.core.Error.PACKAGE.ALGORITHM,
+            		jjil.algorithm.ErrorCodes.IMAGE_SIZES_DIFFER,
+        			imageFirst.toString(), 
+        			imageSecond.toString(),
+        			null);
         }
         short[] dataFirst = ((Gray16Image) imageFirst).getData();
         short[] dataSecond = ((Gray16Image) imageSecond).getData();
