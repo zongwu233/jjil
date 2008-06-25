@@ -28,6 +28,7 @@ import jjil.core.Gray8Image;
 import jjil.core.RgbImage;
 import jjil.core.Sequence;
 import jjil.j2me.RgbImageJ2me;
+import barcode.DetectBarcode;
 import barcode.ReadBarcode;
 
 /**
@@ -37,28 +38,19 @@ import barcode.ReadBarcode;
 public class BarcodeParam {
     /** Image cropped to the region where the barcode should be
      */
-    Gray8Image imageCropped;
+    RgbImage imageCropped;
     /** Image to display 
      */
     Image imageDisplay = null;
     /** Input image.
      */
     Image imageInput;
-    /** Cropping window height. From 1-480
-     */
-    int cCropHeight;
-    /** Cropping window left edge. From 0-639.
-     */
-    int dCropLeft;
-    /** Cropping window top. From 0-479.
-     */
-    int dCropTop;
-    /** Cropping window width. From 1-640.
-     */
-    int cCropWidth;
     /** Whether or not barcode detection has been attempted.
      */
     boolean oAttempted = false;
+    /** Where or not barcode was found
+     */
+    boolean oFound = false;
     /** Whether barcode detection was successful or not.
      */
     boolean oSuccessful = false;
@@ -68,23 +60,8 @@ public class BarcodeParam {
      */
     String szBarcode;
     /** Creates a new instance of BarcodeParam */
-    public BarcodeParam(
-            int dCropLeft,
-            int dCropTop,
-            int cCropWidth,
-            int cCropHeight) throws IllegalArgumentException {
-        if (dCropLeft < 0 || dCropLeft > 639 ||
-            dCropTop < 0 || dCropTop > 479 ||
-            cCropWidth < 1 || cCropWidth > 640 ||
-            cCropHeight < 1 || cCropHeight > 480) {
-            throw new IllegalArgumentException("Cropping window is illegal: " +
-                    "(" + dCropLeft + "," + dCropTop + "," + cCropWidth + 
-                    "," + cCropHeight + ")");
-        }
-        this.dCropLeft = dCropLeft;
-        this.dCropTop = dCropTop;
-        this.cCropWidth = cCropWidth;
-        this.cCropHeight = cCropHeight;
+    public BarcodeParam() throws IllegalArgumentException {
+        this.imageCropped = null;
     }
     
     public boolean getAttempted() {
@@ -100,54 +77,68 @@ public class BarcodeParam {
     }
     
     public void Paint(Graphics g) {
-        if (this.imageInput != null) {
+        if (this.imageCropped != null) {
             if (this.oAttempted) {
-                if (this.imageDisplay == null) {
-                    if (this.imageCropped.getWidth() > g.getClipWidth() ||
-                        this.imageCropped.getHeight() > g.getClipHeight()) {
-                        int nWidth = Math.min(this.imageCropped.getWidth(), 
-                                g.getClipWidth());
-                        int nHeight = Math.min(this.imageCropped.getHeight(), 
-                                g.getClipHeight());
-                        GrayShrink rs = new GrayShrink(nWidth, nHeight);
-                        Sequence seq = new Sequence(rs);
-                        seq.Add(new Gray2Rgb());
-                        seq.Push(this.imageCropped);
-                        this.imageDisplay = RgbImageJ2me.toImage((RgbImage)seq.Front());
-                    } else {
-                        Gray2Rgb g2r = new Gray2Rgb();
-                        g2r.Push(this.imageCropped);
-                        this.imageDisplay = RgbImageJ2me.toImage((RgbImage)g2r.Front());
+                try {
+                    if (this.imageDisplay == null && this.oFound) {
+                        if (this.imageCropped.getWidth() > g.getClipWidth() ||
+                            this.imageCropped.getHeight() > g.getClipHeight()) {
+                            int nWidth = Math.min(this.imageCropped.getWidth(), 
+                                    g.getClipWidth());
+                            int nHeight = Math.min(this.imageCropped.getHeight(), 
+                                    g.getClipHeight());
+                            RgbShrink rs = new RgbShrink(nWidth, nHeight);
+                            rs.Push(this.imageCropped);
+                            this.imageDisplay = RgbImageJ2me.toImage((RgbImage)rs.Front());
+                        } else {
+                            this.imageDisplay = RgbImageJ2me.toImage(this.imageCropped);
+                        }
+                    } 
+                    if (this.imageDisplay != null) {
+                        g.drawImage(
+                                this.imageDisplay, 
+                                g.getClipWidth()/2, 
+                                g.getClipHeight()/2, 
+                                Graphics.VCENTER | Graphics.HCENTER);
                     }
+                    if (this.oSuccessful) {
+                        // draw approximate barcode rectangle
+                        int nTL = this.rb.getLeftApproxPos() * g.getClipWidth()
+                            / this.imageCropped.getWidth() + g.getClipX();
+                        int nTR = this.rb.getRightApproxPos() * g.getClipWidth()
+                            / this.imageCropped.getWidth() + g.getClipX();
+                        int nBL = nTL + 
+                                this.rb.getLeftApproxSlope() * g.getClipHeight() / 256
+                                * g.getClipWidth() / this.imageCropped.getWidth();
+                        int nBR = nTR + 
+                                this.rb.getRightApproxSlope() * g.getClipHeight() / 256
+                                * g.getClipWidth() / this.imageCropped.getWidth();
+                        g.setColor(0, 255, 0); // Green
+                        g.drawLine(nTL, g.getClipY(), nBL, g.getClipY() + g.getClipHeight());
+                        g.drawLine(nTR, g.getClipY(), nBR, g.getClipY() + g.getClipHeight());
+                        // draw the barcode string
+                        // white background
+                        int nHeight = g.getFont().getHeight();
+                        g.setColor(255, 255, 255); // white
+                        g.fillRect(
+                                g.getClipX(), 
+                                g.getClipY() + g.getClipHeight() - nHeight, 
+                                g.getClipX() + g.getClipWidth(), 
+                                g.getClipY() + g.getClipHeight());
+                        // black text
+                        g.setColor(0, 0, 0);
+                        g.drawString(
+                                " Read: " + rb.getCode(), 
+                                g.getClipX(), 
+                                g.getClipY() + g.getClipHeight(), 
+                                Graphics.BOTTOM | Graphics.LEFT);
+                    }
+                } catch (jjil.core.Error e) {
+                    e.printStackTrace();
+                    jjil.j2me.Error eJ2me = new jjil.j2me.Error(e);
+                    g.drawString(eJ2me.getLocalizedMessage(), 0, 0, 0);
                 }
-                g.drawImage(
-                        this.imageDisplay, 
-                        g.getClipWidth()/2, 
-                        g.getClipHeight()/2, 
-                        Graphics.VCENTER | Graphics.HCENTER);
-                
-                // draw approximate barcode rectangle
-                int nTL = this.rb.getLeftApproxPos() * g.getClipWidth()
-                    / this.imageCropped.getWidth() + g.getClipX();
-                int nTR = this.rb.getRightApproxPos() * g.getClipWidth()
-                    / this.imageCropped.getWidth() + g.getClipX();
-                int nBL = nTL + 
-                        this.rb.getLeftApproxSlope() * g.getClipHeight() / 256
-                        * g.getClipWidth() / this.imageCropped.getWidth();
-                int nBR = nTR + 
-                        this.rb.getRightApproxSlope() * g.getClipHeight() / 256
-                        * g.getClipWidth() / this.imageCropped.getWidth();
-                g.setColor(0, 255, 0); // Green
-                g.drawLine(nTL, g.getClipY(), nBL, g.getClipY() + g.getClipHeight());
-                g.drawLine(nTR, g.getClipY(), nBR, g.getClipY() + g.getClipHeight());
             } else {
-                g.setColor(0, 255, 0); // Green
-                g.drawRect(
-                        g.getClipX() + this.dCropLeft * g.getClipWidth() / 640,
-                        g.getClipY() + this.dCropTop * g.getClipHeight() / 480,
-                        this.cCropWidth * g.getClipWidth() / 640,
-                        this.cCropHeight * g.getClipHeight() / 480
-                        );
             }
         }
     }
@@ -155,33 +146,41 @@ public class BarcodeParam {
     public void Push() {
         this.oAttempted = true;
         this.imageDisplay = null;
-        jjil.core.Image inimg = RgbImageJ2me.toRgbImage(this.imageInput);
-        Sequence seq = new Sequence(new RgbSelect2Gray(RgbSelect2Gray.GREEN));
-        int nSize = 1;
-        while (nSize < Math.min(inimg.getWidth(), inimg.getHeight())) nSize <<= 1;
-        nSize >>= 1;
-        seq.Add(new GrayHistEq());
-        //seq.Add(new DeblurHorizHalftone());
-        //seq.Add(new GrayHistEq());
-        seq.Push(inimg);
-        inimg = seq.Front();
-        this.rb = new ReadBarcode();
-        seq = new Sequence();
-        int dTopLeftX = this.dCropLeft * inimg.getWidth() / 640;
-        int dTopLeftY = this.dCropTop * inimg.getHeight() / 480;
-        int cWidth = this.cCropWidth * inimg.getWidth() / 640;
-        int cHeight = this.cCropHeight * inimg.getHeight() / 480;
-        GrayCrop crop = new GrayCrop(dTopLeftX, dTopLeftY, cWidth, cHeight);
-        seq.Add(crop);
-        seq.Push(inimg);
-        Gray8Image imageResult = (Gray8Image) seq.Front();
-        this.rb.Push(inimg,dTopLeftX,dTopLeftY,cWidth,cHeight);
-        this.imageCropped = imageResult;
-       // this.imageCropped = ((RgbImage) g2r.Front()).getImage();
-        if (this.rb.getSuccessful()) {
-            this.oSuccessful = true;
-            this.szBarcode = this.rb.getCode();
-        } else {
+        this.imageCropped = RgbImageJ2me.toRgbImage(this.imageInput);
+        DetectBarcode db = new DetectBarcode(20000);
+        try {
+            if (!db.Push(this.imageCropped)) {
+                /**
+                 * Couldn't find the barcode. Tell the user.
+                 */
+                this.oFound = false;
+                this.oSuccessful = false;
+                this.szBarcode = null;
+            } else {
+                this.oFound = true;
+                this.rb = new ReadBarcode();
+                this.rb.setRect(db.getRect());
+                this.rb.Push(this.imageCropped);
+                if (!rb.getSuccessful()) {
+                        /**
+                         * Couldn't read the barcode.
+                         */
+                        this.oSuccessful = false;
+                        this.szBarcode = null;
+                } else {
+                        /**
+                         * Read the barcode. Tell the user.
+                         */
+                        this.oSuccessful = true;
+                        this.szBarcode = this.rb.getCode();
+                    }
+            }
+        } catch (jjil.core.Error e) {
+            e.printStackTrace();
+            jjil.j2me.Error eJ2me = new jjil.j2me.Error(e);
+            /**
+             * Report error somehow.
+             */
             this.oSuccessful = false;
             this.szBarcode = null;
         }
@@ -199,8 +198,4 @@ public class BarcodeParam {
         this.imageInput = imageInput;       
     }
     
-    public String toString() {
-        return super.toString() + " (" + this.dCropLeft + "," + this.dCropTop + 
-                "," + this.cCropWidth + "," + this.cCropHeight + ")";
-    }
 }
