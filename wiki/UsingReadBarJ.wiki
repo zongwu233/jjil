@@ -15,3 +15,5 @@ When you start ReadBarJ you will see a simple menu (labeled "Options" in the emu
 When you make your selections from the menu the current selection will be shown prefixed by a '+' sign. The selections are saved from program run to program run.
 
 Generally speaking you what to use the sharpest, highest resolution image you can for barcode capture. The barcode must be at least 200 pixels in width to be read and it has to be sharply defined and in focus.
+
+After you've made your selections pressing the "FIRE" button on your cellphone (this is usually a centrally-located button) will capture and image, locate the barcode, and show its value. The area of the image containing the barcode will be shown on the screen and its approximate edges will be outlined with green lines.
