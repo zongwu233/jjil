@@ -22,9 +22,9 @@
                 </properties>
             </reference>
             <reference>
-                <foreign-project>JJIL</foreign-project>
+                <foreign-project>CharacterizeCamera-J2ME</foreign-project>
                 <artifact-type>jar</artifact-type>
-                <script>${project.JJIL}/build.xml</script>
+                <script>${project.CharacterizeCamera-J2ME}/build.xml</script>
                 <target>jar</target>
                 <clean-target>clean</clean-target>
                 <id>jar</id>
@@ -41,6 +41,17 @@
                 <id>jar.DefaultColorPhone</id>
                 <properties>
                     <property name="config.active">DefaultColorPhone</property>
+                </properties>
+            </reference>
+            <reference>
+                <foreign-project>JJIL-1</foreign-project>
+                <artifact-type>jar</artifact-type>
+                <script>${project.JJIL-1}/build.xml</script>
+                <target>jar</target>
+                <clean-target>clean</clean-target>
+                <id>jar</id>
+                <properties>
+                    <property name="config.active"/>
                 </properties>
             </reference>
         </references>
