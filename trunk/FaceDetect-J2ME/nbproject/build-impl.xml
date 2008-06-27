@@ -156,11 +156,14 @@
         <ant target="jar" inheritall="false" antfile="${project.CharacterizeCamera}/build.xml">
             <property name="config.active" value=""/>
         </ant>
-        <ant target="jar" inheritall="false" antfile="${project.JJIL}/build.xml">
+        <ant target="jar" inheritall="false" antfile="${project.CharacterizeCamera-J2ME}/build.xml">
             <property name="config.active" value=""/>
         </ant>
         <ant target="jar" inheritall="false" antfile="${project.JJIL}/build.xml">
             <property name="config.active" value="DefaultColorPhone"/>
+        </ant>
+        <ant target="jar" inheritall="false" antfile="${project.JJIL-1}/build.xml">
+            <property name="config.active" value=""/>
         </ant>
     </target>
     <target name="conditional-clean" depends="init" unless="no.clean.before.build" description="Clean project in case its meta information has changed.">
