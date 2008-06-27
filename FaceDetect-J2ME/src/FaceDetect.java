@@ -44,7 +44,20 @@ public class FaceDetect extends MIDlet {
         if(current==null) {
             // first call
             if (System.getProperty("supports.video.capture").equals("true")) {
-                cameraCanvas=new CameraCanvas(this);
+                try {
+                    cameraCanvas=new CameraCanvas(this);
+                } catch (java.io.IOException e) {
+                    e.printStackTrace();
+                    Alert a = new Alert("IOException", e.toString(), null, AlertType.ERROR);
+                    a.setTimeout(Alert.FOREVER);
+                    Display.getDisplay(this).setCurrent(a);
+                } catch (jjil.core.Error e) {
+                    e.printStackTrace();
+                    jjil.j2me.Error eJ2me = new jjil.j2me.Error(e);
+                    Alert a = new Alert("JJIL Error", eJ2me.getLocalizedMessage(), null, AlertType.ERROR);
+                    a.setTimeout(Alert.FOREVER);
+                    Display.getDisplay(this).setCurrent(a);
+                }
                 displayCanvas=new DisplayCanvas(this);
                 Display.getDisplay(this).setCurrent(cameraCanvas);
                 cameraCanvas.start();

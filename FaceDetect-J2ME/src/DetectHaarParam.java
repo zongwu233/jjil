@@ -47,13 +47,15 @@ public class DetectHaarParam {
      * Creates a new instance of DetectHaarParam
      */
     public DetectHaarParam(int nMinScale, int nMaxScale) 
-        throws IllegalArgumentException 
+        throws jjil.core.Error, java.io.IOException
     {
         InputStream is  = getClass().getResourceAsStream("HCSB.txt");
         this.dh = new DetectHaarMultiScale(is, nMinScale, nMaxScale);
     }
        
-    public void Paint(Graphics g) {
+    public void Paint(Graphics g) 
+        throws jjil.core.Error
+    {
         if (this.imageInput != null && this.imInput != null) {
             int nTargetWidth = Math.min(imInput.getWidth(),g.getClipWidth());
             int nTargetHeight = Math.min(imInput.getHeight(),g.getClipHeight());
@@ -92,7 +94,7 @@ public class DetectHaarParam {
                             g.getClipWidth(),
                             g.getClipHeight());
                     g.drawImage(
-                            new RgbImageJ2me(rgb).getImage(), 
+                            RgbImageJ2me.toImage(rgb), 
                             g.getClipX() + (g.getClipWidth() - rgb.getWidth())/2, 
                             g.getClipY() + (g.getClipHeight() - rgb.getHeight())/2, 
                             0);
@@ -105,7 +107,7 @@ public class DetectHaarParam {
                             g.getClipWidth(),
                             g.getClipHeight());
                     g.drawImage(
-                            new RgbImageJ2me(rgb).getImage(), 
+                            RgbImageJ2me.toImage(rgb), 
                             g.getClipX() + (g.getClipWidth() - rgb.getWidth())/2, 
                             g.getClipY() + (g.getClipHeight() - rgb.getHeight())/2, 
                             0);
@@ -114,9 +116,11 @@ public class DetectHaarParam {
         }
     }
     
-    public void Push() {
+    public void Push() 
+        throws jjil.core.Error
+    {
         if (this.imageInput != null) {
-            this.imInput = new RgbImageJ2me(this.imageInput);
+            this.imInput = RgbImageJ2me.toRgbImage(this.imageInput);
             RgbAvg2Gray rg = new RgbAvg2Gray();
             rg.Push(this.imInput);
             if (this.dh != null) this.dh.Push(rg.Front());

@@ -89,6 +89,7 @@ public class CameraCanvas
 
     /** Creates a new instance of CameraCanvas */
     CameraCanvas(FaceDetect midlet)
+        throws jjil.core.Error, java.io.IOException
     {
         this.dhp = new DetectHaarParam(1, 40);
         this.midlet=midlet;
@@ -210,6 +211,7 @@ public class CameraCanvas
     }
     
     private void doCapture()
+        throws jjil.core.Error
     {
         if (this.player != null && this.player.getState() == Player.STARTED) {
             takeSnapshot();
@@ -221,17 +223,31 @@ public class CameraCanvas
         }
     }
     
+    private void reportJjilError(jjil.core.Error e) {
+        e.printStackTrace();
+        jjil.j2me.Error eJ2me = new jjil.j2me.Error(e);
+        String szMsg = eJ2me.getLocalizedMessage();
+        Alert a = new Alert("JJIL Error", szMsg, null, AlertType.ERROR);
+        a.setTimeout(Alert.FOREVER);
+        Display.getDisplay(this.midlet).setCurrent(a);
+    }
+    
     public void paint(Graphics g)
     {
-        if (this.dhp != null) this.dhp.Paint(g);
-        if(szMessage1!=null)
+        try
         {
-            Alert a = new Alert(szMessage1, szMessage2,
-                    null, AlertType.ERROR);
-            a.setTimeout(Alert.FOREVER);
-            Display.getDisplay(this.midlet).setCurrent(a);
-            szMessage1 = null;
-            szMessage2 = null;
+            if (this.dhp != null) this.dhp.Paint(g);
+            if(szMessage1!=null)
+            {
+                Alert a = new Alert(szMessage1, szMessage2,
+                        null, AlertType.ERROR);
+                a.setTimeout(Alert.FOREVER);
+                Display.getDisplay(this.midlet).setCurrent(a);
+                szMessage1 = null;
+                szMessage2 = null;
+            }
+        } catch (jjil.core.Error e) {
+            reportJjilError(e);
         }
     } 
     
@@ -293,7 +309,11 @@ public class CameraCanvas
         {
             if (this.videoControl != null) {
                 if (this.oVideoControlVisible) {
-                   doCapture();
+                    try {
+                       doCapture();
+                    } catch (jjil.core.Error e) {
+                        reportJjilError(e);
+                    }
                 } else {
                     this.videoControl.setVisible(true);
                     this.oVideoControlVisible = true;
@@ -344,7 +364,11 @@ public class CameraCanvas
             case FIRE:
                 if (this.videoControl != null) {
                     if (this.oVideoControlVisible) {
-                       doCapture();
+                        try {
+                           doCapture();
+                        } catch (jjil.core.Error e) {
+                            reportJjilError(e);
+                        }
                     } else {
                         this.videoControl.setVisible(true);
                         this.oVideoControlVisible = true;
@@ -448,6 +472,7 @@ public class CameraCanvas
     }
     
     private void takeSnapshot()
+        throws jjil.core.Error
     {
         if(player!=null)
         {
