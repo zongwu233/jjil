@@ -30,8 +30,6 @@ import jjil.core.RgbImage;
 
 /**
  * Pipeline stage crops a gray image to a given rectangular cropping window.
- * <p>
- * Hungarian prefix is 'crop'.
  * @author webb
  */
 public class RgbCrop extends PipelineStage {

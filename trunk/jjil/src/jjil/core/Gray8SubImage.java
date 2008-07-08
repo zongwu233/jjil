@@ -25,14 +25,21 @@
 package jjil.core;
 
 /**
- *
+ * Gray8SubImage is used to represent a rectangular region extracted from a larger
+ * Gray8Image, retaining the x and y position where the subimage was extracted.
  * @author webb
  */
 public class Gray8SubImage extends Gray8Image {
     int cX;
     int cY;
     
-    /** Creates a new instance of Gray8SubImage */
+    /**
+     * Creates a new instance of Gray8SubImage
+     * @param cWidth Image height.
+     * @param cHeight Image width.
+     * @param cX Horizontal position of top-left corner of subimage.
+     * @param cY Vertical position of top-left corner of subimage.
+     */
     public Gray8SubImage(int cWidth, int cHeight, int cX, int cY) {
         super(cWidth, cHeight);
         this.cX = cX;
@@ -55,21 +62,37 @@ public class Gray8SubImage extends Gray8Image {
         return image;
     }
     
+    /**
+     * Get horizontal offset of subimage.
+     * @return the horizontal position of the top-left corner of the subimage.
+     */
     public int getXOffset()
     {
         return this.cX;
     }
     
+    /**
+     * Get vertical offset of subimage.
+     * @return the vertical position of the top-left corner of the subimage.
+     */
     public int getYOffset()
     {
         return this.cY;
     }
     
+    /**
+     * Change horizontal position of subimage.
+     * @param nX the new horizontal position.
+     */
     public void setXOffset(int nX)
     {
         this.cX = nX;
     }
     
+    /**
+     * Change vertical position of subimage.
+     * @param nY the new vertical position.
+     */
     public void setYOffset(int nY)
     {
         this.cY = nY;

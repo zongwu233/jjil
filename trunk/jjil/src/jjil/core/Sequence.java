@@ -85,10 +85,11 @@ public class Sequence extends PipelineStage {
         }
     }
     
-    /** Returns the Image produced by the last stage
+    /**
+     * Returns the Image produced by the last stage
      * in the pipeline. Overrides PipelineStage.Front.
-     *
      * @return the Image produced by the pipeline.
+     * @throws jjil.core.Error if no image is available.
      */
     public Image Front() throws jjil.core.Error
     {
@@ -99,17 +100,14 @@ public class Sequence extends PipelineStage {
         }
     }
     
-    /** Process an image by the pipeline.
+    /**
+     * Process an image by the pipeline.
      * The image is pushed onto the beginning of the pipeline,
      * and then each stage's output is passed to the next
      * stage, until the end of the pipeline is reached.
      * Overrides PipelineStage.Push(Image).
-     *
      * @param i the image to be pushed.
-     * @throws IllegalStateException if the pipeline is empty
-     *    when this function is called, or a pipeline stage
-     *    did not return a result and is not the last stage
-     *    in the pipeline.
+     * @throws jjil.core.Error if the pipeline is empty.
      */
     public void Push(Image i) throws jjil.core.Error
     {

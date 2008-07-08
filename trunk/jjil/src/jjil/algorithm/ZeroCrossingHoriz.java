@@ -37,8 +37,6 @@ import jjil.core.Gray8Image;
  * are returned as an array of arrays of ints, one array per row, each
  * integer referring to the position of a zero crossing in the row,
  * multiplied by 256 so fractional positions can be represented.
- * <p>
- * Hungarian prefix is 'zeroes'.
  * @author webb
  */
 public class ZeroCrossingHoriz {

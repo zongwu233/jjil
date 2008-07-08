@@ -25,9 +25,7 @@
 package jjil.core;
 
 /**
- * Gray8Image is the image type used to store a signed
- * 8-bit image. Note that Java limitations (no unsigned byte) make it necessary
- * to treat alll 8-bit images as signed.
+ * Gray32Image is the image type used to store a 32-bit integer image.
  *
  * @author webb
  */
@@ -35,7 +33,7 @@ public class Gray32Image extends Image {
     private final int nImage[];
     
     /**
-     * Creates a new instance of Gray8Image
+     * Creates a new instance of Gray32Image
      * @param cWidth Width of the image (columns).
      * @param cHeight Height of the image (rows)
      */
@@ -58,9 +56,10 @@ public class Gray32Image extends Image {
         }
     }
 
-    /** Copy this image
-     *
+    /**
+     * Copy this image
      * @return the image copy.
+     * @throws jjil.core.Error never. (Needed for override in Gray32MaskedImage).
      */
     public Image Clone() throws jjil.core.Error
     {

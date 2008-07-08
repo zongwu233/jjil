@@ -28,9 +28,10 @@ import jjil.core.Gray32Image;
 import jjil.core.Gray8Image;
 import jjil.core.Image;
 import jjil.core.PipelineStage;
-/** Gray82Gray32 converts an 32-bit gray image to a 8-bit
- *  gray image. Input values are clamped between 0 and 255
- *  and offset for signed output.
+/** Gray32Scale2Gray8 converts an 32-bit gray image to a 8-bit
+ *  gray image. Input values are scaled so that the max value in
+ *  the image maps to Byte.MAX_VALUE and the minimum value to
+ *  Byte.MIN_VALUE.
  *
  * @author webb
  */
@@ -77,7 +78,9 @@ public class Gray32Scale2Gray8 extends PipelineStage {
              */
              /* Assign 32-bit output */
             gray8Data[i] = (byte)
-                    (Byte.MIN_VALUE + (255 * (gray32Data[i] - nMin)) / nDiff);
+                    (Byte.MIN_VALUE + 
+                    (((int)Byte.MAX_VALUE) - ((int)Byte.MIN_VALUE) * 
+                        (gray32Data[i] - nMin)) / nDiff);
         }
         super.setOutput(gray8);
     }

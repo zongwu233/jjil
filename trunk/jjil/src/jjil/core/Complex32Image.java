@@ -25,9 +25,7 @@
 package jjil.core;
 
 /**
- * Complex32Image is the image type used to store a signed
- * 8-bit image. Note that Java limitations (no unsigned byte) make it necessary
- * to treat alll 8-bit images as signed.
+ * Complex32Image is the image type used to store a complex 32-bit image.
  *
  * @author webb
  */

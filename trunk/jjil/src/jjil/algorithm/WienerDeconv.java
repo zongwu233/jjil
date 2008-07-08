@@ -32,7 +32,10 @@ import jjil.core.Image;
 import jjil.core.MathPlus;
 import jjil.core.PipelineStage;
 /**
- *
+ * Wiener deconvolution of input Gray8Image. You specify a point spread function
+ * as a Gray8Image and a noise level. See PsfGray8 for point spread function
+ * generating methods. The computation is done in the Fourier domain. The output
+ * is of type Complex32Image.
  * @author webb
  */
 public class WienerDeconv extends PipelineStage {
@@ -43,7 +46,11 @@ public class WienerDeconv extends PipelineStage {
     Gray32Image gPsfSq;
     
     /**
-     * Creates a new instance of WienerDeconv
+     * Creates a new instance of WienerDeconv.
+     * @param psf the input point spread function. This is the expected blur
+     * window, for example a disk or rectangle.
+     * @param nNoise the noise level.
+     * @throws jjil.core.Error if the input point spread function is not a Gray8Image or not square.
      */
     public WienerDeconv(Gray8Image psf, int nNoise) throws jjil.core.Error {
         if (psf.getWidth() != psf.getHeight()) {
@@ -69,6 +76,11 @@ public class WienerDeconv extends PipelineStage {
         invertPsf();
     }
     
+    /**
+     * Compute the deconvolution of the input Gray8Image, producing a Complex32Image.
+     * @param im the input Gray8Image.
+     * @throws jjil.core.Error if the input image is not a Gray8Image or not square.
+     */
     public void Push(Image im) throws jjil.core.Error {
         if (im.getWidth() != im.getHeight()) {
             throw new Error(

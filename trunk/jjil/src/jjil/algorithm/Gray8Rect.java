@@ -29,7 +29,8 @@ import jjil.core.Image;
 import jjil.core.PipelineStage;
 
 /**
- * Pipeline stage assigns a constant value to a rectangle in an image.
+ * Pipeline stage assigns a constant value to a rectangle in an input Gray8Image
+ * to produce an output Gray8Image.
  * @author webb
  */
 public class Gray8Rect extends PipelineStage {
@@ -38,12 +39,12 @@ public class Gray8Rect extends PipelineStage {
     
     /**
      * Creates a new instance of Gray8Rect.
-     * 
      * @param cX The horizontal offset of the rectangle.
      * @param cY the vertical offset of the rectangle.
      * @param nWidth the width of the rectangle.
      * @param nHeight the height of the rectangle.
      * @param bValue the value to be assigned to the rectangle.
+     * @throws jjil.core.Error if the height or width of the rectange is negative or zero.
      */
     public Gray8Rect(int cX, int cY, int nWidth, int nHeight, byte bValue) 
     	throws jjil.core.Error {
@@ -54,7 +55,7 @@ public class Gray8Rect extends PipelineStage {
     /**
      * Assigns a constant rectangle to the input Gray8Image, replacing values in the image.
      * @param image the input image (output replaces input).
-     * @throws java.lang.jjil.core.Error if image is not a Gray8Image.
+     * @throws jjil.core.Error if the input is not a Gray8Image.
      */
     public void Push(Image image) throws jjil.core.Error {
         if (!(image instanceof Gray8Image)) {
@@ -78,6 +79,14 @@ public class Gray8Rect extends PipelineStage {
          super.setOutput(input);
     }
     
+    /**
+     * 
+     * @param cX Top-left horizontal coordinate of the rectangle.
+     * @param cY top-left vertical coordinate of the rectangle.
+     * @param nWidth Width of the rectangle.
+     * @param nHeight Height of the rectangle.
+     * @throws jjil.core.Error if the width or height is negative or zero.
+     */
     public void setWindow(int cX, int cY, int nWidth, int nHeight) 
     	throws jjil.core.Error {
     	if (nWidth <= 0 || nHeight <= 0) {

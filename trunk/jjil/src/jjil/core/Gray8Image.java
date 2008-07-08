@@ -58,9 +58,10 @@ public class Gray8Image extends Image {
         }
     }
     
-    /** Copy this image
-     *
+    /**
+     * Copy this image
      * @return the image copy.
+     * @throws jjil.core.Error never (needed for override).
      */
     public Image Clone() throws jjil.core.Error
     {

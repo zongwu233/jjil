@@ -26,7 +26,7 @@ package jjil.algorithm;
 import jjil.core.Image;
 import jjil.core.PipelineStage;
 /**
- * Copies an input image to the output. This is not a deep copy, so if anything
+ * Copies an input image to the output. This is a shallow copy, so if anything
  * modifies the image contents the copy will be modified too.
  * @author webb
  */

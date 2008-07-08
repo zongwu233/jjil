@@ -27,14 +27,14 @@ import jjil.core.Gray8Image;
 
 /**
  * Forms the one-dimensional vector that is the vertical average
- * of the input gray image. Not a pipeline stage. The class is not
- * to be instantiated; all members are static.
+ * of the input gray image. Not a pipeline stage. The class may not
+ * be instantiated; all members are static.
  *
  * @author webb
  */
 public class GrayVertAvg {
     
-    /** Creates a new instance of GrayVertAvg. Not intended for use. */
+    /** Creates a new instance of GrayVertAvg. May not be used. */
     private GrayVertAvg() {
     }
     

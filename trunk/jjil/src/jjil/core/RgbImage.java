@@ -27,10 +27,11 @@ package jjil.core;
 /**
  * RgbImage is the type used to hold an RGB image, which
  * is stored as an ARGB image type (32-bits) with the
- * A byte always 0. It contains members that allow an
- * RgbImage to be transferred back and for from the Image
- * type defined in javax.microedition.lcdui.
- *
+ * A byte always 0. 
+ * <p>
+ * Implementation-specific libraries define methods that allow the creation
+ * of an RgbImage from a native image type. RgbImage is therefore the first and
+ * last jjil.core object used after capture and before display of an image.
  * @author webb
  */
 public class RgbImage extends Image {
@@ -66,7 +67,7 @@ public class RgbImage extends Image {
     }
     
     
-    /** Creates a copy of this image
+    /** Creates a shallow copy of this image
      *
      * @return the image copy.
      */

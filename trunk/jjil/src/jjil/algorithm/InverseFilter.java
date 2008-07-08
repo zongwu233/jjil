@@ -47,7 +47,7 @@ public class InverseFilter extends PipelineStage {
      * @param nGamma The gamma parameter from the inverse filter operation, corresponding to
      * a noise level. Higher gamma values imply a higher noise level and keep
      * the inverse filter from amplifying noisy components.
-     * @throws java.lang.jjil.core.Error If the point spread function is not square or a power of 2 in size.
+     * @throws jjil.core.Error If the point spread function is not square or a power of 2 in size.
      */
     public InverseFilter(Gray8Image psf, int nGamma) throws jjil.core.Error {
         if (psf.getWidth() != psf.getHeight()) {
@@ -76,7 +76,7 @@ public class InverseFilter extends PipelineStage {
     /**
      * Compute the inverse filter of the given image.
      * @param im the Gray8Image to compute the inverse filter on.
-     * @throws java.lang.jjil.core.Error If the input image is not a Gray8Image or not the same size as the 
+     * @throws jjil.core.Error If the input image is not a Gray8Image or not the same size as the 
      * point spread function.
      */
     public void Push(Image im) throws jjil.core.Error {

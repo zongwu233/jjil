@@ -50,7 +50,7 @@ public class Gray8MaskedImage extends Gray8Image {
      * image and mask.
      * @param imData the data image.
      * @param imMask the mask
-     * @throws java.lang.jjil.core.Error If either input is not a Gray8Image or the sizes are not the same.
+     * @throws jjil.core.Error If either input is not a Gray8Image or the sizes are not the same.
      */
     public Gray8MaskedImage(Gray8Image imData, Gray8Image imMask) 
         throws jjil.core.Error
@@ -74,9 +74,10 @@ public class Gray8MaskedImage extends Gray8Image {
         this.imMask = imMask;
     }
     
-    /** Copy this image
-     *
+    /**
+     * Copy this image
      * @return the image copy.
+     * @throws jjil.core.Error never (except in case of coding error).
      */
     public Image Clone() throws jjil.core.Error
     {
@@ -87,7 +88,7 @@ public class Gray8MaskedImage extends Gray8Image {
     }
     
     /**
-     * 
+     * Returns the input Gray8Image.
      * @return the input iamge
      */
     public Gray8Image getImage()
@@ -96,7 +97,7 @@ public class Gray8MaskedImage extends Gray8Image {
     }
     
     /**
-     * 
+     * Get the image mask, a Gray8Image.
      * @return the input mask
      */
     public Gray8Image getMask()

@@ -17,11 +17,12 @@ import jjil.core.RgbImage;
  */
 public class RgbImageJ2me {
     
-    /** Create an RgbImage from a javax.microedition.lcdui.Image
+    /**
+     * Create an RgbImage from a javax.microedition.lcdui.Image
      * image. The appropriate sized image area is created and
      * the contents are copied from the input.
-     *
      * @param image the javax.microedition.lcdui.Image image
+     * @return the RgbImage with the same contents as the javax.microedition.lcdui.Image.
      */
     static public RgbImage toRgbImage(javax.microedition.lcdui.Image image)
     {
@@ -44,6 +45,7 @@ public class RgbImageJ2me {
      * the contents of the RgbImage's A byte are not examined.
      * @return An javax.microedition.lcdui.Image object with contents equal
      * to this Image.
+     * @param rgb the input RgbImage which is to be converted to a javax.microedition.lcdui.Image.
      */
     static public javax.microedition.lcdui.Image toImage(RgbImage rgb)
     {

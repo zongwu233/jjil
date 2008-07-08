@@ -47,7 +47,7 @@ public class GrayLinComb implements Ladder.Join {
      * @param a Multiplier for first image.
      * @param b Multiplier for second image.
      * @param c Divisor for linear combination.
-     * @throws java.lang.jjil.core.Error if the divisor (c) is 0.
+     * @throws jjil.core.Error if the divisor (c) is 0.
      */
     public GrayLinComb(int a, int b, int c) throws jjil.core.Error {
         if (c == 0) {

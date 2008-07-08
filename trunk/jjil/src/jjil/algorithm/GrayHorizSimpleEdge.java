@@ -29,32 +29,21 @@ import jjil.core.Image;
 import jjil.core.PipelineStage;
 
 /**
- * Computes the horizontal Canny operator for an input gray image. The sigma
- * value for the operator is set in the constructor or setSigma. All calculations
- * are done in integer (per CLDC 1.0) and the sigma value is specified as
- * multiplied by 10.0. The minimum value for the unmultiplied sigma is 0.1;
- * the maximum value is about 10.0. Larger sigma values give an operator which
- * is less sensitive to high frequencies and more sensitive to low frequencies.
- * <p>
- * Hungarian prefix is 'canny'.
+ * Computes a simple horizontal edge measure. The measure is simply the difference
+ * between the current pixel and the one to the left, clamped between Byte.MIN_VALUE
+ * and Byte.MAX_VALUE. The output replaces the input.
  * @author webb
  */
 public class GrayHorizSimpleEdge extends PipelineStage {
     
-    /** Creates a new instance of CannyHoriz 
-     *
-     * @param cSigma the sigma value for the operator, which is the sigma
-     * in the Gaussian distribution multipied by 10.0 and converted to integer.
-     * @throws jjil.core.Error is sigma is out of range.
+    /** Creates a new instance of GrayHorizSimpleEdge 
      */
     public GrayHorizSimpleEdge() {
     }
     
-    /** Apply the Canny operator horizontally to the input input image.
-     * The sigma value for the operator is set in the class constructor.
-     * We handle the borders of the image a little carefully to avoid creating
-     * spurious edges at them. The image value at the border is reflected so
-     * that image(0,-1), for example, is made equal to image(0,1). 
+    /** Compute a simple horizontal edge measure. The measure is simply the difference
+     * between the current pixel and the one to the left, clamped between Byte.MIN_VALUE
+     * and Byte.MAX_VALUE. The output replaces the input.
      *
      * @param image the input Gray8Image
      * @throws jjil.core.Error if image is not a Gray8Image

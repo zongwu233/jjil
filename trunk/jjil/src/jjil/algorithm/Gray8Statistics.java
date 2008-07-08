@@ -93,7 +93,7 @@ public class Gray8Statistics {
     /**
      * Return standard deviation, times 256 using Newton's iteration.
      * @return the standard deviation, times 256.
-     * @throws java.lang.ArithmeticException if the variance computed in Push() is less than zero.
+     * @throws jjil.core.Error if the variance computed in Push() is less than zero.
      */
     public int getStdDev() throws jjil.core.Error {
         // n = variance * 256 * 256 (for accuracy)

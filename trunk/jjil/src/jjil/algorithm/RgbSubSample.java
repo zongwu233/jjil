@@ -30,7 +30,7 @@ import jjil.core.RgbImage;
 
 /**
  * Pipeline stage reduces an RgbImage's size by subsampling WITHOUT
- * smoothing. This results in an incorrectly subsampled image but can be
+ * smoothing. This results in an aliased image but can be
  * done very quickly and the artifacts resulting from the subsampling can
  * themselves be useful for detection of certain kinds of objects such
  * as barcodes. This pipeline stage should be used with caution because
@@ -42,10 +42,11 @@ public class RgbSubSample extends PipelineStage {
     private int cTargetHeight;
     private int cTargetWidth;
     
-    /** Creates a new instance of RgbSubSample.
-     *
-     * @param cReduceWidth amount to reduce the width by
-     * @param cReduceHeight amount to reduce the height by
+    /**
+     * Creates a new instance of RgbSubSample.
+     * @param cTargetWidth the new width
+     * @param cTargetHeight the new height
+     * @throws jjil.core.Error if the target width or height is less than or equal to zero.
      */
     public RgbSubSample(int cTargetWidth, int cTargetHeight)
     	throws jjil.core.Error {

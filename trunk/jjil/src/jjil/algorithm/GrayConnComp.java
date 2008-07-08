@@ -34,9 +34,9 @@ import jjil.core.RgbImage;
 import jjil.core.Sequence;
 
 /**
- * Gray connected components. Input is a gray image. Pixels with value
- * Byte.MIN_VALUE are taken to be background. Other pixels are labeled with
- * unique labels. The connected component image can be retrieved, as can the
+ * Gray connected components. Input is a Gray8Image. Pixels with value
+ * Byte.MIN_VALUE are taken to be background. Other connected pixels are labeled 
+ * with unique labels. The connected component image can be retrieved, as can the
  * connected component bounding rectangles, sorted by area.
  * 
  * @author webb
@@ -104,18 +104,17 @@ public class GrayConnComp {
 	}
 
 	/**
-	 * Returns the nComponent'th bounding rectangle in order by size. Sorts only
-	 * as many components as are necessary to reach the requested component.
-	 * Does this by observing the state of rSortedLabels. If it is null, it has
-	 * to be allocated. If the nComponent'th element is null, more need to be
-	 * copied from pqLabels. This is done by copying and deleting the minimum
-	 * element until we reach the requested component.
-	 * 
-	 * @param nComponent:
-	 *            the number of the component to return.
-	 * @return the nComponent'th bounding rectangle, ordered by pixel count,
-	 *         largest first
-	 */
+     * Returns the nComponent'th bounding rectangle in order by size. Sorts only
+     * as many components as are necessary to reach the requested component.
+     * Does this by observing the state of rSortedLabels. If it is null, it has
+     * to be allocated. If the nComponent'th element is null, more need to be
+     * copied from pqLabels. This is done by copying and deleting the minimum
+     * element until we reach the requested component.
+     * @return the nComponent'th bounding rectangle, ordered by pixel count,
+     *         largest first
+     * @param nComponent the number of the component to return.
+     * @throws jjil.core.Error if nComponent is greater than the number of components available.
+     */
 	public Rect getComponent(int nComponent) throws jjil.core.Error {
 		// see if we've created the sorted labels array
 		// allocate it if we haven't.
@@ -148,11 +147,11 @@ public class GrayConnComp {
 	}
 
 	/**
-	 * Get the number of connected components in the labeled image. Computes the
-	 * components from the labeled image if necessary.
-	 * 
-	 * @return the number of connected components.
-	 */
+     * Get the number of connected components in the labeled image. Computes the
+     * components from the labeled image if necessary.
+     * @return the number of connected components.
+     * @throws jjil.core.Error if BinaryHeap returns jjil.core.Error due to coding error.
+     */
 	public int getComponents() throws jjil.core.Error {
 		// see if we've already calculated the components
 		if (this.bComponents) {
@@ -230,6 +229,7 @@ public class GrayConnComp {
 				   	null);
 		}
 		// initialize the label lookup array
+                EquivalenceClass.reset();
 		this.reClasses = new EquivalenceClass[image.getWidth() * image.getHeight()];
 
 		// note that we've not computed the final labels or

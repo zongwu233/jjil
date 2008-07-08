@@ -38,7 +38,7 @@ public class Gray32Div extends PipelineStage {
     /**
      * Creates a new instance of Gray32Div.
      * @param nDivisor The number to divide the input image by.
-     * @throws java.lang.jjil.core.Error if the divisor is 0.
+     * @throws jjil.core.Error if the divisor is 0.
      */
     public Gray32Div(int nDivisor) throws jjil.core.Error {
         setDivisor(nDivisor);
@@ -72,7 +72,7 @@ public class Gray32Div extends PipelineStage {
     /**
      * Changes divisor.
      * @param nDivisor The new divisor.
-     * @throws java.lang.jjil.core.Error If the divisor is 0.
+     * @throws jjil.core.Error if the divisor is 0.
      */
     public void setDivisor(int nDivisor) throws jjil.core.Error {
         if (nDivisor == 0) {

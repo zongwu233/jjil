@@ -99,10 +99,18 @@ public class Error extends jjil.core.Error {
             LS.getMessage("WARP_START_ROW_GE_END_ROW");
     }
     
+    /**
+     * Copy constructor.
+     * @param e the Error object to copy.
+     */
     public Error(jjil.core.Error e) {
         super(e);
     }
         
+    /**
+     * Get a localized message for the Error.
+     * @return a localized String describing the Error.
+     */
     public String getLocalizedMessage() {
         String szResult = null;
         switch (this.getPackage()) {

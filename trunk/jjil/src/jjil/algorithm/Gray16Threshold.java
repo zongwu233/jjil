@@ -29,7 +29,7 @@ import jjil.core.Image;
 import jjil.core.PipelineStage;
 
 /**
- * Threshold. Output is a Gray8Image with values greater than threshold
+ * Threshold. Output is a Gray16Image with values greater than threshold
  * set to Byte.MAX_VALUE, below threshold set to Byte.MIN_VALUE. Input
  * is a Gray8Image.
  * @author webb
@@ -38,7 +38,10 @@ public class Gray16Threshold extends PipelineStage {
 	int nThreshold;
 	Gray8Image imageOutput = null;
     
-    /** Creates a new instance of Gray16Threshold */
+    /**
+     * Creates a new instance of Gray16Threshold
+     * @param nThreshold the threshold.
+     */
     public Gray16Threshold(int nThreshold) {
     	this.nThreshold = nThreshold;
     }
@@ -78,6 +81,10 @@ public class Gray16Threshold extends PipelineStage {
         super.setOutput(this.imageOutput);
     }
     
+    /**
+     * 
+     * @return a String describing the class instance.
+     */
     public String toString() {
     	return super.toString() + "(" + this.nThreshold + ")"; //$NON-NLS-1$ //$NON-NLS-2$
     }

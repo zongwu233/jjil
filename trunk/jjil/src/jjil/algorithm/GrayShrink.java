@@ -73,7 +73,7 @@ public class GrayShrink extends PipelineStage {
     /**
      * Process an input Gray8Image, producing a new shrunk output image.
      * @param image The input Gray8Image.
-     * @throws java.lang.jjil.core.Error if input is not a Gray8Image, or the input image size is smaller (either 
+     * @throws jjil.core.Error if input is not a Gray8Image, or the input image size is smaller (either 
      * horizontally or vertically) than the desired size.
      */
     public void Push(Image image) throws jjil.core.Error {

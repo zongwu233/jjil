@@ -38,7 +38,8 @@ public class GrayAdd implements Ladder.Join {
     public GrayAdd() {
     }
     
-    /** Adds two gray images. Result is clamped between -128 and 127.
+    /** Adds two Gray8Image's. Result is clamped between Byte.MIN_VALUE and 
+     *  Byte.MAX_VALUE. The first input image is replaced by the result.
      *
      * @param imageFirst the first image (and output)
      * @param imageSecond the second image

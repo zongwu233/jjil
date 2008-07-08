@@ -33,8 +33,6 @@ import jjil.core.Point;
  * Finds a line in an array of points using Hough transform. Not a pipeline
  * stage. Returns the most likely line as slope and Y-intercept through
  * member access functions.
- * <p>
- * Hungarian prefix is 'fit'.
  * @author webb
  */
 public class LinefitHough {

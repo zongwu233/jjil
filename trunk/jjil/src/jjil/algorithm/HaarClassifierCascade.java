@@ -49,7 +49,7 @@ import jjil.core.Image;
  * also includes multiprocessor support. <br>
  * Once the Haar classifier has been trained using the OpenCV HaarTraining
  * application, the cascade has to be transformed into a text file that can be
- * loaded into this code. This is done with a C++ program I wrote called 
+ * loaded into this code. This is done with a C++ program called 
  * haar2j2me. Haar2j2me changes the floating-point values in the OpenCV's Haar
  * cascade into integer, scaling appropriately, and greatly reduces the size
  * of the file (the XML files produced by HaarTraining are just too large to fit
@@ -95,8 +95,9 @@ public abstract class HaarClassifierCascade {
      * @param i The input Gray8Image. The image size must be equal to the expected size
      * (as given by getWidth() and getHeight()).
      * @return true iff the input image passes all the tests in the Haar cascade.
+     * @throws jjil.core.Error if the input image is not a Gray8Image or is the wrong size.
      */
-    public abstract boolean eval(Image i) throws jjil.core.Error, IOException;
+    public abstract boolean eval(Image i) throws jjil.core.Error;
     
     /**
      * Support method for reading integers from an input stream. The single-character
@@ -106,11 +107,10 @@ public abstract class HaarClassifierCascade {
      * The separator character can be any non-numeric character.<br>
      * Note that I can't use Integer.parseInt because I don't know how many 
      * characters are to be read.
-     * @param isr The input stream.
      * @return the next integer read from the input stream.
+     * @param isr The input stream.
+     * @throws jjil.core.Error if there is a parse error in the file.
      * @throws java.io.IOException if the read method of isr returns an IOException.
-     * @throws jjil.algorithm.HaarClassifierCascade.ParseException if the input stream ends before the end of the integer (i.e., there is not a
-     * separator character after the integer.)
      */
     protected static int readInt(InputStreamReader isr) 
         throws jjil.core.Error, IOException, IOException
@@ -400,7 +400,7 @@ public abstract class HaarClassifierCascade {
          * are tilted, 0 if not.
          * @throws java.io.IOException if the input stream reader methods return IOException, or we get an early
          * end of file.
-         * @throws jjil.algorithm.HaarClassifierCascade.ParseException if the input is not in the expected format.
+         * @throws jjil.core.Error if the input is not in the expected format.
          */
         public HaarFeature(InputStreamReader isr)
            throws jjil.core.Error, IOException 
@@ -506,7 +506,7 @@ public abstract class HaarClassifierCascade {
      * @return The created HaarClassifierCascade. This will always be of
      * type HaarClassifierStumpBase.
      * @throws java.io.IOException if the read from isr returns an IOException, or if end of file is encountered unexpectedly.
-     * @throws jjil.algorithm.HaarClassifierCascade.ParseException If the input doesn't match what is expected.
+     * @throws jjil.core.Error If the input doesn't match what is expected.
      */
     public static HaarClassifierCascade fromStream(InputStreamReader isr) 
            throws jjil.core.Error, IOException 
@@ -593,7 +593,7 @@ class HaarClassifierTreeBase extends HaarClassifierCascade
     private HaarStageClassifier child;
     private HaarClassifierTreeBase parent;
 
-    public boolean eval(Image image) throws jjil.core.Error, IOException {
+    public boolean eval(Image image) throws jjil.core.Error {
         if (!(image instanceof Gray32Image)) {
              throw new Error(
             				Error.PACKAGE.ALGORITHM,
@@ -777,7 +777,7 @@ class  HaarClassifierStumpBase extends HaarClassifierCascade {
     };
 
        
-        public boolean eval(Image image) throws jjil.core.Error, IOException {
+        public boolean eval(Image image) throws jjil.core.Error {
             if (!(image instanceof Gray8Image)) {
                  throw new Error(
                                  Error.PACKAGE.ALGORITHM,

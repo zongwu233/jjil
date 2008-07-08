@@ -59,10 +59,10 @@ public abstract class PipelineStage
         return !this.fReady;
     }
     
-    /** Returns the current output, and pops it off the stack.
-     *
+    /**
+     * Returns the current output, and pops it off the stack.
      * @return the current output
-     * @throws IllegalStateException if no output is available
+     * @throws jjil.core.Error if no output is available
      */
     public Image Front() throws jjil.core.Error
     {
@@ -80,9 +80,10 @@ public abstract class PipelineStage
         return imageResult;
     }
        
-    /** Actual processing is done in the derived class here.
-     *
+    /**
+     * Actual processing is done in the derived class here.
      * @param imageInput the input image
+     * @throws jjil.core.Error typically, when the image is not of the expected type.
      */
     public abstract void Push(Image imageInput) throws jjil.core.Error;
     

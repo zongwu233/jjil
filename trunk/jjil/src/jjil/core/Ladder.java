@@ -40,6 +40,8 @@ public class Ladder extends PipelineStage {
          * @param imageFirst First image
          * @param imageSecond Second image
          * @return the combined image
+         * @throws jjil.core.Error typically, when the two images are not the expected type or are of other
+         * than the required size.
          */
         Image DoJoin(Image imageFirst, Image imageSecond) throws jjil.core.Error;
     }
@@ -76,7 +78,7 @@ public class Ladder extends PipelineStage {
      * Pass the input image to both pipeines, then combine the two outputs into one
      * using the join operation
      * @param image Input image
-     * @throws IllegalStateException if either pipeline does not produce an output
+     * @throws jjil.core.Error if either pipeline does not produce an output
      * after being supplied with the input.
      */
     public void Push(Image image) throws jjil.core.Error {

@@ -29,7 +29,7 @@ import jjil.core.Image;
 import jjil.core.PipelineStage;
 
 /**
- * Computes absolute value of a gray image.
+ * Computes absolute value of a Gray8Image, replacing the original.
  * @author webb
  */
 public class GrayAbs extends PipelineStage {
@@ -41,8 +41,8 @@ public class GrayAbs extends PipelineStage {
     }
     
     /** 
-	 * Compute absolute value of the image. Input is range
-	 * Byte.MIN_VALUE to Byte.MAX_VALUE; output is 0..Byte.MAX_VALUE
+     * Compute absolute value of the image. Input is range
+     * Byte.MIN_VALUE to Byte.MAX_VALUE; output is 0..Byte.MAX_VALUE
      * @param image the input Gray8Image
      * @throws jjil.core.Error if image is not a Gray8Image
      */

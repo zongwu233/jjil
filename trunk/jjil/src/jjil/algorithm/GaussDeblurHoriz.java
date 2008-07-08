@@ -169,8 +169,7 @@ public class GaussDeblurHoriz extends PipelineStage {
      * frequency domain) less than this value. The Gaussian elements have been scaled
      * by 256, so a value equal to, say, 64 keeps the maximum amplification of the
      * deconvolution less than 256/64 = 4.
-     * @throws java.lang.jjil.core.Error If the standard deviation is less than 0 or greater than the maximum number
-     * of precomputed components -- currently 100 = a standard deviation of 1.00.
+     * @throws jjil.core.Error if the standard deviation parameter is out of range.
      */
     public GaussDeblurHoriz(int nStdDev, int nNoise) throws jjil.core.Error {
         setStdDev(nStdDev);
@@ -184,6 +183,7 @@ public class GaussDeblurHoriz extends PipelineStage {
      * of the given standard deviation and which has a background noise level less
      * than the given level.
      * @param im Input Gray8Image.
+     * @throws jjil.core.Error if the input is not a Gray8Image or is not square.
      */
     public void Push(Image im) throws jjil.core.Error {
         if (im.getWidth() != im.getHeight()) {
@@ -235,8 +235,7 @@ public class GaussDeblurHoriz extends PipelineStage {
     /**
      * Changes current standard deviation value.
      * @param nStdDev Input standard deviation, multiplied by 100.
-     * @throws java.lang.jjil.core.Error If the stanard deviation is less than 0 or greater than the maximum --
-     * currently 100 = a standard deviation of 1.00.
+     * @throws jjil.core.Error if the parameter is out of range.
      */
     public void setStdDev(int nStdDev) throws jjil.core.Error {
         if (nStdDev < 0 || nStdDev > this.rxnCoeffs.length) {

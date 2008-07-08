@@ -37,8 +37,6 @@ import jjil.core.RgbVal;
  * < limit.
  * <p>
  * The test direction can be reversed using the dir parameter.
- * <p>
- * Hungarian prefix is 'rc'.
  * @author webb
  */
 public class RgbClip extends PipelineStage {

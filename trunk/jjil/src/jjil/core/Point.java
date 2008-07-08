@@ -42,13 +42,17 @@ public class Point {
         this.wY = wY;
     }
     
-    /** Return the point's x-coordinate.
+    /**
+     * Return the point's x-coordinate.
+     * @return the horizontal position of the point.
      */
     public int getX() {
         return this.wX;
     } 
     
-    /** Return the point's y-coordinate.
+    /**
+     * Return the point's y-coordinate.
+     * @return the vertical position of the point.
      */
     public int getY() {
         return this.wY;
