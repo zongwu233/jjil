@@ -36,7 +36,7 @@ import jjil.core.PipelineStage;
  * Computes the inverse FFT of the input Complex32Image. The output is a Gray8Image,
  * which is the magnitude of the inverse FFT. The output can be scaled so the
  * maximum and minimum values of the magnitude are mapped to Byte.MAX_VALUE and
- * Byte.MIN_VALUE>
+ * Byte.MIN_VALUE.
  * @author webb
  */
 public class IFftComplex32 extends PipelineStage {
@@ -54,7 +54,7 @@ public class IFftComplex32 extends PipelineStage {
     /**
      * Perform the inverse FFT on the input Complex32Image, producing a Gray8Image.
      * @param im Input image. Must be a power of 2 in size and of type Complex32Image.
-     * @throws java.lang.jjil.core.Error if the input is not a power of 2 in size or not a Complex32Image.
+     * @throws jjil.core.Error if the input is not a power of 2 in size or not a Complex32Image.
      */
     public void Push(Image im) throws jjil.core.Error {
         if (!(im instanceof Complex32Image)) {

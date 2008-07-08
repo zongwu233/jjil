@@ -43,7 +43,7 @@ public class RgbStretch extends PipelineStage {
     private int cHeight;
     private int cWidth;
     private Sequence seqR, seqG, seqB;
-    /** Creates a new instance of GrayRectStretch. 
+    /** Creates a new instance of RgbStretch. 
      *
      * @param cWidth new image width
      * @param cHeight new image height
@@ -75,7 +75,7 @@ public class RgbStretch extends PipelineStage {
     /**
      * Process an image.
      * @param image the input RgbImage.
-     * @throws java.lang.jjil.core.Error if the input is not an RgbImage, or is smaller than the target image either
+     * @throws jjil.core.Error if the input is not an RgbImage, or is smaller than the target image either
      * horizontally or vertically.
      */
     public void Push(Image image) throws jjil.core.Error {

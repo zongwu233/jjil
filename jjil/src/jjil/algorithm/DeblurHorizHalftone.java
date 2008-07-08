@@ -39,17 +39,6 @@ public class DeblurHorizHalftone extends PipelineStage {
      
     /**
      * Creates a new instance of InverseFilter.
-     * @param nStdDev Standard deviation of the Gaussian blur operator to deblur with. The
-     * value is multiplied by 100 so a value of 5 corresponds to a standard deviation
-     * of the Gaussian of 0.05.
-     * @param nNoise The expected noise level in the input image. The deconvolution has the
-     * potential to amplify noise levels since it is a high pass filter. The noise
-     * parameter limits this by not dividing by any Gaussian element (in the 
-     * frequency domain) less than this value. The Gaussian elements have been scaled
-     * by 256, so a value equal to, say, 64 keeps the maximum amplification of the
-     * deconvolution less than 256/64 = 4.
-     * @throws java.lang.IllegalArgumentException If the standard deviation is less than 0 or greater than the maximum number
-     * of precomputed components -- currently 100 = a standard deviation of 1.00.
      */
     public DeblurHorizHalftone() {
    }
@@ -59,6 +48,7 @@ public class DeblurHorizHalftone extends PipelineStage {
      * of the given standard deviation and which has a background noise level less
      * than the given level.
      * @param im Input Gray8Image.
+     * @throws jjil.core.Error if the input is not of type Gray8Image.
      */
     public void Push(Image im) throws jjil.core.Error {
         if (!(im instanceof Gray8Image)) {

@@ -39,22 +39,23 @@ public interface PriorityQueue {
     /**
      * Insert into the priority queue, maintaining heap order.
      * Duplicates are allowed.
-     * @param x the item to insert.
      * @return may return a Position useful for decreaseKey.
+     * @param x the item to insert.
+     * @throws jjil.core.Error if x is not of the correct type or null.
      */
     Position insert( ComparableJ2me x ) throws jjil.core.Error;
     
     /**
      * Find the smallest item in the priority queue.
      * @return the smallest item.
-     * @throws UnderflowException if empty.
+     * @throws jjil.core.Error if the heap is empty.
      */
     ComparableJ2me findMin( ) throws jjil.core.Error;
     
     /**
      * Remove the smallest item from the priority queue.
      * @return the smallest item.
-     * @throws UnderflowException if empty.
+     * @throws jjil.core.Error if empty.
      */
     ComparableJ2me deleteMin( ) throws jjil.core.Error;
     

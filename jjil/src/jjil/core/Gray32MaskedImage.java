@@ -27,8 +27,9 @@
 package jjil.core;
 
 /**
- * Gray32MaskedImage is the image type used to store a signed
- * 8-bit image and its associated mask. Mask value = Byte.MIN_VALUE is considered
+ * Gray32MaskedImage is the image type used to store a 32-bit integer
+ * image and its associated 8-bit mask. Mask value = Byte.MIN_VALUE is 
+ * considered
  * to be unmasked; all other values are masked.
  * @author webb
  */
@@ -50,7 +51,7 @@ public class Gray32MaskedImage extends Gray32Image {
      * image and mask.
      * @param imData the data image.
      * @param imMask the mask
-     * @throws java.lang.jjil.core.Error If either input is not a Gray8Image or the sizes are not the same.
+     * @throws jjil.core.Error If either input is not a Gray8Image or the sizes are not the same.
      */
     public Gray32MaskedImage(Gray32Image imData, Gray8Image imMask) 
         throws jjil.core.Error
@@ -59,11 +60,11 @@ public class Gray32MaskedImage extends Gray32Image {
         if (imData.getWidth() != imMask.getWidth() ||
             imData.getHeight() != imMask.getHeight()) {
             throw new Error(
-            				Error.PACKAGE.CORE,
-            				ErrorCodes.IMAGE_MASK_SIZE_MISMATCH,
-            				imData.toString(),
-            				imMask.toString(),
-            				null);
+                            Error.PACKAGE.CORE,
+                            ErrorCodes.IMAGE_MASK_SIZE_MISMATCH,
+                            imData.toString(),
+                            imMask.toString(),
+                            null);
         }
         System.arraycopy(
                 imData.getData(),
@@ -74,9 +75,10 @@ public class Gray32MaskedImage extends Gray32Image {
         this.imMask = imMask;
     }
     
-    /** Copy this image
-     *
+    /**
+     * Copy this image
      * @return the image copy.
+     * @throws jjil.core.Error if Gray32MaskedImage constructor, indicating coding error.
      */
     public Image Clone() throws jjil.core.Error
     {
@@ -87,7 +89,7 @@ public class Gray32MaskedImage extends Gray32Image {
     }
     
     /**
-     * 
+     * Get the input Gray32Image.
      * @return the input iamge
      */
     public Gray32Image getImage()
@@ -96,7 +98,7 @@ public class Gray32MaskedImage extends Gray32Image {
     }
     
     /**
-     * 
+     * Get the input Gray8Image mask.
      * @return the input mask
      */
     public Gray8Image getMask()

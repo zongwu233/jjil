@@ -83,6 +83,12 @@ public class Complex {
         return this;
     }
         
+    /**
+     * Divide the complex number by a real ineger.
+     * @param n the divisor.
+     * @return the Complex number resulting from the division (replaces this).
+     * @throws jjil.core.Error if n = 0
+     */
     public Complex div(int n) throws jjil.core.Error {
         if (n==0) {
             throw new Error(
@@ -100,8 +106,8 @@ public class Complex {
    /**
      * Divides one complex number by another
      * @param cx The complex number to divide by.
-     * @throws java.lang.jjil.core.Error If division by 0 is attempted, i.e., cx.square() is 0.
      * @return the result of dividing this number by cx.
+     * @throws jjil.core.Error If division by 0 is attempted, i.e., cx.square() is 0.
      */
     public Complex div(Complex cx) throws jjil.core.Error {
         int nShift = 0;
@@ -160,6 +166,7 @@ public class Complex {
     /**
      * Complex magnitude.
      * @return the magnitude of this number, i.e., sqrt(real**2 + imag**2)
+     * @throws jjil.core.Error if the square value computed is too large.
      */
     public int magnitude() throws jjil.core.Error {
         // special case when one component is 0
@@ -224,7 +231,7 @@ public class Complex {
     /**
      * Computes the absolute square.
      * @return The absolute square, i.e, real**2 + imag**2.
-     * @throws RuntimeException if Complex value is too large.
+     * @throws jjil.core.Error if Complex value is too large.
      */
     public int square() throws jjil.core.Error {
         if (Math.abs(this.nReal) > MathPlus.SCALE ||
@@ -254,7 +261,7 @@ public class Complex {
 
     /**
      * Multiplies a complex number by a real number.
-         * @param cx The complex number to multiply by.
+         * @param nX The complex number to multiply by.
      * @return The product of the two numbers.
      */
     public Complex times(int nX) {

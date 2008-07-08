@@ -39,7 +39,7 @@ public class Fft1d {
      * width.
      * @param nMaxWidth The maximum width to compute FFTs for. This is used to precompute the complex
      * roots of unity used in the FFT calculation. Must be a power of 2.
-     * @throws java.lang.jjil.core.Error If nMaxWidth is not a power of 2.
+     * @throws jjil.core.Error if width parameter is not a power of two.
      */
     public Fft1d(int nMaxWidth) throws jjil.core.Error {
         setMaxWidth(nMaxWidth);
@@ -49,8 +49,8 @@ public class Fft1d {
      * Computes forward FFT of the complex array.
      * @param x The complex array to compute the FFT of.
      * @return The FFT of the input.
-     * @throws java.lang.jjil.core.Error If the length of the arra is not a power of 2, or greater than the previosly
-     * specified maximum width.
+     * @throws jjil.core.Error if image size is not a power of two or is larger than maximum width set in 
+     * the constructor.
      */
     public Complex[] fft(Complex[] x) throws jjil.core.Error {
         int N = x.length;
@@ -124,10 +124,10 @@ public class Fft1d {
     // compute the inverse FFT of x[], for length a power of 2
     /**
      * Computes inverse FFT of the input complex array.
-     * @param x The input complex array.
-     * @throws java.lang.jjil.core.Error If the input array length is not a power of 2 or is greater than the 
-     * previously specified maximum width.
      * @return The FFT of the input.
+     * @param x The input complex array.
+     * @throws jjil.core.Error if the input size is not a power of two or is larger than the maximum
+     * set in the constructor.
      */
     public Complex[] ifft(Complex[] x) throws jjil.core.Error {
         int N = x.length;

@@ -92,7 +92,7 @@ public class Gray8SubImageGenerator extends PipelineStage {
     /**
      * Returns the next subimage.
      * @return a subimage within the input image, of type Gray8SubImage.
-     * @throws java.lang.IllegalStateException when there are no more subimages available (Empty() would return
+     * @throws jjil.core.Error when there are no more subimages available (Empty() would return
      * true.)
      */
      public Image Front() throws jjil.core.Error
@@ -138,7 +138,7 @@ public class Gray8SubImageGenerator extends PipelineStage {
      * Reinitializes the subimage generator and prepares it to generate the first
      * Gray8SubImage for the new input.
      * @param image The new input image (which must be of type Gray8Image).
-     * @throws java.lang.jjil.core.Error if image is not of type Gray8Image, or is too small
+     * @throws jjil.core.Error if image is not of type Gray8Image, or is too small
      * (less than the size of the subimages we're supposed to
      * be generating).
      */

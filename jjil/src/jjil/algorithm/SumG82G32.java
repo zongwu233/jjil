@@ -24,6 +24,12 @@ import jjil.core.Image;
 import jjil.core.PipelineStage;
 
 /**
+ * Forms integral image by summing pixels in a
+ * Gray8[Sub]Image to form a Gray32[Sub]Image.<br>
+ * The computation is O(i,j) = Sum for k<=i,l<=j of I(k,l)<br>
+ * Note output type is 32 bit because otherwise we'd get
+ * truncation. With 32-bit output we can go up to 
+ * 65,536 = 256x256 pixels in the input image.
  *
  * @author webb
  */
@@ -35,6 +41,12 @@ public class SumG82G32 extends PipelineStage {
     public SumG82G32() {
     }
     
+    /**
+     * Form the cumulative sum<p>
+     * Output(i,j) = Sum(k&le;i,j&le;j)[Input(k,l)]
+     * @param image input image.
+     * @throws jjil.core.Error if the input is not a Gray8Image.
+     */
     public void Push(Image image) throws jjil.core.Error
     {
         if (!(image instanceof Gray8Image)) {

@@ -28,8 +28,7 @@ public class EquivalenceClass {
 	private EquivalenceClass eParent;
 	
 	/**
-	 * Create a new set with label x
-	 * @param x: the integer label to assign to this set.
+	 * Create a new set
 	 */
 	public EquivalenceClass() {
 		this.nLabel = EquivalenceClass.nNextLabel ++;
@@ -71,11 +70,18 @@ public class EquivalenceClass {
 	private void setParent(EquivalenceClass e) {
 		this.eParent = e;
 	}
+        
+    /** Must be called once when a new set of equivalence classes is
+     *  to be defined.
+     */
+    public static void reset() {
+        EquivalenceClass.nNextLabel = 0;
+    }
 	
 	/**
 	 * Unifies this class with another class. After this operation
 	 * this and y will be in the same equivalence class.
-	 * @param y: the class to unify with.
+	 * @param y the class to unify with.
 	 */
 	public void union(EquivalenceClass y) {
 		EquivalenceClass xRoot = this.find();

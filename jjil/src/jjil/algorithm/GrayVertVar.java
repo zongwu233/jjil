@@ -45,7 +45,9 @@ public class GrayVertVar extends PipelineStage {
 	 */
 	Gray16Image g16 = null;
     
-    /** Creates a new instance of GrayVertVar 
+    /**
+     * Creates a new instance of GrayVertVar
+     * @param nWindow height of window to calculate variance over.
      */
     public GrayVertVar(int nWindow) {
     	this.nWindow = nWindow;

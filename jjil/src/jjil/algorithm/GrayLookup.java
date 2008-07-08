@@ -41,7 +41,7 @@ public class GrayLookup extends PipelineStage {
     /**
      * Creates a new instance of GrayLookup.
      * @param table The mapping table. Element i maps gray value Byte.MinValue + i to table[i].
-     * @throws java.lang.jjil.core.Error when table is not a 256-element array.
+     * @throws jjil.core.Error when table is not a 256-element array.
      */
     public GrayLookup(byte[] table) throws jjil.core.Error {
         setTable(table);
@@ -60,7 +60,7 @@ public class GrayLookup extends PipelineStage {
     /**
      * Maps input Gray8Image through the lookup table, replacing values in the image.
      * @param image the input image (output replaces input).
-     * @throws java.lang.jjil.core.Error if image is not a Gray8Image.
+     * @throws jjil.core.Error if image is not a Gray8Image.
      */
     public void Push(Image image) throws jjil.core.Error {
         if (!(image instanceof Gray8Image)) {
@@ -83,7 +83,7 @@ public class GrayLookup extends PipelineStage {
      * Assign a new lookup table. Images passed to Push() after setTable is called
      * will be mapped by the new image.
      * @param table The lookup table. Input image value g is mapped to table[g + Byte.MinValue]
-     * @throws java.lang.jjil.core.Error if table is not a 256-element array.
+     * @throws jjil.core.Error if table is not a 256-element array.
      */
     public void setTable(byte[] table) throws jjil.core.Error {
         if (table.length != 256) {

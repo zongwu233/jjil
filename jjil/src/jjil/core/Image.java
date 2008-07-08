@@ -29,8 +29,6 @@ package jjil.core;
  * It is used for passing images between pipeline stages.
  * The image dimensions are stored here; the image format
  * and the actual image data are defined in the derived classes.
- * <p>
- * Hungarian prefix is 'image'.
  * @author webb
  */
 public abstract class Image {
@@ -53,9 +51,10 @@ public abstract class Image {
         this.cHeight = cHeight;
     }
     
-    /** Makes a copy of the image
-     *
+    /**
+     * Makes a copy of the image
      * @return the image copy
+     * @throws jjil.core.Error never (needed for override).
      */
     public abstract Image Clone() throws jjil.core.Error;
     

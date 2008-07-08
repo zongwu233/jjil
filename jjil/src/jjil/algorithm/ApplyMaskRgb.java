@@ -29,9 +29,7 @@ import jjil.core.Error;
 import jjil.core.Gray8Image;
 import jjil.core.RgbImage;
 import jjil.core.RgbVal;
-/** ApplyMaskRgb converts an 8-bit gray image to RGB by replicating the 
- * gray values into R, G, and B. The signed byte values in the gray
- * image are changed into unsigned byte values in the ARGB word.
+/** ApplyMaskRgb shows a mask on an RGB image by making all the unmasked pixels gray.
  *
  * @author webb
  */
@@ -43,11 +41,11 @@ public class ApplyMaskRgb {
     
     /**
      * Highlights an area in a RGB image by turning the non-masked areas gray and dimming them.
+     * @return the masked color image.
      * @param imRgb the input RGB image.
      * @param imMask The input mask. Pixels with the value Byte.MinValue are unmasked. Everything else is 
      * considered to be masked.
-     * @return the masked color image.
-     * @throws IllegalArgumentException if the input sizes do not match
+     * @throws jjil.core.Error if the input sizes do not match
      */
     public RgbImage Push(
             RgbImage imRgb,

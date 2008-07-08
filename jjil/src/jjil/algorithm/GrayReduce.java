@@ -30,10 +30,8 @@ import jjil.core.PipelineStage;
 
 /**
  * Pipeline stage reduces an image's size by rectangular averaging. The
- * reduction factor must evenly divide the image size. There is no
- * smoothing done.
- * <p>
- * Hungarian prefix is 'red'.
+ * reduction factor must evenly divide the image size. No
+ * smoothing is done.
  *
  * @author webb
  */
@@ -41,10 +39,11 @@ public class GrayReduce extends PipelineStage {
     private int cReduceHeight;
     private int cReduceWidth;
     
-    /** Creates a new instance of GrayReduce.
-     *
+    /**
+     * Creates a new instance of GrayReduce.
      * @param cReduceWidth amount to reduce the width by
      * @param cReduceHeight amount to reduce the height by
+     * @throws jjil.core.Error if the reduce width or height is less than or equal to zero.
      */
     public GrayReduce(int cReduceWidth, int cReduceHeight) 
     	throws jjil.core.Error {

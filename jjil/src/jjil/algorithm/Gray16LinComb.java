@@ -32,15 +32,16 @@ import jjil.core.Ladder;
  * Forms the linear combination of two Gray16Images. Designed to be used as a
  * combining stage in a Ladder. Calculates (nA * left image + nB * right image) / nC
  * @author webb
- * @param nA: the multiplier of the left image
- * @param nB: the multiplier of the right image
- * @param nC: the divisor.
  */
 public class Gray16LinComb implements Ladder.Join {
 	private int nA, nB, nC;
     
     /**
-     * Creates a new instance of Gray16LinComb.
+     * Creates a new instance of Gray16LinComb which will form the linear combination of 
+     * two images by calculating (nA * first image + nB * second image) / nC.
+     * @param nA the multiplier for the first image.
+     * @param nB the multiplier for the second image.
+     * @param nC the divisor.
      */
     public Gray16LinComb(int nA, int nB, int nC) {
     	this.nA = nA;
@@ -49,11 +50,13 @@ public class Gray16LinComb implements Ladder.Join {
     }
     
     /**
-     * Subtract one Gray16Image from another.
+     * Form the linear combination of two Gray16Images. Output replaces the first
+     * input.
      * @param imageFirst the left-hand image image (and output)
      * @param imageSecond the right-hand image image
-     * @throws jjil.core.Error if the image is not a gray 16-bit
+     * @throws jjil.core.Error if either image is not a gray 16-bit
      * image.
+     * @return the resulting Gray16Image.
      */
     public Image DoJoin(Image imageFirst, Image imageSecond)
         throws jjil.core.Error

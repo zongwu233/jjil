@@ -31,8 +31,6 @@ import jjil.core.PipelineStage;
 /**
  * This PipelineStage warps a trapezoid in the input gray image into a 
  * rectangular output image.
- * <p>
- * Hungarian prefix is 'warp'.
  * @author webb
  */
 public class GrayTrapWarp extends PipelineStage {

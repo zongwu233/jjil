@@ -31,14 +31,16 @@ import jjil.core.PipelineStage;
 /**
  * Equalize the histogram of a gray image.
  * <p>
- * Hungarian prefix is 'he'.
  * @author webb
  */
 public class GrayHistEq extends PipelineStage {
     private int cPixels = 0;
     private GrayHistMatch histMatch;
     
-    /** Creates a new instance of GrayHistEq */
+    /**
+     * Creates a new instance of GrayHistEq
+     * @throws jjil.core.Error if GrayHistMatch throws jjil.core.Error due to coding error.
+     */
     public GrayHistEq() throws jjil.core.Error {
         int[] nullHist = new int[256];
         this.histMatch = new GrayHistMatch(nullHist);

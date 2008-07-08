@@ -36,7 +36,6 @@ import jjil.core.PipelineStage;
  * the maximum value is about 10.0. Larger sigma values give an operator which
  * is less sensitive to high frequencies and more sensitive to low frequencies.
  * <p>
- * Hungarian prefix is 'canny'.
  * @author webb
  */
 public class CannyHoriz extends PipelineStage {
@@ -158,24 +157,24 @@ public class CannyHoriz extends PipelineStage {
         {-11, -11, -10, -9, -8, -7, -5, -3, -1, 0, 1, 2, 4, 5, 5, 6, 6, 6, 6, 6, 6, 5},
        };
     
-    /** Creates a new instance of CannyHoriz 
-     *
+    /**
+     * Creates a new instance of CannyHoriz
      * @param cSigma the sigma value for the operator, which is the sigma
      * in the Gaussian distribution multipied by 10.0 and converted to integer.
-     * @throws IllegalArgumentException is sigma is out of range.
+     * @throws jjil.core.Error if cSigma is out of range.
      */
     public CannyHoriz(int cSigma) throws jjil.core.Error {
         this.setSigma(cSigma);
     }
     
-    /** Apply the Canny operator horizontally to the input input image.
+    /**
+     * Apply the Canny operator horizontally to the input input image.
      * The sigma value for the operator is set in the class constructor.
      * We handle the borders of the image a little carefully to avoid creating
      * spurious edges at them. The image value at the border is reflected so
-     * that image(0,-1), for example, is made equal to image(0,1). 
-     *
+     * that image(0,-1), for example, is made equal to image(0,1).
      * @param image the input Gray8Image
-     * @throws IllegalArgumentException if image is not a Gray8Image
+     * @throws jjil.core.Error if the input is not a Gray8Image.
      */
     public void Push(Image image) throws jjil.core.Error {
         if (!(image instanceof Gray8Image)) {
@@ -232,14 +231,12 @@ public class CannyHoriz extends PipelineStage {
         return this.cSigma;
     }
     
-    /** sets a new value for sigma. Sigma controls the frequency of edges
+    /**
+     * sets a new value for sigma. Sigma controls the frequency of edges
      * that the operator responds to. A small sigma value gives higher
      * frequency edges, while a larger sigma gives lower frequency edges.
-     *
      * @param cSigma the new sigma value
-     * @throws IllegalArgumentException if cSigma is out of range --
-     * less than or equal to 1 or greater than the number of coefficients
-     * we're precomputed.
+     * @throws jjil.core.Error if cSigma is out of range.
      */
     public void setSigma(int cSigma) throws jjil.core.Error {
         if (cSigma <= 1 || cSigma >= this.nCoeff.length) {

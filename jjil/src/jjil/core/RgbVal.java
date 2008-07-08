@@ -53,6 +53,7 @@ public class RgbVal {
      * To convert these to the returned signed byte value we must add
      * Byte.MIN_VALUE.
      * @return the blue byte value, converted to a signed byte
+     * @param ARGB the input color ARGB word.
      */
     public static byte getB(int ARGB) {
         return toSignedByte((byte)(ARGB & 0xff));
@@ -82,20 +83,23 @@ public class RgbVal {
         return toSignedByte((byte) ((ARGB>>16) & 0xff));
     }
     
-    /** Converts from an unsigned bit field (as stored in an ARGB word
+    /**
+     * Converts from an unsigned bit field (as stored in an ARGB word
      * to a signed byte value (that we can do computation on).
      * @return the signed byte value
+     * @param b the unsigned byte value.
      */
     public static byte toSignedByte(byte b) {
         return (byte) (b + Byte.MIN_VALUE);
     }
     
-    /** Converts from a signed byte value (which we do computation on)
+    /**
+     * Converts from a signed byte value (which we do computation on)
      * to an unsigned bit field (as stored in an ARGB word). The result
      * is returned as an int because the unsigned 8 bit value cannot be
      * represented as a byte.
-     *
      * @return the unsigned bit field
+     * @param b the signed byte value.
      */
     public static int toUnsignedInt(byte b) {
         return (b - Byte.MIN_VALUE);

@@ -76,6 +76,8 @@ public class DetectHaarMultiScale extends PipelineStage {
      * wherever you got this code from.
      * @param nMinScale Minimum (finest) scale at which features will be detected.
      * @param nMaxScale Maximum (coarsest) scale at which features will be detected.
+     * @throws jjil.core.Error if there is an error in the input file.
+     * @throws java.io.IOException if there is an I/O error reading the input file.
      */
     public DetectHaarMultiScale(InputStream is, int nMinScale, int nMaxScale) 
     	throws jjil.core.Error, IOException
@@ -91,8 +93,7 @@ public class DetectHaarMultiScale extends PipelineStage {
      * Apply multi-scale Haar cascade and prepare a mask image showing where features
      * were detected.
      * @param image Input Gray8Image.
-     * @throws java.lang.IllegalArgumentException if the input is not a Gray8Image
-     * or is too small (smaller than the Haar cascade size).
+     * @throws jjil.core.Error if the input is not a Gray8Image or is too small.
      */
          
     public void Push(Image image) throws jjil.core.Error
@@ -152,28 +153,20 @@ public class DetectHaarMultiScale extends PipelineStage {
                 // the detector
                 if (imSub.getXOffset() > nxLastFound + hcc.getWidth() &&
                     imSub.getYOffset() > nyLastFound + hcc.getHeight()) {
-                    try {
-                        if (hcc.eval(imSub)) {
-                            // Found something. 
-                            nxLastFound = imSub.getXOffset();
-                            nyLastFound = imSub.getYOffset();
-                            // assign Byte.MAX_VALUE to the feature area so we don't
-                            // search it again
-                            Gray8Rect gr = new Gray8Rect(nxLastFound, 
-                                    nyLastFound, 
-                                    this.hcc.getWidth(), 
-                                    this.hcc.getHeight(), 
-                                    Byte.MAX_VALUE);
-                            gr.Push(imMask);
-                            imMask = (Gray8Image) gr.Front();
-                         }
-                    } catch (IOException ex) {
-                        throw new Error(jjil.core.Error.PACKAGE.ALGORITHM, 
-                                jjil.algorithm.ErrorCodes.IO_EXCEPTION,
-                                this.hcc.toString(),
-                                ex.getMessage(),
-                                null);
-                    }
+                    if (hcc.eval(imSub)) {
+                        // Found something. 
+                        nxLastFound = imSub.getXOffset();
+                        nyLastFound = imSub.getYOffset();
+                        // assign Byte.MAX_VALUE to the feature area so we don't
+                        // search it again
+                        Gray8Rect gr = new Gray8Rect(nxLastFound, 
+                                nyLastFound, 
+                                this.hcc.getWidth(), 
+                                this.hcc.getHeight(), 
+                                Byte.MAX_VALUE);
+                        gr.Push(imMask);
+                        imMask = (Gray8Image) gr.Front();
+                     }
                 }
             }
             nScale = nScale * 256 / this.nScaleChange;

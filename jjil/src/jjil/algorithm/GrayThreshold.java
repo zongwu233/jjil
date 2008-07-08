@@ -36,7 +36,10 @@ import jjil.core.PipelineStage;
 public class GrayThreshold extends PipelineStage {
 	int nThreshold;
     
-    /** Creates a new instance of GrayThreshold */
+    /**
+     * Creates a new instance of GrayThreshold
+     * @param nThreshold threshold value.
+     */
     public GrayThreshold(int nThreshold) {
     	this.nThreshold = nThreshold;
     }
@@ -68,6 +71,10 @@ public class GrayThreshold extends PipelineStage {
         super.setOutput(image);
     }
     
+    /**
+     * 
+     * @return String describing class instance.
+     */
     public String toString() {
     	return super.toString() + "(" + this.nThreshold + ")"; //$NON-NLS-1$ //$NON-NLS-2$
     }

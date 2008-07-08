@@ -31,10 +31,8 @@ import jjil.core.PipelineStage;
  * Computes a simple measure of horizontal-vertical contrast.
  * The measure is the difference in variance
  * over a window of a given size measured horizontally and vertically.
- * The contrast measure will have large positive values where there is a lot
- * of horizontal contrast but not much vertical contrast, and large
- * negative values where there is a lot of vertical contrast but not
- * much horizontal contrast. 
+ * The measure used is a linear combination of the horizontal and vertical
+ * contrast, clamped between Byte.MIN_VALUE and Byte.MAX_VALUE. 
  * @author webb
  */
 public class GrayHorizVertContrast extends PipelineStage {
@@ -43,10 +41,10 @@ public class GrayHorizVertContrast extends PipelineStage {
     /** Creates a new instance of GrayHorizVertContrast. Builds the pipeline
      * which computes the horizontal-vertical contrast measure. Result is
      * (nA * horizontal + nB * vertical) / nC.
-     * @param nWindow: the size of the window to compute contrast over.
-     * @param nA: factor to multiply horizontal contrast by
-     * @param nB: factor to multiply vertical contrast by
-     * @param nC: divisor
+     * @param nWindow the size of the window to compute contrast over.
+     * @param nA factor to multiply horizontal contrast by
+     * @param nB factor to multiply vertical contrast by
+     * @param nC divisor
      */
     public GrayHorizVertContrast(int nWindow, int nA, int nB, int nC) {
     	GrayHorizVar ghv = new GrayHorizVar(nWindow);

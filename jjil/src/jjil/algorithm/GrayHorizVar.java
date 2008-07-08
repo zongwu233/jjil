@@ -45,7 +45,9 @@ public class GrayHorizVar extends PipelineStage {
 	 */
 	Gray16Image g16 = null;
     
-    /** Creates a new instance of GrayHorizVar 
+    /**
+     * Creates a new instance of GrayHorizVar
+     * @param nWindow window size to compute horizontal variance over.
      */
     public GrayHorizVar(int nWindow) {
     	this.nWindow = nWindow;

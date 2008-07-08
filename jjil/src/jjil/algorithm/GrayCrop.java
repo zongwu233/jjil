@@ -29,9 +29,8 @@ import jjil.core.Image;
 import jjil.core.PipelineStage;
 
 /**
- * Pipeline stage crops a gray image to a given rectangular cropping window.
+ * Pipeline stage crops a Gray8Image to a given rectangular cropping window.
  * <p>
- * Hungarian prefix is 'crop'.
  * @author webb
  */
 public class GrayCrop extends PipelineStage {

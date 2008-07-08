@@ -34,6 +34,8 @@ public class BinaryHeap implements PriorityQueue {
     /**
      * Construct the binary heap from an array.
      * @param items the inital items in the binary heap.
+     * @throws jjil.core.Error if one of the objects compareTo method throws
+     * jjil.core.Error.
      */
     public BinaryHeap( ComparableJ2me [ ] items ) throws jjil.core.Error {
         currentSize = items.length;
@@ -47,8 +49,10 @@ public class BinaryHeap implements PriorityQueue {
     /**
      * Insert into the priority queue.
      * Duplicates are allowed.
-     * @param x the item to insert.
      * @return null, signifying that decreaseKey cannot be used.
+     * @param x the item to insert.
+     * @throws jjil.core.Error if one of the objects in the priority queue throws jjil.core.Error when the
+     * compareTo method is called.
      */
     public PriorityQueue.Position insert( ComparableJ2me x ) throws jjil.core.Error {
         if( currentSize + 1 == array.length )
@@ -76,7 +80,8 @@ public class BinaryHeap implements PriorityQueue {
     /**
      * Find the smallest item in the priority queue.
      * @return the smallest item.
-     * @throws UnderflowException if empty.
+     * @throws jjil.core.Error if one of the objects in the priority queue throws jjil.core.Error when the
+     * compareTo method is called.
      */
     public ComparableJ2me findMin() throws jjil.core.Error {
         if( isEmpty( ) )
@@ -92,7 +97,8 @@ public class BinaryHeap implements PriorityQueue {
     /**
      * Remove the smallest item from the priority queue.
      * @return the smallest item.
-     * @throws UnderflowException if empty.
+     * @throws jjil.core.Error if one of the objects in the priority queue throws jjil.core.Error when the
+     * compareTo method is called.
      */
     public ComparableJ2me deleteMin() throws jjil.core.Error {
         ComparableJ2me minItem = findMin( );

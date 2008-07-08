@@ -32,8 +32,6 @@ import jjil.core.PipelineStage;
  * bilinear interpolation. For more information on this and other image
  * warps, see George Wolberg's excellent book, "Digital Image Warping",
  * Wiley-IEEE Computer Society Press, 1990.
- * <p>
- * Hungarian prefix is 'stretch'.
  * @author webb
  */
 public class GrayRectStretch extends PipelineStage {

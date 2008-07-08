@@ -33,9 +33,9 @@ import jjil.core.RgbVal;
 /**
  * Pipeline stage converts an ARGB color image into a Gray8Image. It does
  * this by averaging the R, G, and B values. Note that since the byte image
- * is signed, it converts each unsigned byte in the ARGB word to a signed
+ * is signed, each unsigned byte in the ARGB word is converted to a signed
  * integer before doing the average. So the word 0x00FF8001 would get
- * R, G, and B values 127, 0, and -126.
+ * R, G, and B values 127, 0, and -126 (and the average would be 0).
  * @author webb
  */
 public class RgbAvg2Gray extends PipelineStage {

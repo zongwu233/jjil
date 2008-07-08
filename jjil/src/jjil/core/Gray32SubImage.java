@@ -25,14 +25,22 @@
 package jjil.core;
 
 /**
- *
+ * Gray32SubImage is used to represent a rectangular region extracted from
+ * a larger Gray32Image, retaining the x and y position where the image was
+ * extracted.
  * @author webb
  */
 public class Gray32SubImage extends Gray32Image {
     int cX;
     int cY;
     
-    /** Creates a new instance of Gray32SubImage */
+    /**
+     * Creates a new instance of Gray32SubImage
+     * @param cWidth Image width.
+     * @param cHeight Image height.
+     * @param cX Horizontal position of top-left corner of subimage.
+     * @param cY Vertical position of top-left corner of subimage.
+     */
     public Gray32SubImage(int cWidth, int cHeight, int cX, int cY) {
         super(cWidth, cHeight);
         this.cX = cX;
@@ -55,21 +63,37 @@ public class Gray32SubImage extends Gray32Image {
         return image;
     }
     
+    /**
+     * Return horizontal position of top-left corner of subimage.
+     * @return the horizontal position of the top-left corner of the subimage.
+     */
     public int getXOffset()
     {
         return this.cX;
     }
     
+    /**
+     * Return vertical position of top-left corner of subimage.
+     * @return vertical position of top-left corner of subimage.
+     */
     public int getYOffset()
     {
         return this.cY;
     }
     
+    /**
+     * Change horizontal position of subimage.
+     * @param nX New horizontal position of top-left corner of subimage.
+     */
     public void setXOffset(int nX)
     {
         this.cX = nX;
     }
     
+    /**
+     * Change vertical psotion of subimage.
+     * @param nY New vertical position of top-left corner of subimage.
+     */
     public void setYOffset(int nY)
     {
         this.cY = nY;

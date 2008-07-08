@@ -183,7 +183,7 @@ public class RgbSelect2Gray extends PipelineStage {
     /**
      * Changes the color selected.
      * @param color the new color selected
-     * @throws java.lang.jjil.core.Error if the input color is not ColorClass.RED, GREEN, or BLUE.
+     * @throws jjil.core.Error if the input color is not ColorClass.RED, GREEN, or BLUE.
      */
     public void setColor(ColorClass color) throws jjil.core.Error {
         /* as I understand the language this can't happen, but just in

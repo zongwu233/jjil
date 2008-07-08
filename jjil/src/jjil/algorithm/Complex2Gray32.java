@@ -46,7 +46,7 @@ public class Complex2Gray32 extends PipelineStage {
      * Convert an input Complex32Image to an output Gray32Image by taking the 
      * complex magnitude of each pixel.
      * @param im Input image. Must be a Complex32Image.
-     * @throws java.lang.IllegalArgumentException If the input is not a Complex32Image.
+     * @throws jjil.core.Error if the input is not of type Complex32Image.
      */
     public void Push(Image im) throws jjil.core.Error {
         if (!(im instanceof Complex32Image)) {
