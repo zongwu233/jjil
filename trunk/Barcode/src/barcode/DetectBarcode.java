@@ -14,6 +14,10 @@ import jjil.core.RgbImage;
 import jjil.core.Sequence;
 import jjil.debug.Debug;
 
+/**
+ * Detects a barcode in an image and returns the rectangle where the barcode lies. 
+ * Applies a series of heuristic tests to find the barcode.
+ */
 public class DetectBarcode {
 	private static final boolean bDebug = true;
 	int nMinArea;
@@ -36,17 +40,18 @@ public class DetectBarcode {
 	}
 	
 	/**
-	 * Accepts an RgbImage and tries to detect a barcode in it.
-	 * It doesn't read the barcode. The barcode is searched for
-	 * as an area where there are lots of vertical edges. 
-	 * The detection is done at low resolution for speed.
-	 * <br>
-	 * The minimum area of the barcode is set in pixels in the
-	 * constructor. The barcode position is saved and can be
-	 * retrieved through getRect.
-	 * @param rgb: the input RgbImage
-	 * @return true iff a barcode appeared to have been found.
-	 */
+     * Accepts an RgbImage and tries to detect a barcode in it.
+     * It doesn't read the barcode. The barcode is searched for
+     * as an area where there are lots of vertical edges. 
+     * The detection is done at low resolution for speed.
+     * <br>
+     * The minimum area of the barcode is set in pixels in the
+     * constructor. The barcode position is saved and can be
+     * retrieved through getRect.
+     * @param rgb Input image.
+     * @return true iff a barcode appeared to have been found.
+     * @throws jjil.core.Error Should not throw this except in the case of coding error.
+     */
 	public boolean Push(RgbImage rgb) throws jjil.core.Error {
 		final int nReducedHeight = 240;
 		final int nReducedWidth = 320;

@@ -33,6 +33,7 @@ import jjil.core.*;
  * expected in the image, due to defocus. The class models the blurred
  * barcode and uses this to match against the image.
  * @author webb
+ * @deprecated This code has been supersded by BarcodeReaderEan13, which includes UPC barcodes.
  */
 public class BarcodeReaderUpc implements BarcodeReader {
     
@@ -313,9 +314,11 @@ public class BarcodeReaderUpc implements BarcodeReader {
     //
     ///////////////////////////////////////////////////////////////////////
     
-    /** Creates a new instance of BarcodeReaderUpc.
+    /**
+     * Creates a new instance of BarcodeReaderUpc.
+     * @deprecated This code has been supersded by BarcodeReaderEan13, which includes UPC barcodes.
      */
-    public BarcodeReaderUpc() throws IllegalArgumentException {
+    public BarcodeReaderUpc() {
         MakeDigitMasks();
     }
     
@@ -423,18 +426,17 @@ public class BarcodeReaderUpc implements BarcodeReader {
         return wConv;
     }
 
-    /** 
+    /**
+     * 
      * Read a UPC barcode in an image. The image must be an 8-bit gray image.
      * The returned barcode is the most likely barcode seen based on a series
      * of tests that take into account the blur in the image. The returned
      * String object will always pass the check digit test. Also returned
      * is a "goodness" which measures how well the returned barcode's
      * image accounts for the image provided.
-     *
-     * @param image the input image
-     * @param szCode the returned barcode
      * @return the "goodness" of the barcode
-     * @throws IllegalArgumentException if image is not an 8-bit gray image 
+     * @param image the input image
+     * @throws jjil.core.Error if image is not an 8-bit gray image
      */
     
     public int Decode(Image image) 
