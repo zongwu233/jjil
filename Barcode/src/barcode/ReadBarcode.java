@@ -287,18 +287,35 @@ public class ReadBarcode {
         return this.szBestCode;
     }
     
+    /**
+     * Get left top position of barcode.
+     * @return the approximate column in the top row where the barcode lies.
+     */
     public int getLeftApproxPos() {
         return this.cYLeft;
     }
     
+    /**
+     * Get the slope of the left edge of the barcode.
+     * @return the approximate slope of the left edge of the barcode, multiplied by
+     * 256.
+     */
     public int getLeftApproxSlope() {
         return this.wSlopeLeft;
     }
 
+    /**
+     * Get the right top position of the barcode.
+     * @return the approximate right edge of the barcode, in the top row of the image.
+     */
     public int getRightApproxPos() {
         return this.cYRight;
     }
     
+    /**
+     * Get the slope of the right edge of the barcode.
+     * @return the slope of the right side of the barcode.
+     */
     public int getRightApproxSlope() {
         return this.wSlopeRight;
     }
@@ -311,7 +328,8 @@ public class ReadBarcode {
         return this.szBestCode != null;
     }
     
-    /** Read the barcode. The image must be an 8-bit gray image. The other
+    /**
+     * Read the barcode. The image must be an 8-bit gray image. The other
      * parameters specify a cropping window. The barcode should almost fill
      * the cropping window. The barcode will be located and rectified in the
      * window. It is assumed to extend horizontally across the window. The
@@ -321,14 +339,9 @@ public class ReadBarcode {
      * <p>
      * The image is cropped as all pixels whose position is greater than or
      * equal to the top or left, and less than the bottom and right.
-     * 
      * @param image the input image.
-     * @param dTopLeftX top left corner of the cropping window
-     * @param dTopLeftY top row of the cropping window
-     * @param cWidth cWidth of the cropping window
-     * @param cHeight height of the cropping window.
-     * @throws java.lang.IllegalArgumentException if the input image is not
-     * an 8-bit gray image.
+     * @throws jjil.core.Error if the barcode rectangle is outside the image, or the input image is not
+     * an RgbImage.
      */
     public void Push(Image image) throws jjil.core.Error {
         int dTopLeftX = this.rectBarcode.getLeft();
@@ -449,6 +462,10 @@ public class ReadBarcode {
         this.imageRectified = (Gray8Image) imageResult;
     }
     
+    /**
+     * Set barcode rectangle.
+     * @param rect The rectangle in which to look for a barcode.
+     */
     public void setRect(Rect rect) {
     	this.rectBarcode = rect;
     }
@@ -493,7 +510,7 @@ public class ReadBarcode {
         Vector vResult = new Vector();
         for (int i=0; i<wZeroes.length; i++) {
             if (wZeroes[i] != null) {
-                if (wZeroes[i].length > 10) {
+                if (wZeroes[i].length > 5) {
                     if (oLeft) {
                     	// on the left side of the barcode we are looking for a positive
                     	// zero crossing, from dark to light 

@@ -45,7 +45,7 @@ public interface BarcodeReader {
      * @param image the input image. Should have been scaled to be a
      * multiple of getWidth() in width (see below).
      * @return the match quality.
-     * @throws IllegalArgumentException if image is not a multiple of width
+     * @throws jjil.core.Error if image is not a multiple of width
      * pixels, or is not a gray image.
      */
     

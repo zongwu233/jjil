@@ -360,7 +360,7 @@ public class BarcodeReaderEan13 implements BarcodeReader {
     /**
      * Creates a new instance of BarcodeReaderEan13.
      */
-    public BarcodeReaderEan13() throws IllegalArgumentException {
+    public BarcodeReaderEan13() {
         MakeDigitMasks();
         MakeParityLookupTable();
     }
@@ -469,18 +469,17 @@ public class BarcodeReaderEan13 implements BarcodeReader {
         return wConv;
     }
 
-    /** 
+    /**
+     * 
      * Read a UPC barcode in an image. The image must be an 8-bit gray image.
      * The returned barcode is the most likely barcode seen based on a series
      * of tests that take into account the blur in the image. The returned
      * String object will always pass the check digit test. Also returned
      * is a "goodness" which measures how well the returned barcode's
      * image accounts for the image provided.
-     *
      * @param image the input image
-     * @param szCode the returned barcode
      * @return the "goodness" of the barcode
-     * @throws IllegalArgumentException if image is not an 8-bit gray image 
+     * @throws jjil.core.Error if image is not an 8-bit gray image
      */
     
     public int Decode(Image image) 
@@ -567,18 +566,21 @@ public class BarcodeReaderEan13 implements BarcodeReader {
         return wGoodness;
     }
     
-    /** 
+    /**
+     * 
      * Read a UPC barcode in an image. The image must be an 8-bit gray image.
      * The returned barcode is the most likely barcode seen based on a series
      * of tests that take into account the blur in the image. The returned
      * String object will always pass the check digit test. Also returned
      * is a "goodness" which measures how well the returned barcode's
      * image accounts for the image provided.
-     *
-     * @param image the input image
-     * @param szCode the returned barcode
      * @return the "goodness" of the barcode
-     * @throws IllegalArgumentException if image is not an 8-bit gray image 
+     * @param cYLeft Left coordinate of region where barcode was found.
+     * @param cYRight Right coordinate of region where barcode was found.
+     * @param wSlopeLeft Slope of barcode edge on left, multiplied by 256. 
+     * @param wSlopeRight Slope of barcode edge on right, multiplied by 256.
+     * @param image the input image
+     * @throws jjil.core.Error if image is not an 8-bit gray image
      */
     
     public int Decode( 
