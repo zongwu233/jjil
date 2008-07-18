@@ -1388,9 +1388,12 @@ public class BarcodeReaderEan13 implements BarcodeReader {
     private byte[] Stretch(byte[] bInput, int dLeft, int dRight, int dTargetWidth) {
     	int dWidth = dRight - dLeft;
     	byte[] bResult;
+    	// check to see if dWidth is already an exact multiple of
+    	// dTargetWidth so we can simply copy
     	if (dWidth % dTargetWidth == 0) {
-    		bResult = new byte[dTargetWidth];
-    		System.arraycopy(bInput, dLeft, bResult, 0, dTargetWidth);
+    		// bug fix from hansomli reported 7/1/08
+    		bResult = new byte[dWidth];
+    		System.arraycopy(bInput, dLeft, bResult, 0, dWidth);
     		return bResult;
     	}
     	// compute smallest multiple of dTargetWidth > dWidth
