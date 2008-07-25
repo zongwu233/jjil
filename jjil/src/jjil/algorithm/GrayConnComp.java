@@ -137,7 +137,7 @@ public class GrayConnComp {
 		// component is. If not compute it by finding and
 		// deleting min until we reach it.
 		if (this.nSortedLabels < nComponent) {
-			while (this.nSortedLabels <= nComponent) {
+			while (this.nSortedLabels < nComponent) {
 				this.rSortedLabels[++this.nSortedLabels] = (Label) this.pqLabels
 						.findMin();
 				this.pqLabels.deleteMin();
