@@ -49,6 +49,10 @@ public class DetectHaarParam {
     public DetectHaarParam(int nMinScale, int nMaxScale) 
         throws jjil.core.Error, java.io.IOException
     {
+    	// Note: you can detect other features than frontal faces by
+    	// changing HCSB.txt in this directory to one of the files in
+    	// the OtherCascades subdirectory. See the README file there
+    	// for more information.
         InputStream is  = getClass().getResourceAsStream("HCSB.txt");
         this.dh = new DetectHaarMultiScale(is, nMinScale, nMaxScale);
     }
