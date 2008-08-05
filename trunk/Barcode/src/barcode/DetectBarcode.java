@@ -32,7 +32,7 @@ public class DetectBarcode {
 	}
 	
 	/**
-	 * Returns rectangle detected by the Push operation below.
+	 * Returns rectangle detected by the push operation below.
 	 * @return a rectangle outlining the barcode in the image.
 	 */
 	public Rect getRect() {
@@ -52,26 +52,26 @@ public class DetectBarcode {
      * @return true iff a barcode appeared to have been found.
      * @throws jjil.core.Error Should not throw this except in the case of coding error.
      */
-	public boolean Push(RgbImage rgb) throws jjil.core.Error {
+	public boolean push(RgbImage rgb) throws jjil.core.Error {
 		final int nReducedHeight = 240;
 		final int nReducedWidth = 320;
 		// build pipeline
 		Sequence seq = new Sequence();
-		seq.Add(new RgbSubSample(nReducedWidth, nReducedHeight));
-		seq.Add(new RgbAvg2Gray());
-		seq.Add(new GrayHistEq());
-		seq.Add(new GrayHorizVertContrast(4, 2, -8, 3));
-		seq.Add(new Gray16Threshold(200));
-		seq.Push(rgb);
+		seq.add(new RgbSubSample(nReducedWidth, nReducedHeight));
+		seq.add(new RgbAvg2Gray());
+		seq.add(new GrayHistEq());
+		seq.add(new GrayHorizVertContrast(4, 2, -8, 3));
+		seq.add(new Gray16Threshold(200));
+		seq.push(rgb);
 		GrayConnComp gcc = new GrayConnComp();
-		Image imThresh = seq.Front();
+		Image imThresh = seq.getFront();
 		Gray2Rgb g2r = new Gray2Rgb();
-		g2r.Push(imThresh);
+		g2r.push(imThresh);
 		if (DetectBarcode.bDebug) {
 			Debug debug = new Debug();
-			debug.toFile((RgbImage)g2r.Front(), "test.jpg");
+			debug.toFile((RgbImage)g2r.getFront(), "test.jpg");
 		}
-		gcc.Push(imThresh);
+		gcc.push(imThresh);
 		if (gcc.getComponents() == 0) {
 			return false;
 		}

@@ -49,10 +49,10 @@ public interface BarcodeReader {
      * pixels, or is not a gray image.
      */
     
-    int Decode(jjil.core.Image image) 
+    int decode(jjil.core.Image image) 
         throws jjil.core.Error;
     /**
-     * This returns the barcode what was read from the image. If Decode
+     * This returns the barcode what was read from the image. If decode
      * has not been called previously or no barcode was found this method
      * returns null.
      *
@@ -71,7 +71,7 @@ public interface BarcodeReader {
     
     /**
      * Returns the number of bars (light and dark lines) in a barcode of this
-     * type. The input image to Decode will be stretched to exactly match
+     * type. The input image to decode will be stretched to exactly match
      * this number -- i.e., it will be a multiple of this width.
      * 
      * 

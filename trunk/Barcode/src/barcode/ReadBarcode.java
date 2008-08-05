@@ -81,7 +81,7 @@ public class ReadBarcode {
      * @param cWidth cWidth of the cropping window
      * @param cHeight height of the cropping window
      */
-    private void CropAndDetectEdges(
+    private void cropAndDetectEdges(
             Image image, 
             int dTopLeftX, 
             int dTopLeftY,
@@ -96,17 +96,17 @@ public class ReadBarcode {
          * resolution channel on the CCDs used in cellphones.
          */
         if (image instanceof RgbImage) {
-            seq.Add(new RgbSelect2Gray(RgbSelect2Gray.GREEN));
+            seq.add(new RgbSelect2Gray(RgbSelect2Gray.GREEN));
         }
         /* Now crop the gray image.
          */
         int dLeft = Math.max(0, dTopLeftX - cWidth / 12);
         int cWidthExp = Math.min(image.getWidth() - dLeft, cWidth * 7 / 6);
-        seq.Add(new GrayCrop(dLeft, dTopLeftY, cWidthExp, cHeight));
+        seq.add(new GrayCrop(dLeft, dTopLeftY, cWidthExp, cHeight));
         /* Apply the pipeline to get the cropped image.
          */
-        seq.Push(image);
-        Image imageResult = seq.Front();
+        seq.push(image);
+        Image imageResult = seq.getFront();
         if (!(imageResult instanceof Gray8Image)) {
             throw new jjil.core.Error(
     				jjil.core.Error.PACKAGE.ALGORITHM,
@@ -118,8 +118,8 @@ public class ReadBarcode {
         this.imageCropped = (Gray8Image) imageResult;
         {   Debug debug = new Debug();
         	Gray2Rgb g2r = new Gray2Rgb();
-        	g2r.Push(this.imageCropped);
-        	RgbImage rgb = (RgbImage) g2r.Front();
+        	g2r.push(this.imageCropped);
+        	RgbImage rgb = (RgbImage) g2r.getFront();
         	debug.toFile(rgb, "cropped.png"); //$NON-NLS-1$
         }
         /* Then do edge detection. The cWidth of the Canny operator is set
@@ -130,10 +130,10 @@ public class ReadBarcode {
         CannyHoriz canny = new CannyHoriz(cCannyWidth);
         /* Now apply the edge detection to the cropped mage
          */
-        canny.Push(imageCropped.Clone());
+        canny.push(imageCropped.clone());
         /* And obtain the result 
          */
-        imageResult = canny.Front();
+        imageResult = canny.getFront();
         if (!(imageResult instanceof Gray8Image)) {
             throw new jjil.core.Error(
     				jjil.core.Error.PACKAGE.ALGORITHM,
@@ -146,13 +146,13 @@ public class ReadBarcode {
         {   
         	Debug debug = new Debug();
 	    	Gray2Rgb g2r = new Gray2Rgb();
-	    	g2r.Push(this.imageEdge);
-	    	RgbImage rgb = (RgbImage) g2r.Front();
+	    	g2r.push(this.imageEdge);
+	    	RgbImage rgb = (RgbImage) g2r.getFront();
 	    	debug.toFile(rgb, "edges.png"); //$NON-NLS-1$
 	    }
     }
     
-    private static Image CropAndStretchImage(
+    private static Image cropAndStretchImage(
             Image imageInput, 
             int dLeft, 
             int dRight, 
@@ -166,39 +166,39 @@ public class ReadBarcode {
         int cTotalWidth = dRight - dLeft;
         GrayCrop crop = new GrayCrop(dLeft, 0, cTotalWidth, cCroppedHeight);
         Sequence seq = new Sequence(crop);
-        seq.Add(new GrayReduce(1,cHeightReduce));
+        seq.add(new GrayReduce(1,cHeightReduce));
         int cReducedHeight = cCroppedHeight / cHeightReduce;
         // we stretch the cropped image so cInputWidth becomes cTargetWidth. This means
         // cTotalWidth must become cTargetWidth * cTotalWidth / cInputWidth
         GrayRectStretch stretch = new GrayRectStretch(
                 cTargetWidth * cTotalWidth / cInputWidth, cReducedHeight);
-        seq.Add(stretch);
-        seq.Add(new GrayHistEq());
-        seq.Push(imageInput);
-        return seq.Front();
+        seq.add(stretch);
+        seq.add(new GrayHistEq());
+        seq.push(imageInput);
+        return seq.getFront();
     }
     
-    private boolean FindBarcodeEdges() throws jjil.core.Error
+    private boolean findBarcodeEdges() throws jjil.core.Error
     {
         ZeroCrossingHoriz zeroesFind = new ZeroCrossingHoriz(8);
-        int[][] wZeroes = zeroesFind.Push(this.imageEdge);
-        Vector v = ZeroesToPoints(wZeroes, true);
+        int[][] wZeroes = zeroesFind.push(this.imageEdge);
+        Vector v = getPointsFromZeroes(wZeroes, true);
         if (v.size() < 5) {
             return false;
         }
         LinefitHough fit = 
                 new LinefitHough(0, this.imageEdge.getWidth(), -76, 76, 100);
-        fit.Push(v);
+        fit.push(v);
         if (fit.getCount() < 5) {
             return false;
         }
         this.cYLeft = fit.getY();
         this.wSlopeLeft = fit.getSlope();
-        v = ZeroesToPoints(wZeroes, false);
+        v = getPointsFromZeroes(wZeroes, false);
         if (v.size() < 5) {
             return false;
         }
-        fit.Push(v);
+        fit.push(v);
         if (fit.getCount() < 5) {
             return false;
         }
@@ -207,21 +207,21 @@ public class ReadBarcode {
         {
         	Debug debug = new Debug();
         	Gray2Rgb g2r = new Gray2Rgb();
-        	g2r.Push(this.imageEdge);
-        	debug.toFile((RgbImage) g2r.Front(), "edges.png"); //$NON-NLS-1$
+        	g2r.push(this.imageEdge);
+        	debug.toFile((RgbImage) g2r.getFront(), "edges.png"); //$NON-NLS-1$
         }
         return true;
      }
     
-    private void FindPreciseBarcodeLimits()
+    private void findPreciseBarcodeLimits()
     {
         int cWidth = this.imageRectified.getWidth();
         int cShortWidth = cWidth / 24, 
             cLongWidth = cWidth / 4;
-        byte[] bAvg = GrayVertAvg.Push(this.imageRectified);
+        byte[] bAvg = GrayVertAvg.push(this.imageRectified);
         int[] wShortSum = new int[bAvg.length], 
                 wLongSum = new int[bAvg.length];
-        FormShortAndLongSums(bAvg, cShortWidth, cLongWidth, wShortSum, wLongSum);
+        formShortAndLongSums(bAvg, cShortWidth, cLongWidth, wShortSum, wLongSum);
         this.dBestLeftPos = -1;
         this.dBestRightPos = -1;
         int wBestLeftJump = Integer.MIN_VALUE, 
@@ -246,7 +246,7 @@ public class ReadBarcode {
         }
     }
 
-    private static void FormShortAndLongSums(
+    private static void formShortAndLongSums(
             byte[] bAvg, 
             int cShortWidth,
             int cLongWidth,
@@ -343,7 +343,7 @@ public class ReadBarcode {
      * @throws jjil.core.Error if the barcode rectangle is outside the image, or the input image is not
      * an RgbImage.
      */
-    public void Push(Image image) throws jjil.core.Error {
+    public void push(Image image) throws jjil.core.Error {
         int dTopLeftX = this.rectBarcode.getLeft();
         int dTopLeftY = this.rectBarcode.getTop();
         int cWidth = this.rectBarcode.getWidth();
@@ -366,20 +366,20 @@ public class ReadBarcode {
         /* Convert the RGB input image to gray, crop, and detect edges. This
          * initializes imageCropped and imageEdge.
          */
-        CropAndDetectEdges(image, dTopLeftX, dTopLeftY, cWidth, cHeight);
+        cropAndDetectEdges(image, dTopLeftX, dTopLeftY, cWidth, cHeight);
         /* Find the approximate left and right edges of the barcode. Sets
          * cYLeft, cYRight, wSlopeLeft, and wSlopeRight
          */
-        if (!FindBarcodeEdges()) {
+        if (!findBarcodeEdges()) {
             return;
         }
         /* Rectify the barcode image so the left and right edges are vertical
          */
-        // RectifyBarcode();
+        // rectifyBarcode();
         /* Find the exact left and right edges of the barcode in the rectified
          * image. Initializes dBestLeftPos and dBestRightPos.
          */
-        // FindPreciseBarcodeLimits();
+        // findPreciseBarcodeLimits();
         // if (this.dBestLeftPos == -1 || this.dBestRightPos == -1) {
         //     return;
         // }
@@ -389,17 +389,17 @@ public class ReadBarcode {
         		0,
         		dBestRightPos - dBestLeftPos,
         		this.imageRectified.getHeight());
-        gc.Push(this.imageRectified);
-        Gray8Image imCropped = (Gray8Image) gc.Front();
+        gc.push(this.imageRectified);
+        Gray8Image imCropped = (Gray8Image) gc.getFront();
         {
            	Debug debug = new Debug();
         	Gray2Rgb g2r = new Gray2Rgb();
-        	g2r.Push(this.imageCropped);
-        	debug.toFile((RgbImage) g2r.Front(), "rectCropped.png");
+        	g2r.push(this.imageCropped);
+        	debug.toFile((RgbImage) g2r.getFront(), "rectCropped.png");
         	
         }
         */
-        int wGoodness = reader.Decode(
+        int wGoodness = reader.decode(
         		this.imageCropped, 
         		this.cYLeft, 
         		this.cYRight, 
@@ -415,12 +415,12 @@ public class ReadBarcode {
         for (int cInputWidth = dBestRightPos - dBestLeftPos - 2*cJitter;
             cInputWidth <= dBestRightPos - dBestLeftPos + 2*cJitter;
             cInputWidth++) {
-            TryWidth(cInputWidth, cJitter, reader);
+            tryWidth(cInputWidth, cJitter, reader);
         }
         */
     }
     
-    private void RectifyBarcode()
+    private void rectifyBarcode()
         throws jjil.core.Error
     {
         int cYLeft = Math.max(0, this.cYLeft - this.imageCropped.getWidth() / 8);
@@ -443,8 +443,8 @@ public class ReadBarcode {
                 cTr, 
                 cBl, 
                 cBr);
-        warp.Push(this.imageCropped);
-        Image imageResult = warp.Front();
+        warp.push(this.imageCropped);
+        Image imageResult = warp.getFront();
         if (!(imageResult instanceof Gray8Image)) {
             throw new jjil.core.Error(
     				jjil.core.Error.PACKAGE.ALGORITHM,
@@ -456,8 +456,8 @@ public class ReadBarcode {
         {
         	Debug debug = new Debug();
         	Gray2Rgb g2r = new Gray2Rgb();
-        	g2r.Push(imageResult);
-        	debug.toFile((RgbImage) g2r.Front(), "rectified.png"); //$NON-NLS-1$
+        	g2r.push(imageResult);
+        	debug.toFile((RgbImage) g2r.getFront(), "rectified.png"); //$NON-NLS-1$
         }
         this.imageRectified = (Gray8Image) imageResult;
     }
@@ -470,7 +470,7 @@ public class ReadBarcode {
     	this.rectBarcode = rect;
     }
     
-    private void TryWidth(int cInputWidth, int cJitter, BarcodeReader reader)
+    private void tryWidth(int cInputWidth, int cJitter, BarcodeReader reader)
     	throws jjil.core.Error
     {
         // find smallest cTargetWidth that is a cMultiple of reader.Width()
@@ -481,7 +481,7 @@ public class ReadBarcode {
             // cTargetWidth is the width we'll stretch input cWidth to
         int cTargetWidth = reader.getWidth() * cMultiple;		
         Image imageStretched =
-            CropAndStretchImage(
+            cropAndStretchImage(
                     imageRectified, 
                     dBestLeftPos-cJitter, 
                     dBestRightPos+cJitter, 
@@ -490,13 +490,13 @@ public class ReadBarcode {
                     cTargetWidth);
         {
         	Gray2Rgb g2r = new Gray2Rgb();
-        	g2r.Push(imageStretched);
-        	new Debug().toFile((RgbImage) g2r.Front(), "stretched.png"); //$NON-NLS-1$
+        	g2r.push(imageStretched);
+        	new Debug().toFile((RgbImage) g2r.getFront(), "stretched.png"); //$NON-NLS-1$
         }
         // now look for a barcode in the stretched rectangle at positions 0..2*cJitter-1
         // (in the input image) which must be scaled by cTargetWidth / cInputWidth in
         // the stretched image
-        int wGoodness = reader.Decode(
+        int wGoodness = reader.decode(
                         imageStretched);
         if (reader.getCode() != null && wGoodness > this.wBestMatch) {
             this.szBestCode = reader.getCode();
@@ -506,7 +506,7 @@ public class ReadBarcode {
 
     }
             
-    private Vector ZeroesToPoints(int[][] wZeroes, boolean oLeft) {
+    private Vector getPointsFromZeroes(int[][] wZeroes, boolean oLeft) {
         Vector vResult = new Vector();
         for (int i=0; i<wZeroes.length; i++) {
             if (wZeroes[i] != null) {
