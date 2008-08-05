@@ -24,7 +24,6 @@
 
 package jjil.algorithm;
 import jjil.core.Gray16Image;
-import jjil.core.Gray32Image;
 import jjil.core.Image;
 import jjil.core.Ladder;
 
@@ -58,7 +57,7 @@ public class Gray16LinComb implements Ladder.Join {
      * image.
      * @return the resulting Gray16Image.
      */
-    public Image DoJoin(Image imageFirst, Image imageSecond)
+    public Image doJoin(Image imageFirst, Image imageSecond)
         throws jjil.core.Error
     {
         if (!(imageFirst instanceof Gray16Image)) {

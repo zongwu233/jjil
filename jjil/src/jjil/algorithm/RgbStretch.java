@@ -53,7 +53,7 @@ public class RgbStretch extends PipelineStage {
         throws jjil.core.Error {
         this.cWidth = cWidth;
         this.cHeight = cHeight;
-        SetupPipeline();
+        setupPipeline();
     }
          
     /** Gets current target height 
@@ -78,7 +78,7 @@ public class RgbStretch extends PipelineStage {
      * @throws jjil.core.Error if the input is not an RgbImage, or is smaller than the target image either
      * horizontally or vertically.
      */
-    public void Push(Image image) throws jjil.core.Error {
+    public void push(Image image) throws jjil.core.Error {
         if (!(image instanceof RgbImage)) {
             throw new Error(
         			Error.PACKAGE.ALGORITHM,
@@ -96,17 +96,17 @@ public class RgbStretch extends PipelineStage {
             			null);
         }
         /* stretch R band */
-        this.seqR.Push(image);
+        this.seqR.push(image);
         /* shrink G band */
-        this.seqG.Push(image);
+        this.seqG.push(image);
         /* stretch B band */
-        this.seqB.Push(image);
+        this.seqB.push(image);
         /* recombine bands */
         Gray3Bands2Rgb g3rgb = new Gray3Bands2Rgb();
-        super.setOutput(g3rgb.Push(
-                (Gray8Image)this.seqR.Front(), 
-                (Gray8Image)this.seqG.Front(), 
-                (Gray8Image)this.seqB.Front()));
+        super.setOutput(g3rgb.push(
+                (Gray8Image)this.seqR.getFront(), 
+                (Gray8Image)this.seqG.getFront(), 
+                (Gray8Image)this.seqB.getFront()));
     }
         
     /** Changes target height
@@ -124,23 +124,23 @@ public class RgbStretch extends PipelineStage {
                 			null);
         }
         this.cHeight = cHeight;
-        SetupPipeline();
+        setupPipeline();
     }
     
-    private void SetupPipeline() throws jjil.core.Error
+    private void setupPipeline() throws jjil.core.Error
     {
         RgbSelect2Gray sel = new RgbSelect2Gray(RgbSelect2Gray.RED);
         this.seqR = new Sequence(sel);
         GrayRectStretch gs = new GrayRectStretch(cWidth, cHeight);
-        this.seqR.Add(gs);
+        this.seqR.add(gs);
         sel = new RgbSelect2Gray(RgbSelect2Gray.GREEN);
         this.seqG = new Sequence(sel);
         gs = new GrayRectStretch(cWidth, cHeight);
-        this.seqG.Add(gs);
+        this.seqG.add(gs);
         sel = new RgbSelect2Gray(RgbSelect2Gray.BLUE);
         this.seqB = new Sequence(sel);
         gs = new GrayRectStretch(cWidth, cHeight);
-        this.seqB.Add(gs);
+        this.seqB.add(gs);
     }
     
     /** Changes target width
@@ -158,7 +158,7 @@ public class RgbStretch extends PipelineStage {
                 			null);
         }
         this.cWidth = cWidth;
-        SetupPipeline();
+        setupPipeline();
     }
     
     
@@ -167,7 +167,8 @@ public class RgbStretch extends PipelineStage {
      *
      * @return the string describing the stretching operation.
      */
-    public String toString() {
+    @Override
+	public String toString() {
         return super.toString() + " (" + this.cWidth + "," + this.cHeight + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
 }

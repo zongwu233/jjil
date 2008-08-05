@@ -71,7 +71,7 @@ public class RgbImage extends Image {
      *
      * @return the image copy.
      */
-    public Image Clone()
+    public Image clone()
     {
         RgbImage image = new RgbImage(getWidth(), getHeight());
         System.arraycopy(
@@ -97,7 +97,8 @@ public class RgbImage extends Image {
      *
      * @return the string.
      */
-    public String toString()
+    @Override
+	public String toString()
     {
         return super.toString() + " (" + getWidth() + "x" + getHeight() + //$NON-NLS-1$ //$NON-NLS-2$
                 ")"; //$NON-NLS-1$

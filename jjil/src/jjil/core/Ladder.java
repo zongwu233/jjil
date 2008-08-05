@@ -43,7 +43,7 @@ public class Ladder extends PipelineStage {
          * @throws jjil.core.Error typically, when the two images are not the expected type or are of other
          * than the required size.
          */
-        Image DoJoin(Image imageFirst, Image imageSecond) throws jjil.core.Error;
+        Image doJoin(Image imageFirst, Image imageSecond) throws jjil.core.Error;
     }
     
     /**
@@ -81,11 +81,11 @@ public class Ladder extends PipelineStage {
      * @throws jjil.core.Error if either pipeline does not produce an output
      * after being supplied with the input.
      */
-    public void Push(Image image) throws jjil.core.Error {
-        Image imageCopy = image.Clone();
-        pipeFirst.Push(image);
-        pipeSecond.Push(imageCopy);
-        if (pipeFirst.Empty()) {
+    public void push(Image image) throws jjil.core.Error {
+        Image imageCopy = image.clone();
+        pipeFirst.push(image);
+        pipeSecond.push(imageCopy);
+        if (pipeFirst.isEmpty()) {
             throw new Error(
                             Error.PACKAGE.CORE,
                             ErrorCodes.PIPELINE_NO_RESULT,
@@ -93,7 +93,7 @@ public class Ladder extends PipelineStage {
                             null,
                             null);
         }
-        if (pipeSecond.Empty()) {
+        if (pipeSecond.isEmpty()) {
             throw new Error(
                                 Error.PACKAGE.CORE,
                                 ErrorCodes.PIPELINE_NO_RESULT,
@@ -102,7 +102,7 @@ public class Ladder extends PipelineStage {
                                 null);
         }
         super.setOutput(
-                join.DoJoin(pipeFirst.Front(), pipeSecond.Front())
+                join.doJoin(pipeFirst.getFront(), pipeSecond.getFront())
                 );
     }
 }

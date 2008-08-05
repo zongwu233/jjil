@@ -62,7 +62,7 @@ public class GrayLookup extends PipelineStage {
      * @param image the input image (output replaces input).
      * @throws jjil.core.Error if image is not a Gray8Image.
      */
-    public void Push(Image image) throws jjil.core.Error {
+    public void push(Image image) throws jjil.core.Error {
         if (!(image instanceof Gray8Image)) {
             throw new Error(
             				Error.PACKAGE.ALGORITHM,
@@ -80,7 +80,7 @@ public class GrayLookup extends PipelineStage {
     }
     
     /**
-     * Assign a new lookup table. Images passed to Push() after setTable is called
+     * Assign a new lookup table. Images passed to push() after setTable is called
      * will be mapped by the new image.
      * @param table The lookup table. Input image value g is mapped to table[g + Byte.MinValue]
      * @throws jjil.core.Error if table is not a 256-element array.

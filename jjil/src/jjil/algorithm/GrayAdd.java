@@ -47,7 +47,7 @@ public class GrayAdd implements Ladder.Join {
      * @throws jjil.core.Error if either image is not a gray 8-bit
      * image, or they are of different sizes.
      */
-    public Image DoJoin(Image imageFirst, Image imageSecond)
+    public Image doJoin(Image imageFirst, Image imageSecond)
         throws jjil.core.Error
     {
         if (!(imageFirst instanceof Gray8Image)) {

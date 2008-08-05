@@ -47,7 +47,7 @@ public class ApplyMaskRgb {
      * considered to be masked.
      * @throws jjil.core.Error if the input sizes do not match
      */
-    public RgbImage Push(
+    public RgbImage push(
             RgbImage imRgb,
             Gray8Image imMask) throws jjil.core.Error {
         if (imRgb.getWidth() != imMask.getWidth() ||

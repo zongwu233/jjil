@@ -176,7 +176,7 @@ public class CannyHoriz extends PipelineStage {
      * @param image the input Gray8Image
      * @throws jjil.core.Error if the input is not a Gray8Image.
      */
-    public void Push(Image image) throws jjil.core.Error {
+    public void push(Image image) throws jjil.core.Error {
         if (!(image instanceof Gray8Image)) {
             throw new Error(
         			Error.PACKAGE.ALGORITHM,
@@ -254,7 +254,8 @@ public class CannyHoriz extends PipelineStage {
      *
      * @return a string describing the Canny operator.
      */
-    public String toString() {
+    @Override
+	public String toString() {
         return super.toString() + " (" + this.cSigma + ")"; //$NON-NLS-1$ //$NON-NLS-2$
     }
 }

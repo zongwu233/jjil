@@ -54,9 +54,8 @@ public abstract class Image {
     /**
      * Makes a copy of the image
      * @return the image copy
-     * @throws jjil.core.Error never (needed for override).
      */
-    public abstract Image Clone() throws jjil.core.Error;
+    public abstract Image clone();
     
     /** Returns the image height 
      *

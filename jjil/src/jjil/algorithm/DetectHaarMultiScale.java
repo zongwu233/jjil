@@ -46,8 +46,8 @@ import jjil.core.PipelineStage;
  * skipped. When transitioning to a finer scale, the mask is stretched to the new
  * size. This results in areas where features have been detected at a coarser scale
  * not being re-searched at a finer scale.<br>
- * DetectHaarMultiScale is structured as a pipeline stage so Push'ing an image
- * results in a new mask being available on Front. The mask can be further processed
+ * DetectHaarMultiScale is structured as a pipeline stage so push'ing an image
+ * results in a new mask being available on getFront. The mask can be further processed
  * by doing connected component detection to determine the feature characteristics,
  * or the mask can be displayed in an overlay on the original image to show the
  * feature areas.
@@ -96,7 +96,7 @@ public class DetectHaarMultiScale extends PipelineStage {
      * @throws jjil.core.Error if the input is not a Gray8Image or is too small.
      */
          
-    public void Push(Image image) throws jjil.core.Error
+    public void push(Image image) throws jjil.core.Error
     {
         Gray8Image imGray;
         if (image instanceof Gray8Image) {
@@ -128,12 +128,12 @@ public class DetectHaarMultiScale extends PipelineStage {
             int nTargetWidth = imGray.getWidth() / nScale;
             int nTargetHeight = imGray.getHeight() / nScale;
             GrayShrink gs = new GrayShrink(nTargetWidth, nTargetHeight);
-            gs.Push(imGray);
-            Gray8Image imShrunk = (Gray8Image) gs.Front();
+            gs.push(imGray);
+            Gray8Image imShrunk = (Gray8Image) gs.getFront();
             // scale the mask to the new size
             GrayRectStretch grs = new GrayRectStretch(nTargetWidth, nTargetHeight);
-            grs.Push(imMask);
-            imMask = (Gray8Image) grs.Front();
+            grs.push(imMask);
+            imMask = (Gray8Image) grs.getFront();
             // combine the image and mask to make a masked image
             Gray8MaskedImage gmi = new Gray8MaskedImage(imShrunk, imMask);
             // pass the masked image to a subimage generator
@@ -142,12 +142,12 @@ public class DetectHaarMultiScale extends PipelineStage {
                     this.hcc.getHeight(),
                     Math.max(1, gmi.getWidth() / 30),
                     Math.max(1, gmi.getHeight() / 30));
-            mgsi.Push(gmi);
+            mgsi.push(gmi);
             // now run Haar detection on each scaled image
             int nxLastFound = -hcc.getWidth();
             int nyLastFound = -hcc.getHeight();
-            while (!mgsi.Empty()) {
-                Gray8SubImage imSub = (Gray8SubImage) mgsi.Front();
+            while (!mgsi.isEmpty()) {
+                Gray8SubImage imSub = (Gray8SubImage) mgsi.getFront();
                 // if we've found a feature recently we skip forward until
                 // we're outside the masked region. There's no point rerunning
                 // the detector
@@ -164,8 +164,8 @@ public class DetectHaarMultiScale extends PipelineStage {
                                 this.hcc.getWidth(), 
                                 this.hcc.getHeight(), 
                                 Byte.MAX_VALUE);
-                        gr.Push(imMask);
-                        imMask = (Gray8Image) gr.Front();
+                        gr.push(imMask);
+                        imMask = (Gray8Image) gr.getFront();
                      }
                 }
             }
@@ -173,8 +173,8 @@ public class DetectHaarMultiScale extends PipelineStage {
         }
         // Stretch imMask to original image size; this is the result
         GrayRectStretch grs = new GrayRectStretch(image.getWidth(), image.getHeight());
-        grs.Push(imMask);
-        super.setOutput(grs.Front());
+        grs.push(imMask);
+        super.setOutput(grs.getFront());
     }
      
     /**

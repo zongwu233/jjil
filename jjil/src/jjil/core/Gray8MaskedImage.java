@@ -77,23 +77,33 @@ public class Gray8MaskedImage extends Gray8Image {
     /**
      * Copy this image
      * @return the image copy.
-     * @throws jjil.core.Error never (except in case of coding error).
      */
-    public Image Clone() throws jjil.core.Error
+    public Image clone()
     {
         Gray8MaskedImage image = new Gray8MaskedImage(
-                (Gray8Image) this, 
-                (Gray8Image) this.imMask.Clone());
+        		this.getWidth(), this.getHeight());
+        System.arraycopy(
+                this.getImage().getData(),
+                0,
+                image.getImage().getData(),
+                0,
+                getWidth()*getHeight());
+        System.arraycopy(
+                this.getMask().getData(),
+                0,
+                image.getMask().getData(),
+                0,
+                getWidth()*getHeight());
         return image;
     }
     
     /**
      * Returns the input Gray8Image.
-     * @return the input iamge
+     * @return the input image
      */
     public Gray8Image getImage()
     {
-        return (Gray8Image) this;
+        return this;
     }
     
     /**
@@ -119,7 +129,8 @@ public class Gray8MaskedImage extends Gray8Image {
      *
      * @return the string.
      */
-    public String toString()
+    @Override
+	public String toString()
     {
         return super.toString() + " (" + this.getWidth() + "x" +  //$NON-NLS-1$ //$NON-NLS-2$
                 this.getHeight() + "," + this.imMask.toString() + ")"; //$NON-NLS-1$ //$NON-NLS-2$

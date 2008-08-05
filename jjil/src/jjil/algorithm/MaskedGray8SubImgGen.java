@@ -33,7 +33,6 @@
 
 package jjil.algorithm;
 import jjil.core.Error;
-import jjil.core.Gray32MaskedImage;
 import jjil.core.Gray8MaskedImage;
 import jjil.core.Gray8SubImage;
 import jjil.core.Image;
@@ -127,14 +126,14 @@ public class MaskedGray8SubImgGen extends PipelineStage {
     
     // We are done producing images when the advance returns no more images
     /**
-     * Returns true iff there is another image available from Front().
+     * Returns true iff there is another image available from getFront().
      * Note that the existence of another image from
      * MaskedGray8SubImgGen depends on the mask image so there's no way to guarantee
      * there will be even one subimage generated for a particular input. You must
-     * always call Empty().
-     * @return true iff there is another image available from Front().
+     * always call isEmpty().
+     * @return true iff there is another image available from getFront().
      */
-    public boolean Empty() {
+    public boolean isEmpty() {
         return !advanceToNextSubImage();
      }
     
@@ -144,12 +143,13 @@ public class MaskedGray8SubImgGen extends PipelineStage {
      * set to indicate where it was generated in the input image.
      * @return a MaskedGray8SubImage that is the next subimage in the input Gray8Image to
      * be processed.
-     * @throws jjil.core.Error if no subimage is available (you have to call Empty() to determine if
+     * @throws jjil.core.Error if no subimage is available (you have to call isEmpty() to determine if
      * a subimage is available. As few as 0 subimage can be generated for a
      * given input if the entire image is masked.) Also throws if the output
      * image (stored in the superclass) has been changed in type.
      */
-     public Image Front() throws jjil.core.Error
+     @Override
+	public Image getFront() throws jjil.core.Error
     {
         // reuse output image
         // check to make sure nobody damaged it somehow
@@ -203,7 +203,8 @@ public class MaskedGray8SubImgGen extends PipelineStage {
      * @throws jjil.core.Error if the input is not of type MaskedGray8Image or is smaller than the
      * subimages to be generated.
      */
-    public void Push(Image image) throws jjil.core.Error {
+    @Override
+	public void push(Image image) throws jjil.core.Error {
         if (!(image instanceof Gray8MaskedImage)) {
             throw new Error(
                             Error.PACKAGE.ALGORITHM,

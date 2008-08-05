@@ -42,7 +42,7 @@ import jjil.core.RgbVal;
  *    <CODE>
  *        RgbImage imageRgb = ...;<br>
  *        RgbSelect2Gray rgb = new RgbSelect2Gray(RgbSelect2Gray.RED);<br>
- *        rgb.Push(imageRgb);
+ *        rgb.push(imageRgb);
  *    </CODE>
  * </p>
  * @author webb
@@ -143,7 +143,8 @@ public class RgbSelect2Gray extends PipelineStage {
      * @throws jjil.core.Error if the input image is not a color
      *   image.
      */
-    public void Push(Image image) throws jjil.core.Error {
+    @Override
+	public void push(Image image) throws jjil.core.Error {
         if (!(image instanceof RgbImage)) {
             throw new Error(
             			Error.PACKAGE.ALGORITHM,
@@ -207,7 +208,8 @@ public class RgbSelect2Gray extends PipelineStage {
      *
      * @return the string describing the RGB select operation.
      */
-    public String toString() {
+    @Override
+	public String toString() {
         return super.toString() + " (" + this.colorChosen.toString() +  //$NON-NLS-1$
                 ")"; //$NON-NLS-1$
     }

@@ -40,7 +40,7 @@ public class Copy extends PipelineStage {
      * Copy an input image to the output without creating a deep copy of the contents.
      * @param im Input image. May be of any Image type.
      */
-    public void Push(Image im) {
+    public void push(Image im) {
         super.setOutput(im);
     }
 }

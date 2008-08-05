@@ -50,7 +50,7 @@ public class Gray8Statistics {
      * @param image the input image.
      * @throws jjil.core.Error if the input image is not gray.
      */
-    public void Push(Image image) throws jjil.core.Error
+    public void push(Image image) throws jjil.core.Error
     {
         if (!(image instanceof Gray8Image)) {
             throw new Error(
@@ -65,7 +65,7 @@ public class Gray8Statistics {
         byte[] data = gray.getData();
         for (int i=0; i<gray.getHeight(); i++) {
             for (int j=0; j<gray.getWidth(); j++) {
-                int pixel = ((int)data[i*image.getWidth()+j]) - Byte.MIN_VALUE;
+                int pixel = (data[i*image.getWidth()+j]) - Byte.MIN_VALUE;
                 nSum += pixel;
                 nSumSq += pixel*pixel;
             }
@@ -93,7 +93,7 @@ public class Gray8Statistics {
     /**
      * Return standard deviation, times 256 using Newton's iteration.
      * @return the standard deviation, times 256.
-     * @throws jjil.core.Error if the variance computed in Push() is less than zero.
+     * @throws jjil.core.Error if the variance computed in push() is less than zero.
      */
     public int getStdDev() throws jjil.core.Error {
         // n = variance * 256 * 256 (for accuracy)

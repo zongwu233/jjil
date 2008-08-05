@@ -74,7 +74,7 @@ public class GrayRectStretch extends PipelineStage {
      * or the input image size is larger than the target size. This class
      * does not do subsampling, only interpolation.
      */
-    public void Push(Image image) throws jjil.core.Error {
+    public void push(Image image) throws jjil.core.Error {
         if (!(image instanceof Gray8Image)) {
             throw new Error(
 			        		Error.PACKAGE.ALGORITHM,
@@ -98,8 +98,8 @@ public class GrayRectStretch extends PipelineStage {
          * has to happen only once. 
          */
         /* horizontal stretch */
-        Gray8Image horiz = StretchHoriz(input);
-        Gray8Image result = StretchVert(horiz);
+        Gray8Image horiz = stretchHoriz(input);
+        Gray8Image result = stretchVert(horiz);
         super.setOutput(result);
     }
     
@@ -143,7 +143,7 @@ public class GrayRectStretch extends PipelineStage {
      * @param input the input image
      * @return the stretched image
      */
-    private Gray8Image StretchHoriz(Gray8Image input) {
+    private Gray8Image stretchHoriz(Gray8Image input) {
         /* horizontal stretch */
         Gray8Image horiz = new Gray8Image(this.cWidth, input.getHeight());
         byte[] inData = input.getData();
@@ -177,7 +177,7 @@ public class GrayRectStretch extends PipelineStage {
                 for (int i=0; i<input.getHeight(); i++) {
                     /* interpolate */
                     outData[i*this.cWidth+j] =
-                     (byte) inData[i*input.getWidth()+cX+1];
+                     inData[i*input.getWidth()+cX+1];
                 }
             }
         }
@@ -190,7 +190,7 @@ public class GrayRectStretch extends PipelineStage {
      * @param input the input image.
      * @returns the stretched image.
      */
-    private Gray8Image StretchVert(Gray8Image input) {
+    private Gray8Image stretchVert(Gray8Image input) {
         byte[] inData = input.getData();
         Gray8Image vert = new Gray8Image(this.cWidth, this.cHeight);
         byte[] outData = vert.getData();
@@ -219,7 +219,7 @@ public class GrayRectStretch extends PipelineStage {
                 for (int j=0; j<input.getWidth(); j++) {
                     /* interpolate */
                     outData[i*this.cWidth+j] =
-                     (byte) (inData[(cY+1)*this.cWidth+j]);
+                     (inData[(cY+1)*this.cWidth+j]);
                 }
             }
         }
@@ -230,7 +230,8 @@ public class GrayRectStretch extends PipelineStage {
      *
      * @return the string describing the stretching operation.
      */
-    public String toString() {
+    @Override
+	public String toString() {
         return super.toString() + " (" + this.cWidth + "," + this.cHeight + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
 }

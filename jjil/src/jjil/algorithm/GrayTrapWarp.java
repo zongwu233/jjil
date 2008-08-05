@@ -136,7 +136,7 @@ public class GrayTrapWarp extends PipelineStage {
      * @throws jjil.core.Error if the input image is not gray,
      * or the trapezoid already specified extends outside its bounds.
      */
-    public void Push(Image image) throws jjil.core.Error {
+    public void push(Image image) throws jjil.core.Error {
         if (!(image instanceof Gray8Image)) {
             throw new Error(
     				Error.PACKAGE.ALGORITHM,
@@ -260,7 +260,8 @@ public class GrayTrapWarp extends PipelineStage {
      * "jjil.algorithm.GrayTrapWarpxxx (startRow,endRow,leftColStart,
      * rightColStart,leftColEnd,rightColEnd)"
      */
-    public String toString() {
+    @Override
+	public String toString() {
         return super.toString() + " (" + this.nRowStart + "," + //$NON-NLS-1$ //$NON-NLS-2$
                 this.nRowEnd + "," + this.nColLeftStart + "," + //$NON-NLS-1$ //$NON-NLS-2$
                 this.nColRightStart + "," + this.nColLeftEnd + "," + //$NON-NLS-1$ //$NON-NLS-2$

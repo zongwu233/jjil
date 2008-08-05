@@ -47,7 +47,7 @@ public class SumG82G32 extends PipelineStage {
      * @param image input image.
      * @throws jjil.core.Error if the input is not a Gray8Image.
      */
-    public void Push(Image image) throws jjil.core.Error
+    public void push(Image image) throws jjil.core.Error
     {
         if (!(image instanceof Gray8Image)) {
             throw new Error(

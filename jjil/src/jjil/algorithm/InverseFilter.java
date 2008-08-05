@@ -68,8 +68,8 @@ public class InverseFilter extends PipelineStage {
         }
         this.nGamma = nGamma;
         this.fft = new FftGray8();
-        this.fft.Push(psf);
-        this.cxmPsfInv = (Complex32Image) this.fft.Front();
+        this.fft.push(psf);
+        this.cxmPsfInv = (Complex32Image) this.fft.getFront();
         this.ifft = new IFftComplex32(true);
     }
     
@@ -79,7 +79,7 @@ public class InverseFilter extends PipelineStage {
      * @throws jjil.core.Error If the input image is not a Gray8Image or not the same size as the 
      * point spread function.
      */
-    public void Push(Image im) throws jjil.core.Error {
+    public void push(Image im) throws jjil.core.Error {
         if (im.getWidth() != im.getHeight()) {
             throw new Error(
             				Error.PACKAGE.ALGORITHM,
@@ -105,8 +105,8 @@ public class InverseFilter extends PipelineStage {
             				null,
             				null);
         }
-        this.fft.Push(im);
-        Complex32Image cxmIm = (Complex32Image) this.fft.Front();
+        this.fft.push(im);
+        Complex32Image cxmIm = (Complex32Image) this.fft.getFront();
         Complex cxIn[] = cxmIm.getData();
         Complex32Image cxmResult = new Complex32Image(im.getWidth(), im.getHeight());
         Complex cxOut[] = cxmResult.getData();
@@ -126,8 +126,8 @@ public class InverseFilter extends PipelineStage {
             }
         }
         // inverse FFT to get result
-        this.ifft.Push(cxmResult);
-        super.setOutput(this.ifft.Front());
+        this.ifft.push(cxmResult);
+        super.setOutput(this.ifft.getFront());
     }
     
 }

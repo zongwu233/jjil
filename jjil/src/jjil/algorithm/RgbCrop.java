@@ -64,7 +64,7 @@ public class RgbCrop extends PipelineStage {
      *    extends outside the input image, or the input image
      *    is not an RgbImage.
      */
-    public void Push(Image image) throws jjil.core.Error {
+    public void push(Image image) throws jjil.core.Error {
         if (!(image instanceof RgbImage)) {
             throw new Error(
                 			Error.PACKAGE.ALGORITHM,
@@ -169,7 +169,8 @@ public class RgbCrop extends PipelineStage {
      *
      * @return the string describing the cropping operation.
      */
-    public String toString() {
+    @Override
+	public String toString() {
         return super.toString() + " (" + this.cX + "," + this.cY +  //$NON-NLS-1$ //$NON-NLS-2$
                 "," + this.cWidth + "," + this.cHeight + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }

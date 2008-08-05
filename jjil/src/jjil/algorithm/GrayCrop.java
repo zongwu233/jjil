@@ -65,7 +65,7 @@ public class GrayCrop extends PipelineStage {
      *    extends outside the input image, or the input image
      *    is not a Gray8Image.
      */
-    public void Push(Image image) throws jjil.core.Error {
+    public void push(Image image) throws jjil.core.Error {
         if (!(image instanceof Gray8Image)) {
             throw new Error(
                 			Error.PACKAGE.ALGORITHM,
@@ -170,7 +170,8 @@ public class GrayCrop extends PipelineStage {
      *
      * @return the string describing the cropping operation.
      */
-    public String toString() {
+    @Override
+	public String toString() {
         return super.toString() + " (" + this.cX + "," + this.cY +  //$NON-NLS-1$ //$NON-NLS-2$
                 "," + this.cWidth + "," + this.cHeight + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }

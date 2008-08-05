@@ -57,7 +57,7 @@ public class Gray8Rect extends PipelineStage {
      * @param image the input image (output replaces input).
      * @throws jjil.core.Error if the input is not a Gray8Image.
      */
-    public void Push(Image image) throws jjil.core.Error {
+    public void push(Image image) throws jjil.core.Error {
         if (!(image instanceof Gray8Image)) {
             throw new Error(
             				Error.PACKAGE.ALGORITHM,

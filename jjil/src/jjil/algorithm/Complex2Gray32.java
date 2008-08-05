@@ -48,7 +48,7 @@ public class Complex2Gray32 extends PipelineStage {
      * @param im Input image. Must be a Complex32Image.
      * @throws jjil.core.Error if the input is not of type Complex32Image.
      */
-    public void Push(Image im) throws jjil.core.Error {
+    public void push(Image im) throws jjil.core.Error {
         if (!(im instanceof Complex32Image)) {
             throw new Error(
                 			Error.PACKAGE.ALGORITHM,

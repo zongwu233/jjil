@@ -61,7 +61,7 @@ public class RgbSubSample extends PipelineStage {
      * @throws jjil.core.Error if the input image is not gray, or
      * the reduction factor does not evenly divide the image size.
      */
-    public void Push(Image image) throws jjil.core.Error {
+    public void push(Image image) throws jjil.core.Error {
         if (!(image instanceof RgbImage)) {
             throw new Error(
                 			Error.PACKAGE.ALGORITHM,
@@ -150,7 +150,8 @@ public class RgbSubSample extends PipelineStage {
      *
      * @return the string describing the reduction operation.
      */
-    public String toString() {
+    @Override
+	public String toString() {
         return super.toString() + " (" + this.cTargetWidth + "," +  //$NON-NLS-1$ //$NON-NLS-2$
                 this.cTargetHeight + ")"; //$NON-NLS-1$
     }

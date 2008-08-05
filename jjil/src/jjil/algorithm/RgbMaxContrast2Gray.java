@@ -44,7 +44,7 @@ public class RgbMaxContrast2Gray extends PipelineStage {
     public RgbMaxContrast2Gray() {
     }
     
-    /** Implementation of Push operation from PipelineStage.
+    /** Implementation of push operation from PipelineStage.
      * Pipeline stage converts an ARGB color image into a Gray8Image. It does
      * this by choosing at each pixel the value that will give the maximum
      * contrast in the resulting image. That is, it computes 
@@ -57,7 +57,7 @@ public class RgbMaxContrast2Gray extends PipelineStage {
      * @param image the input image
      * @throws jjil.core.Error if image is not an RgbImage
      */
-    public void Push(Image image) throws jjil.core.Error {
+    public void push(Image image) throws jjil.core.Error {
         if (!(image instanceof RgbImage)) {
             throw new Error(
         			Error.PACKAGE.CORE,

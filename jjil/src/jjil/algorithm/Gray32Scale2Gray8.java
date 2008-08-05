@@ -47,7 +47,7 @@ public class Gray32Scale2Gray8 extends PipelineStage {
      * @param image the input image.
      * @throws jjil.core.Error if the input is not a Gray8Image
      */
-    public void Push(Image image) throws jjil.core.Error {
+    public void push(Image image) throws jjil.core.Error {
         if (!(image instanceof Gray32Image)) {
             throw new Error(
     				Error.PACKAGE.ALGORITHM,
@@ -79,7 +79,7 @@ public class Gray32Scale2Gray8 extends PipelineStage {
              /* Assign 32-bit output */
             gray8Data[i] = (byte)
                     (Byte.MIN_VALUE + 
-                    (((int)Byte.MAX_VALUE) - ((int)Byte.MIN_VALUE) * 
+                    ((Byte.MAX_VALUE) - (Byte.MIN_VALUE) * 
                         (gray32Data[i] - nMin)) / nDiff);
         }
         super.setOutput(gray8);

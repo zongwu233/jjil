@@ -45,7 +45,7 @@ public class Gray82Gray32 extends PipelineStage {
      * @param image the input image.
      * @throws jjil.core.Error if the input is not a Gray8Image
      */
-    public void Push(Image image) throws jjil.core.Error {
+    public void push(Image image) throws jjil.core.Error {
         if (!(image instanceof Gray8Image)) {
             throw new Error(
             				Error.PACKAGE.ALGORITHM,
@@ -62,7 +62,7 @@ public class Gray82Gray32 extends PipelineStage {
             /* Convert from signed byte value to unsigned byte for storage
              * in the 32-bit image.
              */
-            int grayUnsigned = ((int)grayData[i]) - Byte.MIN_VALUE;
+            int grayUnsigned = (grayData[i]) - Byte.MIN_VALUE;
             /* Assign 32-bit output */
             gray32Data[i] = grayUnsigned;
         }

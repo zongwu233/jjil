@@ -50,7 +50,7 @@ public class Gray32Div extends PipelineStage {
      * @throws jjil.core.Error if the image is not a gray 32-bit
      * image.
      */
-    public void Push(Image image)
+    public void push(Image image)
         throws jjil.core.Error
     {
         if (!(image instanceof Gray32Image)) {

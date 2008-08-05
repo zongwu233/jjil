@@ -63,7 +63,7 @@ public final class Gray16Image extends Image {
      *
      * @return the image copy.
      */
-    public Image Clone()
+    public Image clone()
     {
         Gray16Image image = new Gray16Image(getWidth(),getHeight());
         System.arraycopy(
@@ -88,7 +88,8 @@ public final class Gray16Image extends Image {
      *
      * @return the string.
      */
-    public String toString()
+    @Override
+	public String toString()
     {
         return super.toString() + " (" + getWidth() + "x" + getHeight() + //$NON-NLS-1$ //$NON-NLS-2$
                 ")"; //$NON-NLS-1$

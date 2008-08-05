@@ -76,7 +76,7 @@ public class GrayShrink extends PipelineStage {
      * @throws jjil.core.Error if input is not a Gray8Image, or the input image size is smaller (either 
      * horizontally or vertically) than the desired size.
      */
-    public void Push(Image image) throws jjil.core.Error {
+    public void push(Image image) throws jjil.core.Error {
         if (!(image instanceof Gray8Image)) {
             throw new Error(
                 			Error.PACKAGE.ALGORITHM,
@@ -95,9 +95,9 @@ public class GrayShrink extends PipelineStage {
         }
         Gray8Image input = (Gray8Image) image;
         /* horizontal shrink */
-        Gray32Image horiz = ShrinkHoriz(input);
+        Gray32Image horiz = shrinkHoriz(input);
         /* vertical shrink */
-        Gray8Image result = ShrinkVert(horiz);
+        Gray8Image result = shrinkVert(horiz);
         super.setOutput(result);
     }
         
@@ -144,7 +144,7 @@ public class GrayShrink extends PipelineStage {
      * @param input the input image
      * @return the shrunk image
      */
-    private Gray32Image ShrinkHoriz(Gray8Image input) {
+    private Gray32Image shrinkHoriz(Gray8Image input) {
         /* horizontal shrink */
         Gray32Image horiz = new Gray32Image(this.cWidth, input.getHeight());
         byte[] inData = input.getData();
@@ -156,7 +156,7 @@ public class GrayShrink extends PipelineStage {
         int nPos = 0;
         int nNextPos = input.getWidth() * 256 / this.cWidth;
         int nCount = 0;
-        for (int j=0; j<input.getWidth(); j++) {
+        for (int j=0; j<input.getWidth() && nPos < this.cWidth; j++) {
             for (int i=0; i<input.getHeight(); i++) {
                 nPixelSum[i] += inData[i*input.getWidth() + j] - Byte.MIN_VALUE;
             }
@@ -183,7 +183,7 @@ public class GrayShrink extends PipelineStage {
      * @param input the input image.
      * @returns the shrunk image.
      */
-    private Gray8Image ShrinkVert(Gray32Image input) {
+    private Gray8Image shrinkVert(Gray32Image input) {
         /* vertical shrink */
         Gray8Image vert = new Gray8Image(input.getWidth(), this.cHeight);
         int[] inData = input.getData();
@@ -195,7 +195,7 @@ public class GrayShrink extends PipelineStage {
         int nPos = 0;
         int nNextPos = input.getHeight() * 256 / this.cHeight;
         int nCount = 0;
-        for (int j=0; j<input.getHeight(); j++) {
+        for (int j=0; j<input.getHeight() && nPos < input.getHeight(); j++) {
             for (int i=0; i<input.getWidth(); i++) {
                 nPixelSum[i] += inData[j*input.getWidth() + i];
             }
@@ -223,7 +223,8 @@ public class GrayShrink extends PipelineStage {
      *
      * @return the string describing the shrinking operation.
      */
-    public String toString() {
+    @Override
+	public String toString() {
         return super.toString() + " (" + this.cWidth + "," + this.cHeight + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
 }

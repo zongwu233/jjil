@@ -47,7 +47,7 @@ public class Gray2Rgb extends PipelineStage {
      * @param image the input image.
      * @throws jjil.core.Error if the input is not a Gray8Image
      */
-    public void Push(Image image) throws jjil.core.Error {
+    public void push(Image image) throws jjil.core.Error {
         if (!(image instanceof Gray8Image)) {
             throw new Error(
                 	Error.PACKAGE.ALGORITHM,
@@ -64,7 +64,7 @@ public class Gray2Rgb extends PipelineStage {
             /* Convert from signed byte value to unsigned byte for storage
              * in the RGB image.
              */
-            int grayUnsigned = ((int)grayData[i]) - Byte.MIN_VALUE;
+            int grayUnsigned = (grayData[i]) - Byte.MIN_VALUE;
             /* Create ARGB word */
             rgbData[i] = 
                     ((grayUnsigned)<<16) | 
