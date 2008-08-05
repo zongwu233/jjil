@@ -26,13 +26,12 @@ package jjil.algorithm.j2se;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import jjil.algorithm.ErrorCodes;
+import jjil.algorithm.Gray8QmSum;
 import jjil.core.Error;
 import jjil.core.Gray32Image;
 import jjil.core.Gray8Image;
 import jjil.core.Image;
-import jjil.algorithm.ErrorCodes;
-import jjil.algorithm.Gray8QmSum;
-import jjil.algorithm.j2se.Gray8Statistics;
 /**
  * HaarClassifierCascade implements a Haar classifier, which is a trainable
  * image processing tool for detecting the presence of a feature or class of

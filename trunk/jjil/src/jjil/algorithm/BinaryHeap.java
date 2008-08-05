@@ -1,8 +1,6 @@
 package jjil.algorithm;
 
 import jjil.core.Error;
-//The code in this file is from
-//http://www.java-tips.org/java-se-tips/java.lang/priority-queue-binary-heap-implementation-in-3.html
 
 //BinaryHeap class
 //
