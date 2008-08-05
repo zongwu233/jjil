@@ -89,7 +89,6 @@ public class RgbImageJ2se implements jjil.debug.Show {
 		DataBufferInt dbi = new DataBufferInt(
 				rgb.getData(),
 				rgb.getHeight() * rgb.getWidth());
-		int bandOffsets[] = {0};
 		Raster r = Raster.createRaster(
 				im.getSampleModel(),
 				dbi, 
