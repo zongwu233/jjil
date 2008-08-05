@@ -23,7 +23,6 @@ package barcode;
  *
  */
 import java.util.*;
-import jjil.algorithm.GrayCrop;
 import jjil.algorithm.GrayVertAvg;
 import jjil.core.*;
 
@@ -406,7 +405,7 @@ public class BarcodeReaderUpc implements BarcodeReader {
      * @param cCols the width of the image.
      * @param dCol the starting column for the convolution.
      */
-    private static int Convolve(
+    private static int convolve(
             byte[] image,
             int[] rgWeights, 
             int cPixelsPerBar, 
@@ -439,7 +438,7 @@ public class BarcodeReaderUpc implements BarcodeReader {
      * @throws jjil.core.Error if image is not an 8-bit gray image
      */
     
-    public int Decode(Image image) 
+    public int decode(Image image) 
         throws jjil.core.Error {
         if (!(image instanceof Gray8Image)) {
             throw new jjil.core.Error(
@@ -458,7 +457,7 @@ public class BarcodeReaderUpc implements BarcodeReader {
         EstimateBarcodes(gray);
         // form the vertical average of the image for verifying
         // the codes
-        byte[] rgbAvg = GrayVertAvg.Push(gray);
+        byte[] rgbAvg = GrayVertAvg.push(gray);
         // take the most common left barcodes and estimate their
         // match with the left side of the average
         /* 
@@ -513,7 +512,7 @@ public class BarcodeReaderUpc implements BarcodeReader {
                             String szCompleteCode = 
                                     cvLeftCodes.getCodeAt(dLeft).getBarcode() +
                                     cvRightCodes.getCodeAt(dRight).getBarcode();
-                            if (VerifyCheckDigit(szCompleteCode)) {
+                            if (verifyCheckDigit(szCompleteCode)) {
                                 this.szBarCode = szCompleteCode;
                                 wGoodness = wThisGoodness;
                             }
@@ -588,7 +587,7 @@ public class BarcodeReaderUpc implements BarcodeReader {
             int nBestDigit = -1;
             int wBestConv = Integer.MIN_VALUE;
             for (int j=0; j<10;j++) {
-                int wConv = Convolve(
+                int wConv = convolve(
                         image.getData(),
                         this.rgxwDigitCodes[j],
                         cPixelsPerBar,
@@ -634,7 +633,7 @@ public class BarcodeReaderUpc implements BarcodeReader {
             int nBestDigit = -1;
             int wBestConv = Integer.MAX_VALUE;
             for (int j=0; j<10;j++) {
-                int wConv = Convolve(
+                int wConv = convolve(
                         image.getData(),
                         this.rgxwDigitCodes[j],
                         cPixelsPerBar,
@@ -774,7 +773,7 @@ public class BarcodeReaderUpc implements BarcodeReader {
                     rgwMask = BuildRightSideMask(barcode);
                     dPos = this.dAvgLeftEdge + MidOffset * cPixelsPerBar;
                 }
-                int conv = Convolve(rgbSum, rgwMask, cPixelsPerBar, 0, 
+                int conv = convolve(rgbSum, rgwMask, cPixelsPerBar, 0, 
                         rgbSum.length, dPos);
                 cvCodes.addCode(new CodeConv(barcode, conv));
             } 
@@ -832,7 +831,7 @@ public class BarcodeReaderUpc implements BarcodeReader {
      * @param digits the barcode to be verified.
      * @return true iff the barcode passes the check digit test.
      */
-    private static boolean VerifyCheckDigit(String digits) {
+    private static boolean verifyCheckDigit(String digits) {
         // compute check digit
         // add even numbered digits
         int evenSum = 0;
