@@ -53,7 +53,7 @@ public class Gray16Threshold extends PipelineStage {
      * @throws jjil.core.Error if the image is not a gray 16-bit
      * image.
      */
-    public void Push(Image image)
+    public void push(Image image)
         throws jjil.core.Error
     {
         if (!(image instanceof Gray16Image)) {
@@ -85,7 +85,8 @@ public class Gray16Threshold extends PipelineStage {
      * 
      * @return a String describing the class instance.
      */
-    public String toString() {
+    @Override
+	public String toString() {
     	return super.toString() + "(" + this.nThreshold + ")"; //$NON-NLS-1$ //$NON-NLS-2$
     }
 

@@ -71,8 +71,8 @@ public class WienerDeconv extends PipelineStage {
         }
         this.nNoise = nNoise;
         this.fft = new FftGray8();
-        this.fft.Push(psf);
-        this.cxmPsfInv = (Complex32Image) this.fft.Front();
+        this.fft.push(psf);
+        this.cxmPsfInv = (Complex32Image) this.fft.getFront();
         invertPsf();
     }
     
@@ -81,7 +81,7 @@ public class WienerDeconv extends PipelineStage {
      * @param im the input Gray8Image.
      * @throws jjil.core.Error if the input image is not a Gray8Image or not square.
      */
-    public void Push(Image im) throws jjil.core.Error {
+    public void push(Image im) throws jjil.core.Error {
         if (im.getWidth() != im.getHeight()) {
             throw new Error(
             				Error.PACKAGE.ALGORITHM,
@@ -107,8 +107,8 @@ public class WienerDeconv extends PipelineStage {
             				null,
             				null);
         }
-        this.fft.Push(im);
-        Complex32Image cxmIm = (Complex32Image) this.fft.Front();
+        this.fft.push(im);
+        Complex32Image cxmIm = (Complex32Image) this.fft.getFront();
         Complex cxIn[] = cxmIm.getData();
         Complex32Image cxmResult = new Complex32Image(im.getWidth(), im.getHeight());
         Complex cxOut[] = cxmResult.getData();

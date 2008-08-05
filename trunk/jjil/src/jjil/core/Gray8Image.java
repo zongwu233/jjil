@@ -61,9 +61,8 @@ public class Gray8Image extends Image {
     /**
      * Copy this image
      * @return the image copy.
-     * @throws jjil.core.Error never (needed for override).
      */
-    public Image Clone() throws jjil.core.Error
+    public Image clone()
     {
         Gray8Image image = new Gray8Image(getWidth(),getHeight());
         System.arraycopy(
@@ -89,7 +88,8 @@ public class Gray8Image extends Image {
      *
      * @return the string.
      */
-    public String toString()
+    @Override
+	public String toString()
     {
         return super.toString() + " (" + getWidth() + "x" + getHeight() + //$NON-NLS-1$ //$NON-NLS-2$
                 ")"; //$NON-NLS-1$

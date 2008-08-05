@@ -35,7 +35,7 @@ public class RgbImageJ2se implements jjil.debug.Show {
 	 * Creates a new instance of RgbImageJ2se. The graphics object
 	 * will be used to display images in all subsequently created instances
 	 * of RgbImageJ2se.
-	 * @param graphics: the graphics object to use for all image displays.
+	 * @param graphics the graphics object to use for all image displays.
 	 */
 	public RgbImageJ2se(Graphics graphics) {
 		RgbImageJ2se.graphics = graphics;
@@ -50,7 +50,7 @@ public class RgbImageJ2se implements jjil.debug.Show {
 	
 	/**
 	 * Sends an RgbImage to the current graphics object.
-	 * @param rgb: the image to display.
+	 * @param rgb the image to display.
 	 */
 	public synchronized void toDisplay(RgbImage rgb) {
 		if (RgbImageJ2se.graphics != null) {
@@ -61,8 +61,8 @@ public class RgbImageJ2se implements jjil.debug.Show {
 	
 	/**
 	 * Sends an RgbImage to a file.
-	 * @param rgb: the RgbImage to send to the file.
-	 * @param szFile: the path of the file to save the image in. The
+	 * @param rgb the RgbImage to send to the file.
+	 * @param szFile the path of the file to save the image in. The
 	 * file suffix is used to determine the image type (JPEG or PNG).
 	 * Storage is in JPEG by default.
 	 */
@@ -102,7 +102,7 @@ public class RgbImageJ2se implements jjil.debug.Show {
 	 * Transforms an input java.awt.Image to a jjil.core.RgbImage.
 	 * The image is read from the ImageProducer until the entire image is
 	 * received, and the result is stored into the returned RgbImage.
-	 * @param im: the input java.awt.Image object.
+	 * @param im the input java.awt.Image object.
 	 * @return a jjil.core.RgbImage with the same contents as the input im.
 	 */
 	static public RgbImage toRgbImage(Image im) {

@@ -54,7 +54,7 @@ public abstract class PipelineStage
      *
      * @return true iff the pipeline stage does not have an image available.
      */
-    public boolean Empty()
+    public boolean isEmpty()
     {
         return !this.fReady;
     }
@@ -64,7 +64,7 @@ public abstract class PipelineStage
      * @return the current output
      * @throws jjil.core.Error if no output is available
      */
-    public Image Front() throws jjil.core.Error
+    public Image getFront() throws jjil.core.Error
     {
         if (!this.fReady) {
             throw new Error(
@@ -85,7 +85,7 @@ public abstract class PipelineStage
      * @param imageInput the input image
      * @throws jjil.core.Error typically, when the image is not of the expected type.
      */
-    public abstract void Push(Image imageInput) throws jjil.core.Error;
+    public abstract void push(Image imageInput) throws jjil.core.Error;
     
     /** Derived classes use setOutput to pass their result back
      * here.

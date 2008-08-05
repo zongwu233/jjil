@@ -86,14 +86,14 @@ public class GrayHistMatch extends PipelineStage {
         return result;
     }
     
-    /** Push transforms an input gray image to have the target histogram,
+    /** push transforms an input gray image to have the target histogram,
      * as near as possible while assigning each input grayvalue a unique
      * output grayvalue.
      *
      * @param image the input image.
      * @throws jjil.core.Error if the input image is not gray.
      */
-    public void Push(Image image) throws jjil.core.Error {
+    public void push(Image image) throws jjil.core.Error {
         if (!(image instanceof Gray8Image)) {
             throw new Error(
     				Error.PACKAGE.ALGORITHM,
@@ -123,8 +123,8 @@ public class GrayHistMatch extends PipelineStage {
         byte[] lookup = createLookup(this.histCumTarget, histCum);
         // apply the lookup table
         GrayLookup modify = new GrayLookup(lookup);
-        modify.Push(input);
-        super.setOutput(modify.Front());
+        modify.push(input);
+        super.setOutput(modify.getFront());
     }
     
     /** setHistogram sets a new target histogram.

@@ -44,7 +44,7 @@ public class RgbAvg2Gray extends PipelineStage {
     public RgbAvg2Gray() {
     }
     
-    /** Implementation of Push operation from PipelineStage.
+    /** Implementation of push operation from PipelineStage.
      * Averages the R, G, and B values to create a gray image of
      * the same size. Note that the RGB->Gray conversion involves
      * changing the data range of each pixel from 0->255 to -128->127
@@ -53,7 +53,7 @@ public class RgbAvg2Gray extends PipelineStage {
      * @param image the input image
      * @throws jjil.core.Error if image is not an RgbImage
      */
-    public void Push(Image image) throws jjil.core.Error {
+    public void push(Image image) throws jjil.core.Error {
         if (!(image instanceof RgbImage)) {
             throw new Error(
             				Error.PACKAGE.ALGORITHM,

@@ -54,12 +54,12 @@ public class Sequence extends PipelineStage {
         this.pFirst = p;
     }
     
-    /** Add an additional PipelineStage at the end of the
+    /** add an additional PipelineStage at the end of the
      * current Sequence.
      *
      * @param p the PipelineStage to be added.
      */
-    public void Add(PipelineStage p)
+    public void add(PipelineStage p)
     {
         if (this.pFirst == null) {
             this.pFirst = p;
@@ -67,7 +67,7 @@ public class Sequence extends PipelineStage {
             if (this.pNext == null) {
                 this.pNext = new Sequence(p);
             } else {
-                this.pNext.Add(p);
+                this.pNext.add(p);
             }
         } 
     }
@@ -76,27 +76,28 @@ public class Sequence extends PipelineStage {
      *
      * @return true iff the pipeline has no image available.
      */
-    public boolean Empty()
+    public boolean isEmpty()
     {
         if (pNext == null) {
-            return pFirst.Empty();
+            return pFirst.isEmpty();
         } else {
-            return pNext.Empty();
+            return pNext.isEmpty();
         }
     }
     
     /**
      * Returns the Image produced by the last stage
-     * in the pipeline. Overrides PipelineStage.Front.
+     * in the pipeline. Overrides PipelineStage.getFront.
      * @return the Image produced by the pipeline.
      * @throws jjil.core.Error if no image is available.
      */
-    public Image Front() throws jjil.core.Error
+    @Override
+	public Image getFront() throws jjil.core.Error
     {
         if (pNext == null) {
-            return pFirst.Front();
+            return pFirst.getFront();
         } else {
-            return pNext.Front();
+            return pNext.getFront();
         }
     }
     
@@ -105,11 +106,12 @@ public class Sequence extends PipelineStage {
      * The image is pushed onto the beginning of the pipeline,
      * and then each stage's output is passed to the next
      * stage, until the end of the pipeline is reached.
-     * Overrides PipelineStage.Push(Image).
+     * Overrides PipelineStage.push(Image).
      * @param i the image to be pushed.
      * @throws jjil.core.Error if the pipeline is empty.
      */
-    public void Push(Image i) throws jjil.core.Error
+    @Override
+	public void push(Image i) throws jjil.core.Error
     {
         if (pFirst == null) {
             throw new Error(
@@ -119,8 +121,8 @@ public class Sequence extends PipelineStage {
                             null,
                             null);
         }
-        pFirst.Push(i);
-        if (pFirst.Empty()) {
+        pFirst.push(i);
+        if (pFirst.isEmpty()) {
             throw new Error(
                             Error.PACKAGE.CORE,
                             ErrorCodes.PIPELINE_NO_RESULT,
@@ -129,7 +131,7 @@ public class Sequence extends PipelineStage {
                             null);
         }
         if (pNext != null) {
-            pNext.Push(pFirst.Front());
+            pNext.push(pFirst.getFront());
         }
     }
     
@@ -140,7 +142,8 @@ public class Sequence extends PipelineStage {
      *
      * @return the string describing the pipeline.
      */
-    public String toString()
+    @Override
+	public String toString()
     {
         if (this.pFirst == null) {
             return "(null)"; //$NON-NLS-1$

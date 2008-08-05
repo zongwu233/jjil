@@ -70,7 +70,7 @@ public class ZeroCrossingHoriz {
      * @param posPix the positive pixel
      * @return the zero crossing position
      */
-    private int ComputeZeroCrossing(
+    private int computeZeroCrossing(
             int leftPos, 
             int leftPix, 
             int rightPos, 
@@ -98,7 +98,7 @@ public class ZeroCrossingHoriz {
      * @param v the Vector of Integers
      * @return the array of ints
      */
-    private int[] CopyVectorToArray(Vector v) {
+    private int[] copyVectorToArray(Vector v) {
         /* copy v into an array of ints
          */
         int[] resultRow = new int[v.size()];
@@ -119,7 +119,7 @@ public class ZeroCrossingHoriz {
      * can be represented. A value of null means there were no zero crossings
      * in the row.
      */
-    public int[][] Push(Gray8Image image) {
+    public int[][] push(Gray8Image image) {
         byte[] data = image.getData();
         int[][] result = new int[image.getHeight()][];
         for (int i=0; i<image.getHeight(); i++) {
@@ -142,7 +142,7 @@ public class ZeroCrossingHoriz {
                          * Compute the exact zero crossing.
                          */
                         int posEdge = 
-                            ComputeZeroCrossing(cLastPos, wLastEdge,
+                            computeZeroCrossing(cLastPos, wLastEdge,
                                 j, bThisPix);
                         // test for negative or positive zero crossing
                         if (bThisPix < 0) posEdge = -posEdge;
@@ -153,7 +153,7 @@ public class ZeroCrossingHoriz {
                 }
             }
             if (!v.isEmpty()) {
-               result[i] = CopyVectorToArray(v);
+               result[i] = copyVectorToArray(v);
             }
         }
         return result;

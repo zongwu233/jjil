@@ -80,11 +80,11 @@ public class Gray8SubImageGenerator extends PipelineStage {
     // We are done producing images when the last row is done
     /**
      * Returns true when no more subimages are available from the input image.
-     * Empty() should be called before Front() to verify that subimages are available
-     * since it is an error to call Front() when Empty() is true.
+     * isEmpty() should be called before getFront() to verify that subimages are available
+     * since it is an error to call getFront() when isEmpty() is true.
      * @return true when no more subimages are available. 
      */
-    public boolean Empty() {
+    public boolean isEmpty() {
         return this.nVertIndex == this.nVertLimit;
     }
     
@@ -92,10 +92,11 @@ public class Gray8SubImageGenerator extends PipelineStage {
     /**
      * Returns the next subimage.
      * @return a subimage within the input image, of type Gray8SubImage.
-     * @throws jjil.core.Error when there are no more subimages available (Empty() would return
+     * @throws jjil.core.Error when there are no more subimages available (isEmpty() would return
      * true.)
      */
-     public Image Front() throws jjil.core.Error
+     @Override
+	public Image getFront() throws jjil.core.Error
     {
         // offset of first pixel of the subimage within the
         // larget image.
@@ -142,7 +143,8 @@ public class Gray8SubImageGenerator extends PipelineStage {
      * (less than the size of the subimages we're supposed to
      * be generating).
      */
-    public void Push(Image image) throws jjil.core.Error {
+    @Override
+	public void push(Image image) throws jjil.core.Error {
         if (!(image instanceof Gray8Image)) {
             throw new Error(
             				Error.PACKAGE.ALGORITHM,

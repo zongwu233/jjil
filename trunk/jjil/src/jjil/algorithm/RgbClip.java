@@ -78,7 +78,7 @@ public class RgbClip extends PipelineStage {
      *    extends outside the input image, or the input image
      *    is not an RgbImage.
      */
-    public void Push(Image image) throws jjil.core.Error {
+    public void push(Image image) throws jjil.core.Error {
         if (!(image instanceof RgbImage)) {
             throw new Error(
                 			Error.PACKAGE.ALGORITHM,
@@ -133,7 +133,8 @@ public class RgbClip extends PipelineStage {
      *
      * @return the string describing the clipping operation.
      */
-    public String toString() {
+    @Override
+	public String toString() {
         return super.toString() + " (" + this.nR + "," + this.nG +  //$NON-NLS-1$ //$NON-NLS-2$
                 "," + this.nB + "," + this.nLimit + "," + this.bDir + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
     }

@@ -51,7 +51,7 @@ public class Gray3Bands2Rgb {
      * @return the color image
      * @throws jjil.core.Error if the input sizes do not match
      */
-    public RgbImage Push(
+    public RgbImage push(
             Gray8Image imRed, 
             Gray8Image imGreen, 
             Gray8Image imBlue) throws jjil.core.Error {
@@ -75,9 +75,9 @@ public class Gray3Bands2Rgb {
             /* Convert from signed byte value to unsigned byte for storage
              * in the RGB image.
              */
-            int redUnsigned = ((int)redData[i]) - Byte.MIN_VALUE;
-            int greenUnsigned = ((int)greenData[i]) - Byte.MIN_VALUE;
-            int blueUnsigned = ((int)blueData[i]) - Byte.MIN_VALUE;
+            int redUnsigned = (redData[i]) - Byte.MIN_VALUE;
+            int greenUnsigned = (greenData[i]) - Byte.MIN_VALUE;
+            int blueUnsigned = (blueData[i]) - Byte.MIN_VALUE;
             /* Create ARGB word */
             rgbData[i] = 
                     ((redUnsigned)<<16) | 

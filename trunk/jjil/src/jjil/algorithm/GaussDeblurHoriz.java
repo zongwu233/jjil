@@ -29,7 +29,6 @@ import jjil.core.Error;
 import jjil.core.Gray8Image;
 import jjil.core.Image;
 import jjil.core.PipelineStage;
-import jjil.core.Point;
 /**
  * Uses deconvolution to remove blur from a Gray8Image. The blur removed is a 
  * horizontal Gaussian blur with a given standard deviation. The background noise
@@ -185,7 +184,7 @@ public class GaussDeblurHoriz extends PipelineStage {
      * @param im Input Gray8Image.
      * @throws jjil.core.Error if the input is not a Gray8Image or is not square.
      */
-    public void Push(Image im) throws jjil.core.Error {
+    public void push(Image im) throws jjil.core.Error {
         if (im.getWidth() != im.getHeight()) {
             throw new Error(
             				Error.PACKAGE.ALGORITHM,
@@ -202,8 +201,8 @@ public class GaussDeblurHoriz extends PipelineStage {
             				null,
             				null);
         }
-        this.fft.Push(im);
-        Complex32Image cxmIm = (Complex32Image) this.fft.Front();
+        this.fft.push(im);
+        Complex32Image cxmIm = (Complex32Image) this.fft.getFront();
         Complex cxIn[] = cxmIm.getData();
         Complex32Image cxmResult = new Complex32Image(im.getWidth(), im.getHeight());
         Complex cxOut[] = cxmResult.getData();
@@ -228,8 +227,8 @@ public class GaussDeblurHoriz extends PipelineStage {
             }            
         }
         // inverse FFT to get result
-        this.ifft.Push(cxmResult);
-        super.setOutput(this.ifft.Front());
+        this.ifft.push(cxmResult);
+        super.setOutput(this.ifft.getFront());
     }
     
     /**

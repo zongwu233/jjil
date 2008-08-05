@@ -141,7 +141,7 @@ public class Error extends jjil.core.Error {
                         new Integer(this.getCode()).toString();
                 break;
            }
-           return szResult + ":  " + Parameters();
+           return szResult + ":  " + parameters();
     }
 
 }

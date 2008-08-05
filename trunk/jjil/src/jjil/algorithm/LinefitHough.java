@@ -111,7 +111,7 @@ public class LinefitHough {
      *
      * @param p the point to add to the accumulator array
      */
-    private void AddPoint(Point p) {
+    private void addPoint(Point p) {
         // compute initial intercept. cMinSlope is the real slope minimum
         // * 256.
         int yIntStart = (p.getY() * 256 - p.getX() * this.cMinSlope) / 256;
@@ -135,7 +135,7 @@ public class LinefitHough {
     
     /** Find the peak in the Hough array. Updates cCount, cSlope, and cYInt.
      */
-    private void FindPeak() {
+    private void findPeak() {
         this.cCount = Integer.MIN_VALUE;
         for (int slope=0; slope<this.cSteps; slope++) {
             for (int y=0; y<this.cMaxY-this.cMinY; y++) {
@@ -179,7 +179,7 @@ public class LinefitHough {
      * @throws jjil.core.Error if points is not a Vector of 
      * point objects.
      */
-    public void Push(Vector points) throws jjil.core.Error {
+    public void push(Vector points) throws jjil.core.Error {
         /* create Hough accumulator */
         this.cHoughAccum = 
                 new int[this.cSteps][this.cMaxY-this.cMinY];
@@ -196,9 +196,9 @@ public class LinefitHough {
                     			null);
             }
             Point p = (Point) o;
-            AddPoint(p);
+            addPoint(p);
         }
-        FindPeak(); // sets cYInt, cSlope, cCount for access by caller
+        findPeak(); // sets cYInt, cSlope, cCount for access by caller
         this.cHoughAccum = null; // free memory
     }
        

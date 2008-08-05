@@ -156,7 +156,7 @@ public class Error extends Throwable {
      * 
      * @return String including all parameters describing error.
      */
-    protected String Parameters() {
+    protected String parameters() {
         String sz = "(";
         if (this.getParam1() != null) {
             sz += this.getParam1();
@@ -180,6 +180,6 @@ public class Error extends Throwable {
     public String toString() {
             return new Integer(this.nPackage).toString() + " " +
                     new Integer(this.nCode).toString() + 
-                    Parameters();
+                    parameters();
         }
 }

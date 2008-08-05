@@ -51,7 +51,7 @@ public class Gray8QmSum extends PipelineStage {
      * @param image the input image.
      * @throws jjil.core.Error if the input is not a Gray8Image
      */
-    public void Push(Image image) throws jjil.core.Error {
+    public void push(Image image) throws jjil.core.Error {
         if (!(image instanceof Gray8Image)) {
             throw new Error(
             				Error.PACKAGE.ALGORITHM,
@@ -70,7 +70,7 @@ public class Gray8QmSum extends PipelineStage {
             /* Convert from signed byte value to unsigned byte for storage
              * in the 32-bit image.
              */
-            int grayUnsigned = ((int)grayData[j]) - Byte.MIN_VALUE;
+            int grayUnsigned = (grayData[j]) - Byte.MIN_VALUE;
             /* Assign 32-bit output */
             nSum += grayUnsigned;
             gray32Data[j] = nSum;
@@ -83,7 +83,7 @@ public class Gray8QmSum extends PipelineStage {
                  * in the 32-bit image.
                  */
                 int grayUnsigned = 
-                        ((int)grayData[i*gray.getWidth()+j]) - Byte.MIN_VALUE;
+                        (grayData[i*gray.getWidth()+j]) - Byte.MIN_VALUE;
                 nSum += grayUnsigned;
                 gray32Data[i*gray.getWidth()+j] = 
                         gray32Data[(i-1)*gray.getWidth()+j] +

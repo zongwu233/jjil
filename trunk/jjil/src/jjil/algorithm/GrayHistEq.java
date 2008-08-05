@@ -51,7 +51,7 @@ public class GrayHistEq extends PipelineStage {
      * @param image the input image.
      * @throws jjil.core.Error if the input image is not gray.
      */
-    public void Push(Image image) throws jjil.core.Error {
+    public void push(Image image) throws jjil.core.Error {
         if (!(image instanceof Gray8Image)) {
             throw new Error(
             				Error.PACKAGE.ALGORITHM,
@@ -83,7 +83,7 @@ public class GrayHistEq extends PipelineStage {
         /* Apply the histogram match algorithm to equalize the histogram
          * of the input.
          */
-        this.histMatch.Push(gray);
-        super.setOutput(this.histMatch.Front());
+        this.histMatch.push(gray);
+        super.setOutput(this.histMatch.getFront());
     }
 }

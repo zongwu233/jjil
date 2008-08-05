@@ -214,21 +214,24 @@ public abstract class HaarClassifierCascade {
                 this.weight = weight;
             }
 
-            protected int eval(Gray32Image image) {
+            @Override
+			protected int eval(Gray32Image image) {
                 int data[] =  image.getData();
                 return weight * ( data[this.n1] + data[this.n2] -
                                   data[this.n3] - data[this.n4] );
             }
             
             // when image width is changed we have to recompute the indices.
-            protected void setWidth(int nWidth) {
+            @Override
+			protected void setWidth(int nWidth) {
                     this.n1 = (tly-1)*nWidth + (tlx-1);
                     this.n2 = (tly+h-1)*nWidth + (tlx+w-1);
                     this.n3 = (tly-1)*nWidth + (tlx+w-1);
                     this.n4 = (tly+h-1)*nWidth + (tlx-1);
              }
             
-            public String toString() {
+            @Override
+			public String toString() {
                 return "(hr " + this.tlx + " " + this.tly + //$NON-NLS-1$ //$NON-NLS-2$
                         " " + this.w + " " + this.h +  //$NON-NLS-1$ //$NON-NLS-2$
                         " " + this.weight + ")"; //$NON-NLS-1$ //$NON-NLS-2$
@@ -251,13 +254,15 @@ public abstract class HaarClassifierCascade {
             }
 
 
-            protected int eval(Gray32Image image) {
+            @Override
+			protected int eval(Gray32Image image) {
                 int data[] = image.getData();
 
                 return weight * ( data[this.n2] - data[this.n3] );
             }
             
-            protected void setWidth(int nWidth) {
+            @Override
+			protected void setWidth(int nWidth) {
                 // we precompute the indices so that we don't
                 // have to do computation using nWidth in the
                 // usual case, when nWidth doesn't change.'
@@ -265,7 +270,8 @@ public abstract class HaarClassifierCascade {
                 this.n3 = (tly-1)*nWidth + w - 1;
             }
             
-            public String toString() {
+            @Override
+			public String toString() {
                 return "(hr 0 " + this.tly + //$NON-NLS-1$
                         " " + this.w + " " + this.h +  //$NON-NLS-1$ //$NON-NLS-2$
                         " " + this.weight + ")"; //$NON-NLS-1$ //$NON-NLS-2$
@@ -288,13 +294,15 @@ public abstract class HaarClassifierCascade {
             }
 
 
-            protected int eval(Gray32Image image) {
+            @Override
+			protected int eval(Gray32Image image) {
                 int data[] = image.getData();
 
                 return weight * ( data[this.n2] - data[this.n4] );
             }
             
-            protected void setWidth(int nWidth) {
+            @Override
+			protected void setWidth(int nWidth) {
                 // we precompute the indices so that we don't
                 // have to do computation using nWidth in the
                 // usual case, when nWidth doesn't change.'
@@ -302,7 +310,8 @@ public abstract class HaarClassifierCascade {
                     this.n4 = (h - 1)*nWidth + (tlx-1);
             }
             
-            public String toString() {
+            @Override
+			public String toString() {
                 return "(hr " + this.tlx + " 0 " +  //$NON-NLS-1$ //$NON-NLS-2$
                         this.w + " " + this.h +  //$NON-NLS-1$
                         " " + this.weight + ")"; //$NON-NLS-1$ //$NON-NLS-2$
@@ -322,20 +331,23 @@ public abstract class HaarClassifierCascade {
             }
 
 
-            protected int eval(Gray32Image image) {
+            @Override
+			protected int eval(Gray32Image image) {
                 int data[] = image.getData();
 
                 return weight * ( data[this.n2] );
             }
             
-             protected void setWidth(int nWidth) {
+             @Override
+			protected void setWidth(int nWidth) {
                 // we precompute the indices so that we don't
                 // have to do computation using nWidth in the
                 // usual case, when nWidth doesn't change.'
                 this.n2 = (h - 1)*nWidth + w - 1;
              }
              
-            public String toString() {
+            @Override
+			public String toString() {
                 return "(hr 0 0 " + this.w + " " + this.h +  //$NON-NLS-1$ //$NON-NLS-2$
                         " " + this.weight + ")"; //$NON-NLS-1$ //$NON-NLS-2$
             }
@@ -454,7 +466,8 @@ public abstract class HaarClassifierCascade {
          * same behavior.
          * @return A string representation of the HaarFeature.
          */
-        public String toString() {
+        @Override
+		public String toString() {
             return "(hf " + this.rect[0].toString() +  //$NON-NLS-1$
                     this.rect[1].toString() + this.rect[2].toString() +
                     (this.bTilted ? "1" : "0") + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -593,7 +606,8 @@ class HaarClassifierTreeBase extends HaarClassifierCascade
     private HaarStageClassifier child;
     private HaarClassifierTreeBase parent;
 
-    public boolean eval(Image image) throws jjil.core.Error {
+    @Override
+	public boolean eval(Image image) throws jjil.core.Error {
         if (!(image instanceof Gray32Image)) {
              throw new Error(
             				Error.PACKAGE.ALGORITHM,
@@ -707,7 +721,8 @@ class  HaarClassifierStumpBase extends HaarClassifierCascade {
             
         }
         
-        public String toString() {
+        @Override
+		public String toString() {
             return "(hwcs " + this.feature.toString() + //$NON-NLS-1$
                     this.threshold + " " + this.a + " " + this.b + " " + //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
                     this.width + " " + this.height + ")"; //$NON-NLS-1$ //$NON-NLS-2$
@@ -766,7 +781,8 @@ class  HaarClassifierStumpBase extends HaarClassifierCascade {
             }
         }
         
-        public String toString() {
+        @Override
+		public String toString() {
             String sz =  "(hcs " + this.hwcs.length; //$NON-NLS-1$
             for (int i=0; i<this.hwcs.length; i++) {
                 sz += " " + this.hwcs[i].toString(); //$NON-NLS-1$
@@ -777,7 +793,8 @@ class  HaarClassifierStumpBase extends HaarClassifierCascade {
     };
 
        
-        public boolean eval(Image image) throws jjil.core.Error {
+        @Override
+		public boolean eval(Image image) throws jjil.core.Error {
             if (!(image instanceof Gray8Image)) {
                  throw new Error(
                                  Error.PACKAGE.ALGORITHM,
@@ -787,7 +804,7 @@ class  HaarClassifierStumpBase extends HaarClassifierCascade {
                                  null);
             }
             // calculate the standard deviation of the input mage
-            this.gs.Push(image);
+            this.gs.push(image);
             int stdDev = this.gs.getStdDev();
             int nWidth = image.getWidth();
             if (this.nWidth != nWidth) {
@@ -797,8 +814,8 @@ class  HaarClassifierStumpBase extends HaarClassifierCascade {
             }
             this.nWidth = nWidth;
             // form the cumulative sum of the image
-            this.gcs.Push(image);
-            Gray32Image g32 = (Gray32Image) this.gcs.Front();
+            this.gcs.push(image);
+            Gray32Image g32 = (Gray32Image) this.gcs.getFront();
             for (int i=0; i<this.hsc.length; i++) {
                 this.hsc[i].setStdDev(stdDev);
                 if (!this.hsc[i].eval(g32)) {
@@ -851,7 +868,8 @@ class  HaarClassifierStumpBase extends HaarClassifierCascade {
         }
     }
         
-    public String toString() {
+    @Override
+	public String toString() {
         String sz = "(hcsb " + this.width + " " + this.height + " " + //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
                 this.hsc.length;
          for (int i=0; i<this.hsc.length; i++) {

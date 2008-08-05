@@ -50,7 +50,7 @@ public class Gray8SubImage extends Gray8Image {
      *
      * @return the image copy.
      */
-    public Image Clone()
+    public Image clone()
     {
         Gray8Image image = new Gray8SubImage(getWidth(),getHeight(),getXOffset(),getYOffset());
         System.arraycopy(
@@ -102,7 +102,8 @@ public class Gray8SubImage extends Gray8Image {
      *
      * @return the string.
      */
-    public String toString()
+    @Override
+	public String toString()
     {
         return super.toString() + " (" + getWidth() + "x" + getHeight() + //$NON-NLS-1$ //$NON-NLS-2$
                 "," + getXOffset() + "," + getYOffset() + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$

@@ -30,8 +30,6 @@ import jjil.core.Gray8Image;
 import jjil.core.Image;
 import jjil.core.Point;
 import jjil.core.Rect;
-import jjil.core.RgbImage;
-import jjil.core.Sequence;
 
 /**
  * Gray connected components. Input is a Gray8Image. Pixels with value
@@ -219,7 +217,7 @@ public class GrayConnComp {
 	 * @throws jjil.core.Error
 	 *             if the image is not a gray 8-bit image.
 	 */
-	public void Push(Image image) throws jjil.core.Error {
+	public void push(Image image) throws jjil.core.Error {
 		if (!(image instanceof Gray8Image)) {
 			throw new Error(
 				   	Error.PACKAGE.ALGORITHM,

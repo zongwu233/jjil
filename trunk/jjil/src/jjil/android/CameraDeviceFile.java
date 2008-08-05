@@ -82,8 +82,8 @@ public class CameraDeviceFile {
 									bmp.width()), 
 							Math.max(this.captParams.outputHeight,
 									bmp.height()));
-					rs.Push(rgb);
-					rgb = (RgbImage) rs.Front();
+					rs.push(rgb);
+					rgb = (RgbImage) rs.getFront();
 				}
 				// Now shrink the image if necessary
 				if (this.captParams.outputHeight < bmp.height() ||
@@ -91,7 +91,7 @@ public class CameraDeviceFile {
 					RgbShrink rsh = new RgbShrink(
 							this.captParams.outputWidth, 
 							this.captParams.outputHeight);
-					rsh.Push(rgb);
+					rsh.push(rgb);
 				}
 				bmp = RgbImageAndroid.toBitmap(rgb);
 			}

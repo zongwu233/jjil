@@ -38,7 +38,7 @@ public class MathPlus {
     public static int PI = 205887;
     // Scale factor applied to all calculations
     /**
-     * The scale factor for this class. Parameters and results are scaled by
+     * The scale factor for this class. parameters and results are scaled by
      * this factor, currently 2**16 = 65536.
      */
     public static int SCALE = 65536; // 2**16

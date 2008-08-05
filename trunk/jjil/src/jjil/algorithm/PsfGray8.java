@@ -40,7 +40,7 @@ public class PsfGray8 {
      * twice this width plus 1, centered on the center of the image.
      * @return A Gray8Image that can be passed to InverseFilter to remove horizontal blur.
      */
-    public static Gray8Image HorizBar(int nImageWidth, int nBarHalfWidth) {
+    public static Gray8Image horizBar(int nImageWidth, int nBarHalfWidth) {
         Gray8Image imResult = new Gray8Image(nImageWidth, nImageWidth, Byte.MIN_VALUE);
         byte bData[] = imResult.getData();
         int nC = nImageWidth / 2;
@@ -61,7 +61,7 @@ public class PsfGray8 {
      * @return A Gray8Image that can be passed to InverseFilter to remove circular blur,
      * for example that due to defocus.
      */
-    public static Gray8Image Disk(int nImageWidth, int nRadius) {
+    public static Gray8Image disk(int nImageWidth, int nRadius) {
         Gray8Image imResult = new Gray8Image(nImageWidth, nImageWidth, Byte.MIN_VALUE);
         byte bData[] = imResult.getData();
         int nC = nImageWidth / 2;

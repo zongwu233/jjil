@@ -51,7 +51,7 @@ public class Rgb3x3Average extends PipelineStage {
      * @param imageInput the input image
      * @throws jjil.core.Error if imageInput is not an RgbImage
      */
-    public void Push(Image imageInput) throws jjil.core.Error 
+    public void push(Image imageInput) throws jjil.core.Error 
    {
         if (!(imageInput instanceof RgbImage)) 
         {
