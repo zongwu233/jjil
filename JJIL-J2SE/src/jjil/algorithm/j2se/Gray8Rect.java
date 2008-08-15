@@ -30,7 +30,6 @@ import jjil.core.Error;
 import jjil.core.Gray8Image;
 import jjil.core.Image;
 import jjil.core.PipelineStage;
-import jjil.core.Rect;
 
 /**
  * Pipeline stage assigns a constant value to a rectangle in an input Gray8Image
