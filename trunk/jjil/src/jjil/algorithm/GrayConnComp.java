@@ -84,8 +84,6 @@ public class GrayConnComp {
 	}
 
 	// class variables
-	private final int nReducedHeight = 64;
-	private final int nReducedWidth = 64;
 	private boolean bComponents = false;
 	private Gray16Image imLabeled = null;
 	private int nSortedLabels = -1;

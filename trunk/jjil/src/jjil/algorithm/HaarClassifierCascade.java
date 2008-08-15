@@ -82,13 +82,7 @@ public abstract class HaarClassifierCascade {
     public int getHeight() {
         return height;
     }
-    
-    /**
-     * ParseException is thrown whenever the input doesn't match what is expected.
-     */
-    public static class ParseException extends Exception {
-    }; 
-    
+       
     /**
      * Returns true iff the input image passes all the tests in the Haar cascade, i.e.,
      * is a member of the positive sample image set, so far as it can tell.
