@@ -19,6 +19,7 @@ package jjil.j2se;
  * @author webb
  *
  */
+@SuppressWarnings("serial")
 public class Error extends jjil.core.Error {
     private static final String szMessage[][] = new String[jjil.core.Error.PACKAGE.COUNT][];
     

@@ -176,6 +176,7 @@ public class RgbImageJ2se implements jjil.debug.Show {
 			public void setColorModel(ColorModel model) {
 				
 			}
+			@SuppressWarnings("unchecked")
 			public void setProperties(Hashtable props) {
 				
 			}
