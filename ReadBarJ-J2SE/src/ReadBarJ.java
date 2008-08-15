@@ -17,11 +17,11 @@ class ReadBarJ extends Frame
 		RgbImageJ2se debug = new RgbImageJ2se(this.getGraphics());
 		Debug.setShow(debug);
 		//Image image = getToolkit().getImage("Z:\\Data transfer\\101_PANA\\P1010106.JPG"); //$NON-NLS-1$
-		Image image = getToolkit().getImage("C:\\Documents and Settings\\webb.PEP-SYSTEMS\\workspace\\ReadBarJ-J2ME\\src\\images\\barcode.png");
+		Image image = getToolkit().getImage("c:\\from\\jjil\\original.png");
 		jjil.core.RgbImage inimg = RgbImageJ2se.toRgbImage(image);
 		DetectBarcode db = new DetectBarcode(20000);
 		try {
-			if (!db.Push(inimg)) {
+			if (!db.push(inimg)) {
 				/**
 				 * Couldn't find the barcode. Tell the user.
 				 */
@@ -29,7 +29,7 @@ class ReadBarJ extends Frame
 			} else {
 				ReadBarcode rb = new ReadBarcode();
 				rb.setRect(db.getRect());
-				rb.Push(inimg);
+				rb.push(inimg);
 				if (!rb.getSuccessful()) {
 					/**
 					 * Couldn't read the barcode.
