@@ -129,8 +129,7 @@ public class Gray8MaskedImage extends Gray8Image {
      *
      * @return the string.
      */
-    @Override
-	public String toString()
+    public String toString()
     {
         return super.toString() + " (" + this.getWidth() + "x" +  //$NON-NLS-1$ //$NON-NLS-2$
                 this.getHeight() + "," + this.imMask.toString() + ")"; //$NON-NLS-1$ //$NON-NLS-2$

@@ -133,8 +133,7 @@ public class RgbClip extends PipelineStage {
      *
      * @return the string describing the clipping operation.
      */
-    @Override
-	public String toString() {
+    public String toString() {
         return super.toString() + " (" + this.nR + "," + this.nG +  //$NON-NLS-1$ //$NON-NLS-2$
                 "," + this.nB + "," + this.nLimit + "," + this.bDir + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
     }

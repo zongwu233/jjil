@@ -72,8 +72,7 @@ public class Complex32Image extends Image {
      *
      * @return the string.
      */
-    @Override
-	public String toString()
+    public String toString()
     {
         return super.toString() + " (" + getWidth() + "x" + getHeight() + //$NON-NLS-1$ //$NON-NLS-2$
                 ")"; //$NON-NLS-1$

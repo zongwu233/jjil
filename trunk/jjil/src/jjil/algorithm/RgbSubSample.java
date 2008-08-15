@@ -150,8 +150,7 @@ public class RgbSubSample extends PipelineStage {
      *
      * @return the string describing the reduction operation.
      */
-    @Override
-	public String toString() {
+    public String toString() {
         return super.toString() + " (" + this.cTargetWidth + "," +  //$NON-NLS-1$ //$NON-NLS-2$
                 this.cTargetHeight + ")"; //$NON-NLS-1$
     }

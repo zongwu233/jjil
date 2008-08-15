@@ -130,8 +130,7 @@ public class Gray32MaskedImage extends Gray32Image {
      *
      * @return the string.
      */
-    @Override
-	public String toString()
+    public String toString()
     {
         return super.toString() + " (" + this.getWidth() + "x" +  //$NON-NLS-1$ //$NON-NLS-2$
                 this.getHeight() + ")"; //$NON-NLS-1$

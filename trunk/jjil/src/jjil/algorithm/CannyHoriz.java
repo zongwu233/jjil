@@ -254,8 +254,7 @@ public class CannyHoriz extends PipelineStage {
      *
      * @return a string describing the Canny operator.
      */
-    @Override
-	public String toString() {
+    public String toString() {
         return super.toString() + " (" + this.cSigma + ")"; //$NON-NLS-1$ //$NON-NLS-2$
     }
 }

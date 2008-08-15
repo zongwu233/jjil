@@ -91,8 +91,7 @@ public class Sequence extends PipelineStage {
      * @return the Image produced by the pipeline.
      * @throws jjil.core.Error if no image is available.
      */
-    @Override
-	public Image getFront() throws jjil.core.Error
+    public Image getFront() throws jjil.core.Error
     {
         if (pNext == null) {
             return pFirst.getFront();
@@ -110,8 +109,7 @@ public class Sequence extends PipelineStage {
      * @param i the image to be pushed.
      * @throws jjil.core.Error if the pipeline is empty.
      */
-    @Override
-	public void push(Image i) throws jjil.core.Error
+    public void push(Image i) throws jjil.core.Error
     {
         if (pFirst == null) {
             throw new Error(
@@ -142,8 +140,7 @@ public class Sequence extends PipelineStage {
      *
      * @return the string describing the pipeline.
      */
-    @Override
-	public String toString()
+    public String toString()
     {
         if (this.pFirst == null) {
             return "(null)"; //$NON-NLS-1$

@@ -260,8 +260,7 @@ public class GaussHoriz extends PipelineStage {
      *
      * @return a string describing the Gaussian blur.
      */
-    @Override
-	public String toString() {
+    public String toString() {
         return super.toString() + " (" + this.cSigma + ")"; //$NON-NLS-1$ //$NON-NLS-2$
     }
 }

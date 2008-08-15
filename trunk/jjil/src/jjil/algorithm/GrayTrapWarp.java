@@ -260,8 +260,7 @@ public class GrayTrapWarp extends PipelineStage {
      * "jjil.algorithm.GrayTrapWarpxxx (startRow,endRow,leftColStart,
      * rightColStart,leftColEnd,rightColEnd)"
      */
-    @Override
-	public String toString() {
+    public String toString() {
         return super.toString() + " (" + this.nRowStart + "," + //$NON-NLS-1$ //$NON-NLS-2$
                 this.nRowEnd + "," + this.nColLeftStart + "," + //$NON-NLS-1$ //$NON-NLS-2$
                 this.nColRightStart + "," + this.nColLeftEnd + "," + //$NON-NLS-1$ //$NON-NLS-2$
