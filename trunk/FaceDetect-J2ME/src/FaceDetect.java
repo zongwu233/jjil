@@ -18,12 +18,12 @@
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-import java.io.*;
-import java.util.Enumeration;
+import java.util.Vector;
 import javax.microedition.midlet.*;
 import javax.microedition.lcdui.*;
-import jjil.core.*;
 import jjil.algorithm.*;
+import jjil.core.Error;
+import jjil.algorithm.ErrorCodes;
 
 /**
  *

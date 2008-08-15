@@ -2,9 +2,6 @@
 <project xmlns="http://www.netbeans.org/ns/project/1">
     <type>org.netbeans.modules.kjava.j2meproject</type>
     <configuration>
-        <configurations xmlns="http://www.netbeans.org/ns/project-configurations/1">
-            <configuration>DefaultColorPhone</configuration>
-        </configurations>
         <data xmlns="http://www.netbeans.org/ns/j2me-project">
             <name>FaceDetect-J2ME</name>
             <minimum-ant-version>1.6</minimum-ant-version>
@@ -47,6 +44,14 @@
                 <foreign-project>JJIL-1</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>${project.JJIL-1}/build.xml</script>
+                <target>jar</target>
+                <clean-target>clean</clean-target>
+                <id>jar</id>
+            </reference>
+            <reference>
+                <foreign-project>JJIL-J2ME</foreign-project>
+                <artifact-type>jar</artifact-type>
+                <script>${project.JJIL-J2ME}/build.xml</script>
                 <target>jar</target>
                 <clean-target>clean</clean-target>
                 <id>jar</id>
