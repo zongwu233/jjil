@@ -230,8 +230,7 @@ public class GrayRectStretch extends PipelineStage {
      *
      * @return the string describing the stretching operation.
      */
-    @Override
-	public String toString() {
+    public String toString() {
         return super.toString() + " (" + this.cWidth + "," + this.cHeight + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
 }

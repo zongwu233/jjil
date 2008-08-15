@@ -95,8 +95,7 @@ public class Gray8SubImageGenerator extends PipelineStage {
      * @throws jjil.core.Error when there are no more subimages available (isEmpty() would return
      * true.)
      */
-     @Override
-	public Image getFront() throws jjil.core.Error
+     public Image getFront() throws jjil.core.Error
     {
         // offset of first pixel of the subimage within the
         // larget image.
@@ -143,8 +142,7 @@ public class Gray8SubImageGenerator extends PipelineStage {
      * (less than the size of the subimages we're supposed to
      * be generating).
      */
-    @Override
-	public void push(Image image) throws jjil.core.Error {
+    public void push(Image image) throws jjil.core.Error {
         if (!(image instanceof Gray8Image)) {
             throw new Error(
             				Error.PACKAGE.ALGORITHM,

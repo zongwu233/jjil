@@ -148,8 +148,7 @@ public class GrayReduce extends PipelineStage {
      *
      * @return the string describing the reduction operation.
      */
-    @Override
-	public String toString() {
+    public String toString() {
         return super.toString() + " (" + this.cReduceWidth + "," +  //$NON-NLS-1$ //$NON-NLS-2$
                 this.cReduceHeight + ")"; //$NON-NLS-1$
     }

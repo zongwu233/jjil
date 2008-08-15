@@ -85,8 +85,7 @@ public class Gray16Threshold extends PipelineStage {
      * 
      * @return a String describing the class instance.
      */
-    @Override
-	public String toString() {
+    public String toString() {
     	return super.toString() + "(" + this.nThreshold + ")"; //$NON-NLS-1$ //$NON-NLS-2$
     }
 

@@ -149,8 +149,7 @@ public class MaskedGray32SubImgGen extends PipelineStage {
      * given input if the entire image is masked.) Also throws if the output
      * image (stored in the superclass) has been changed in type.
      */
-     @Override
-	public Image getFront() throws jjil.core.Error
+     public Image getFront() throws jjil.core.Error
     {
         // reuse output image
         // check to make sure nobody damaged it somehow
@@ -204,8 +203,7 @@ public class MaskedGray32SubImgGen extends PipelineStage {
      * @throws jjil.core.Error if the input is not of type MaskedGray8Image or is smaller than the
      * subimages to be generated.
      */
-    @Override
-	public void push(Image image) throws jjil.core.Error {
+    public void push(Image image) throws jjil.core.Error {
         if (!(image instanceof Gray32MaskedImage)) {
             throw new Error(
                             Error.PACKAGE.ALGORITHM,

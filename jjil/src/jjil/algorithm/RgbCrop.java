@@ -169,8 +169,7 @@ public class RgbCrop extends PipelineStage {
      *
      * @return the string describing the cropping operation.
      */
-    @Override
-	public String toString() {
+    public String toString() {
         return super.toString() + " (" + this.cX + "," + this.cY +  //$NON-NLS-1$ //$NON-NLS-2$
                 "," + this.cWidth + "," + this.cHeight + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
