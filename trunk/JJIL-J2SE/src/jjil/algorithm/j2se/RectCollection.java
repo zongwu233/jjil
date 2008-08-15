@@ -90,7 +90,8 @@ public class RectCollection {
      * @return the modified binary tree (= tbtRoot if it already exists, 
      * otherwise it will be created)
      */
-    private ThreadedBinaryTree<Double,Vector<Rectangle>> addRect(
+    @SuppressWarnings({"unchecked"})
+	private ThreadedBinaryTree<Double,Vector<Rectangle>> addRect(
             Rectangle r, 
             double start, 
             double end, 

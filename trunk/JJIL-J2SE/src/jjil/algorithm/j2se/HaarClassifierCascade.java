@@ -88,7 +88,8 @@ public abstract class HaarClassifierCascade {
     /**
      * ParseException is thrown whenever the input doesn't match what is expected.
      */
-    public static class ParseException extends Exception {
+    @SuppressWarnings("serial")
+	public static class ParseException extends Exception {
     }; 
     
     /**
