@@ -62,7 +62,6 @@ public class DetectHaarMultiScale extends PipelineStage {
     // scale change is the change in scale from one search to the next
     // times 256
     private int nScaleChange = 12 * 256 / 10;
-    private Image imageOutput = null;
        
     /**
      * Creates a new instance of DetectHaarMultiScale. The scale parameters correspond
