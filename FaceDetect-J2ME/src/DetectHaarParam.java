@@ -21,12 +21,18 @@
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-import java.io.*;
+import java.io.InputStream;
 import javax.microedition.lcdui.Image;
 import javax.microedition.lcdui.Graphics;
+import jjil.algorithm.ApplyMaskRgb;
 import jjil.algorithm.DetectHaarMultiScale;
-import jjil.core.*;
-import jjil.algorithm.*;
+import jjil.algorithm.GrayConnComp;
+import jjil.algorithm.GrayShrink;
+import jjil.algorithm.RgbAvg2Gray;
+import jjil.algorithm.RgbShrink;
+import jjil.core.Gray8Image;
+import jjil.core.Rect;
+import jjil.core.RgbImage;
 import jjil.j2me.RgbImageJ2me;
 /**
  * Hungarian notation prefix: dhp.
@@ -44,7 +50,18 @@ public class DetectHaarParam {
     jjil.core.RgbImage imInput = null;
     
     /**
-     * Creates a new instance of DetectHaarParam
+     * Creates a new instance of DetectHaarParam, which will scan
+     * an image for faces using a Haar cascade over a range of scales.
+     * @param nMinScale minimum scale factor. The image will be reduced
+     * by at least this factor horizontally and vertically before face
+     * detection
+     * @param nMaxScale maximum scale factor. The image will be reduced 
+     * by at most this factor horizontally and vertically before face
+     * detection
+     * @throws jjil.core.Error if the Haar cascade format is illegal,
+     * or verious other tests fail.
+     * @throws java.io.IOException if the Haar cascade can't be loaded
+     * from the input file.
      */
     public DetectHaarParam(int nMinScale, int nMaxScale) 
         throws jjil.core.Error, java.io.IOException
@@ -57,7 +74,7 @@ public class DetectHaarParam {
         this.dh = new DetectHaarMultiScale(is, nMinScale, nMaxScale);
     }
        
-    public void Paint(Graphics g) 
+    public void paint(Graphics g) 
         throws jjil.core.Error
     {
         if (this.imageInput != null && this.imInput != null) {
@@ -66,31 +83,44 @@ public class DetectHaarParam {
             // convert the image to gray and then
             // warp the image to the clipping size
             RgbShrink rs = new RgbShrink(nTargetWidth, nTargetHeight);
-            rs.Push(this.imInput);
+            rs.push(this.imInput);
             
-            if (this.dh != null && !this.dh.Empty()) {
+            if (this.dh != null && !this.dh.isEmpty()) {
                 jjil.core.Gray8Image imMask = null;
-                jjil.core.Image image = dh.Front();
+                jjil.core.Image image = dh.getFront();
                 if (image instanceof jjil.core.Gray8Image) {
                    imMask = (Gray8Image) image;
+                   GrayConnComp gcc = new GrayConnComp();
+                   gcc.push(imMask);
+                   if (gcc.getComponents()> 0) {
+                       // found a face
+                       Rect r = gcc.getComponent(0);
+                       // calculate center of face in mask coordinates
+                       int x = r.getLeft() + r.getWidth() / 2;
+                       int y = r.getTop() + r.getHeight() / 2;
+                       // convert from mask to original image
+                       x = (x * this.imInput.getWidth()) / imMask.getWidth();
+                       y = (y * this.imInput.getHeight()) / imMask.getHeight();
+                       // (x,y) is the center of the detected face
+                   }
                 } else if (image instanceof jjil.core.Gray32Image) {
                     jjil.algorithm.Gray322Gray8 g322g8 = 
                             new jjil.algorithm.Gray322Gray8();
-                    g322g8.Push(image);
-                    imMask = (Gray8Image) g322g8.Front();
+                    g322g8.push(image);
+                    imMask = (Gray8Image) g322g8.getFront();
                 } else if (image instanceof jjil.core.RgbImage) {
                     RgbAvg2Gray r2g = new RgbAvg2Gray();
-                    r2g.Push(image);
-                    imMask = (Gray8Image) r2g.Front();
+                    r2g.push(image);
+                    imMask = (Gray8Image) r2g.getFront();
                 }
                 if (imMask != null) {
                     // shrink the mask to fit the display
                     GrayShrink gs = new GrayShrink(nTargetWidth, nTargetHeight);
-                    gs.Push(imMask);
-                    imMask = (Gray8Image) gs.Front();
+                    gs.push(imMask);
+                    imMask = (Gray8Image) gs.getFront();
                     // combine the gray image and the mask to make a displayable image
                     ApplyMaskRgb am = new ApplyMaskRgb();
-                    RgbImage rgb = am.Push((RgbImage)rs.Front(), imMask);
+                    RgbImage rgb = am.push((RgbImage)rs.getFront(), imMask);
                     g.setColor(0x0000FF00); // green
                     g.fillRect(
                             g.getClipX(),
@@ -103,7 +133,7 @@ public class DetectHaarParam {
                             g.getClipY() + (g.getClipHeight() - rgb.getHeight())/2, 
                             0);
                 } else {
-                    RgbImage rgb = (RgbImage) rs.Front();
+                    RgbImage rgb = (RgbImage) rs.getFront();
                     g.setColor(0x00FF0000); // red
                     g.fillRect(
                             g.getClipX(),
@@ -120,14 +150,14 @@ public class DetectHaarParam {
         }
     }
     
-    public void Push() 
+    public void push() 
         throws jjil.core.Error
     {
         if (this.imageInput != null) {
             this.imInput = RgbImageJ2me.toRgbImage(this.imageInput);
             RgbAvg2Gray rg = new RgbAvg2Gray();
-            rg.Push(this.imInput);
-            if (this.dh != null) this.dh.Push(rg.Front());
+            rg.push(this.imInput);
+            if (this.dh != null) this.dh.push(rg.getFront());
         }
      }
     

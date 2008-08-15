@@ -236,7 +236,7 @@ public class CameraCanvas
     {
         try
         {
-            if (this.dhp != null) this.dhp.Paint(g);
+            if (this.dhp != null) this.dhp.paint(g);
             if(szMessage1!=null)
             {
                 Alert a = new Alert(szMessage1, szMessage2,
@@ -496,7 +496,7 @@ public class CameraCanvas
                 if (this.dhp != null && lcdImage != null) this.dhp.setImage(lcdImage);
                 repaint();
                 serviceRepaints();
-                if (this.dhp != null) this.dhp.Push();
+                if (this.dhp != null) this.dhp.push();
                 repaint();
                 serviceRepaints();
             } catch (Exception e)
