@@ -76,6 +76,17 @@ public class Rect {
     }
     
     /**
+     * Test a point for inclusion in a rectangle, including
+     * boundaries.
+     * @param p the point to test
+     * @return true iff the point is in the rectangle
+     */
+    public boolean contains(Point p) {
+    	return p.wX >= this.nTlx && p.wX <= this.nTlx + this.nWidth &&
+    		p.wY >= this.nTly && p.wY <= this.nTly + this.nHeight;
+    }
+    
+    /**
      * Return area of the rectangle.
      * @return the Rect's area.
      */
