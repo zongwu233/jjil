@@ -6,6 +6,7 @@ import jjil.j2se.RgbImageJ2se;
 import barcode.DetectBarcode;
 import barcode.ReadBarcode;
 
+@SuppressWarnings("serial")
 class ReadBarJ extends Frame
 {  
 	  public static void main(String argv[])
