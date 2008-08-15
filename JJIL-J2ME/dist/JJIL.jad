@@ -1,0 +1,11 @@
+J2MEUnitTestClasses: jjil.core.ImageTest jjil.core.SequenceTest jjil.core.PipelineStageTest jjil.core.LadderTest jjil.core.Gray8ImageTest jjil.core.Gray16ImageTest jjil.core.RgbImageTest jjil.algorithm.Rgb3x3AverageTest jjil.algorithm.RgbAvg2GrayTest jjil.algorithm.Gray2RgbTest jjil.algorithm.RgbSelect2GrayTest jjil.algorithm.GrayCropTest jjil.algorithm.CannyHorizTest jjil.algorithm.GrayReduceTest jjil.algorithm.GrayShrinkTest jjil.algorithm.GrayRectStretchTest jjil.algorithm.GrayHistTest jjil.algorithm.GrayLookupTest jjil.algorithm.GrayHistMatchTest jjil.core.RgbValTest jjil.algorithm.GrayHistEqTest jjil.algorithm.ZeroCrossingHorizTest jjil.algorithm.LinefitHoughTest jjil.algorithm.GrayVertAvgTest jjil.algorithm.GrayTrapWarpTest jjil.algorithm.RgbCropTest jjil.algorithm.RgbClipTest jjil.algorithm.GrayStatisticsTest jjil.algorithm.RgbClipTest jjil.core.Gray8SubImageTest jjil.algorithm.GrayAddTest jjil.core.PointTest jjil.algorithm.GrayAddTest jjil.algorithm.SumG82G32Test jjil.algorithm.Gray8QmSumTest
+JMUnitTestClasses: jjil.algorithm.FftTest jjil.algorithm.FftGray8Test jjil.algorithm.WienerDeconvTest
+MIDlet-1: TestRunner, , j2meunit.midletui.TestRunner
+MIDlet-2: TestSuite, , jmunit.framework.cldc10.TestSuite
+MIDlet-Jar-Size: 150936
+MIDlet-Jar-URL: JJIL.jar
+MIDlet-Name: JJIL
+MIDlet-Vendor: Vendor
+MIDlet-Version: 1.0
+MicroEdition-Configuration: CLDC-1.0
+MicroEdition-Profile: MIDP-2.0
