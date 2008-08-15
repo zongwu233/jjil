@@ -24,9 +24,7 @@
 import javax.microedition.lcdui.Image;
 import javax.microedition.lcdui.Graphics;
 import jjil.algorithm.*;
-import jjil.core.Gray8Image;
 import jjil.core.RgbImage;
-import jjil.core.Sequence;
 import jjil.j2me.RgbImageJ2me;
 import barcode.DetectBarcode;
 import barcode.ReadBarcode;
@@ -45,6 +43,10 @@ public class BarcodeParam {
     /** Input image.
      */
     Image imageInput;
+    /** 
+     * Coordinates of barcode rectange in original cropped image.
+     */
+    int nTL, nTR, nBL, nBR;
     /** Whether or not barcode detection has been attempted.
      */
     boolean oAttempted = false;
@@ -59,8 +61,9 @@ public class BarcodeParam {
     /** The detected barcode (if any).
      */
     String szBarcode;
-    /** Creates a new instance of BarcodeParam */
-    public BarcodeParam() throws IllegalArgumentException {
+    /** Creates a new instance of BarcodeParam
+     */
+    public BarcodeParam() {
         this.imageCropped = null;
     }
     
@@ -76,11 +79,12 @@ public class BarcodeParam {
         return this.oSuccessful;
     }
     
-    public void Paint(Graphics g) {
+    public void paint(Graphics g) {
         if (this.imageCropped != null) {
             if (this.oAttempted) {
                 try {
                     if (this.imageDisplay == null && this.oFound) {
+                        // reduce output image in size so it fits display
                         if (this.imageCropped.getWidth() > g.getClipWidth() ||
                             this.imageCropped.getHeight() > g.getClipHeight()) {
                             int nWidth = Math.min(this.imageCropped.getWidth(), 
@@ -88,34 +92,42 @@ public class BarcodeParam {
                             int nHeight = Math.min(this.imageCropped.getHeight(), 
                                     g.getClipHeight());
                             RgbShrink rs = new RgbShrink(nWidth, nHeight);
-                            rs.Push(this.imageCropped);
-                            this.imageDisplay = RgbImageJ2me.toImage((RgbImage)rs.Front());
+                            rs.push(this.imageCropped);
+                            this.imageDisplay = RgbImageJ2me.toImage((RgbImage)rs.getFront());
                         } else {
+                            // not necessary to reduce size
                             this.imageDisplay = RgbImageJ2me.toImage(this.imageCropped);
+                            g.setColor(0, 0, 0);
                         }
                     } 
-                    if (this.imageDisplay != null) {
+                    if (this.oSuccessful) {
                         g.drawImage(
                                 this.imageDisplay, 
-                                g.getClipWidth()/2, 
-                                g.getClipHeight()/2, 
-                                Graphics.VCENTER | Graphics.HCENTER);
-                    }
-                    if (this.oSuccessful) {
+                                g.getClipX(), 
+                                g.getClipY(), 
+                                Graphics.TOP | Graphics.LEFT);
                         // draw approximate barcode rectangle
-                        int nTL = this.rb.getLeftApproxPos() * g.getClipWidth()
-                            / this.imageCropped.getWidth() + g.getClipX();
-                        int nTR = this.rb.getRightApproxPos() * g.getClipWidth()
-                            / this.imageCropped.getWidth() + g.getClipX();
-                        int nBL = nTL + 
-                                this.rb.getLeftApproxSlope() * g.getClipHeight() / 256
-                                * g.getClipWidth() / this.imageCropped.getWidth();
-                        int nBR = nTR + 
-                                this.rb.getRightApproxSlope() * g.getClipHeight() / 256
-                                * g.getClipWidth() / this.imageCropped.getWidth();
+                        // calculate coordinates scaled according to displayed
+                        // image
+                        int nTL = this.nTL * this.imageDisplay.getWidth()
+                            / this.imageCropped.getWidth();
+                        int nTR = this.nTR * this.imageDisplay.getWidth()
+                            / this.imageCropped.getWidth();
+                        int nBL = this.nBL * this.imageDisplay.getWidth() 
+                            / this.imageCropped.getWidth();
+                        int nBR = this.nBR * this.imageDisplay.getWidth() 
+                            / this.imageCropped.getWidth();
                         g.setColor(0, 255, 0); // Green
-                        g.drawLine(nTL, g.getClipY(), nBL, g.getClipY() + g.getClipHeight());
-                        g.drawLine(nTR, g.getClipY(), nBR, g.getClipY() + g.getClipHeight());
+                        g.drawLine(
+                                nTL + g.getClipX(), 
+                                g.getClipY(), 
+                                nBL + g.getClipX(), 
+                                g.getClipY() + g.getClipHeight());
+                        g.drawLine(
+                                nTR + g.getClipX(), 
+                                g.getClipY(), 
+                                nBR + g.getClipX(), 
+                                g.getClipY() + g.getClipHeight());
                         // draw the barcode string
                         // white background
                         int nHeight = g.getFont().getHeight();
@@ -143,13 +155,13 @@ public class BarcodeParam {
         }
     }
     
-    public void Push() {
+    public void push() {
         this.oAttempted = true;
         this.imageDisplay = null;
         this.imageCropped = RgbImageJ2me.toRgbImage(this.imageInput);
         DetectBarcode db = new DetectBarcode(20000);
         try {
-            if (!db.Push(this.imageCropped)) {
+            if (!db.push(this.imageCropped)) {
                 /**
                  * Couldn't find the barcode. Tell the user.
                  */
@@ -157,23 +169,31 @@ public class BarcodeParam {
                 this.oSuccessful = false;
                 this.szBarcode = null;
             } else {
-                this.oFound = true;
+                                this.oFound = true;
                 this.rb = new ReadBarcode();
                 this.rb.setRect(db.getRect());
-                this.rb.Push(this.imageCropped);
+                this.rb.push(this.imageCropped);
                 if (!rb.getSuccessful()) {
                         /**
                          * Couldn't read the barcode.
                          */
-                        this.oSuccessful = false;
-                        this.szBarcode = null;
                 } else {
-                        /**
-                         * Read the barcode. Tell the user.
-                         */
-                        this.oSuccessful = true;
-                        this.szBarcode = this.rb.getCode();
-                    }
+                    /**
+                     * Read the barcode. Tell the user.
+                     */
+                    // calculate coordinates of barcode rectange in terms of
+                    // original cropped image
+                    this.nTL = db.getRect().getLeft() + this.rb.getLeftApproxPos();
+                    this.nTR = db.getRect().getLeft() + this.rb.getRightApproxPos();
+                    this.nBL = this.nTL + 
+                            this.rb.getLeftApproxSlope() * this.imageCropped.getHeight() / 256;
+                    this.nBR = this.nTR + 
+                            this.rb.getRightApproxSlope() * this.imageCropped.getHeight() / 256;
+                    this.oSuccessful = false;
+                    this.szBarcode = null;
+                    this.oSuccessful = true;
+                    this.szBarcode = this.rb.getCode();
+                }
             }
         } catch (jjil.core.Error e) {
             e.printStackTrace();
@@ -188,6 +208,7 @@ public class BarcodeParam {
     
     public void reset() {
         this.imageCropped = null;
+        this.imageDisplay = null;
         this.imageInput = null;
         this.oAttempted = false;
         this.oSuccessful = false;
