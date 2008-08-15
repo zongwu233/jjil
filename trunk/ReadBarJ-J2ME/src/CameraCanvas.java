@@ -311,10 +311,10 @@ public class CameraCanvas
             g.setColor(0x00808080); // gray
             g.fillRect(0,0,getWidth(),getHeight());
         }
-        this.bcp.Paint(g);
+        this.bcp.paint(g);
         if (!this.oResultShown) {
             if (bcp.getSuccessful()) {
-                // successful results are shown by the bcp Paint method
+                // successful results are shown by the bcp paint method
             } else if (bcp.getAttempted()) {
                 Alert a = new Alert("Barcode not found", 
                         "No barcode found", 
@@ -645,7 +645,7 @@ public class CameraCanvas
                 this.bcp.setImage(lcdImage);
                 repaint();
                 serviceRepaints();
-                this.bcp.Push();
+                this.bcp.push();
                 repaint();
                 serviceRepaints();
             } catch (Exception e)
