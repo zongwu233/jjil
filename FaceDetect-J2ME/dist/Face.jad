@@ -1,0 +1,8 @@
+MIDlet-1: FaceDetect,/face.png,FaceDetect
+MIDlet-Jar-Size: 954374
+MIDlet-Jar-URL: Face.jar
+MIDlet-Name: FaceDetect
+MIDlet-Vendor: Vendor
+MIDlet-Version: 1.0
+MicroEdition-Configuration: CLDC-1.0
+MicroEdition-Profile: MIDP-2.0
