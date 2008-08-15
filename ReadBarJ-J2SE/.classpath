@@ -4,5 +4,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/jjil"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Barcode"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/JJIL-J2SE"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
