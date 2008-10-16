@@ -70,6 +70,26 @@ public class RgbClip extends PipelineStage {
         this.bDir = dir;
     }
     
+    /**
+     * Creates a new instance of RgbClip. The clip test is defined here.
+     * 
+     * 
+     * @param rgb int value containg packed RGB
+     * @param l the threshold
+     * @param dir if true pixels that fail test are set to 0; if false
+     * pixels that pass test are set to 0.
+     */
+    public RgbClip(
+            int rgb,
+            int l,
+            boolean dir) {
+        this.nR = RgbVal.getR(rgb);
+        this.nG = RgbVal.getG(rgb);
+        this.nB = RgbVal.getB(rgb);
+        this.nLimit = l;
+        this.bDir = dir;
+    }
+
     /** Clips the RGB image and sets all pixels that fail/pass the
      * test (according to bDir) to 0.
      *
