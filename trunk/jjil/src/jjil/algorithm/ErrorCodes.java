@@ -8,29 +8,20 @@ package jjil.algorithm;
  */
 public class ErrorCodes {
     /**
-     * Input bounds outside input image.
-     */
-    public static final int BOUNDS_OUTSIDE_IMAGE = 0;		// 
-    /**
      * null pointer in Label.compareTo.
      */
     public static final int CONN_COMP_LABEL_COMPARETO_NULL 
-            = BOUNDS_OUTSIDE_IMAGE + 1;			// 
+            = 0;			// 
     /**
       * label # outside bounds of array.
       */
     public static final int CONN_COMP_LABEL_OUT_OF_BOUNDS 
             = CONN_COMP_LABEL_COMPARETO_NULL + 1;	// 
     /**
-      * the input terminated before expected (parse error).
-      */
-    public static final int INPUT_TERMINATED_EARLY 
-            = CONN_COMP_LABEL_OUT_OF_BOUNDS + 1;	// 
-    /**
       * FFT exceeds maximum size.
       */
     public static final int FFT_SIZE_LARGER_THAN_MAX 
-            = INPUT_TERMINATED_EARLY + 1;		// 
+            = CONN_COMP_LABEL_OUT_OF_BOUNDS + 1;		// 
     /**
       * FFT only works for powers of 2.
       */
@@ -96,11 +87,16 @@ public class ErrorCodes {
 	 */
     public static final int INPUT_IMAGE_SIZE_NEGATIVE 
             = IMAGE_TOO_SMALL + 1;			// 
+    /**
+      * the input terminated before expected (parse error).
+      */
+    public static final int INPUT_TERMINATED_EARLY 
+            = INPUT_IMAGE_SIZE_NEGATIVE + 1;	// 
 	/**
 	 * unspecified IO Exception.
 	 */
     public static final int IO_EXCEPTION
-            = INPUT_IMAGE_SIZE_NEGATIVE + 1;            // 
+            = INPUT_TERMINATED_EARLY + 1;            // 
 	/**
 	 * Grayvalue lookup table must be 256 in length.
 	 */
@@ -127,10 +123,20 @@ public class ErrorCodes {
     public static final int PARAMETER_RANGE_NULL_OR_NEGATIVE
             = PARAMETER_OUT_OF_RANGE + 1;       	// 
 	/**
+	 * Two parameters should be the same size but aren't.
+	 */
+    public static final int PARAMETER_SIZES_DIFFER
+            = PARAMETER_RANGE_NULL_OR_NEGATIVE + 1;       	// 
+	/**
+	 * A parameter is the wrong size.
+	 */
+    public static final int PARAMETER_WRONG_SIZE
+            = PARAMETER_RANGE_NULL_OR_NEGATIVE + 1;       	// 
+	/**
 	 * parse error while reading input.
 	 */
     public static final int PARSE_ERROR 
-            = PARAMETER_RANGE_NULL_OR_NEGATIVE + 1;	// 
+            = PARAMETER_WRONG_SIZE + 1;	// 
 	/**
 	 * In reduce, input image is not an integer multiple of the output size.
 	 */
