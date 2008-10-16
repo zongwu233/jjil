@@ -12,7 +12,7 @@ All Image types support these methods:
 
   The constructor `Image(int cWidth, int cHeight)` creates a new image of the given width and height.
 
-  `Image Clone()`: returns a “deep” copy of the image, i.e., one that actually creates a copy of the image pixels. Note that images processed in pipeline stages are usually passed using a “shallow” copy, allowing reuse of their pixels, for efficiency in space.
+  `Image clone()`: returns a “deep” copy of the image, i.e., one that actually creates a copy of the image pixels. Note that images processed in pipeline stages are usually passed using a “shallow” copy, allowing reuse of their pixels, for efficiency in space.
 
   `int getHeight()`: returns the image height.
 
@@ -28,27 +28,27 @@ A PipelineStage is a single image processing algorithm. It takes a single image 
 
 A PipelineStage must implement this method:
 
-  `void Push(Image imageIn)`
+  `void push(Image imageIn)`
 
 It may also implement these methods, or it can use the default implementations:
 
-  `boolean Empty()`
+  `boolean isEmpty()`
 
-  `Image Front()`
+  `Image getFront()`
 
 The semantics of these methods are:
 
- `Push(Image)`: takes an Image as input. After verifying that it is of the right type (for example, Gray8Image or RgbImage), do whatever processing is required for this input. The output, if any, is saved so it can be retrieved using Front() and the presence of an output, if there is one, is set so it can be retrieved using Empty().
+ `push(Image)`: takes an Image as input. After verifying that it is of the right type (for example, Gray8Image or RgbImage), do whatever processing is required for this input. The output, if any, is saved so it can be retrieved using Front() and the presence of an output, if there is one, is set so it can be retrieved using Empty().
 
-  `Empty()`: returns a boolean value indicating whether or not an output is available from the PipelineStage. Each pipeline stage is allowed to return zero, one, or any other number of outputs given an input. The user of the PipelineStage is required to test for the presence of an output using Empty() before attempting to retrieve it.
+  `isEmpty()`: returns a boolean value indicating whether or not an output is available from the PipelineStage. Each pipeline stage is allowed to return zero, one, or any other number of outputs given an input. The user of the PipelineStage is required to test for the presence of an output using Empty() before attempting to retrieve it.
  
-  `Front()`: returns the next Image resulting from processing an input using Push(). It is an error (which will throw IllegalStateException) to attempt to retrieve an image without testing for its presence with Empty(). When Front() is called the current image is “popped” from the PipelineStage’s internal storage; calling Front() again will return a new image (if there is one; otherwise Empty() will return true).
+  `getFront()`: returns the next Image resulting from processing an input using Push(). It is an error (which will throw IllegalStateException) to attempt to retrieve an image without testing for its presence with Empty(). When Front() is called the current image is “popped” from the PipelineStage’s internal storage; calling Front() again will return a new image (if there is one; otherwise Empty() will return true).
 
 In addition to these public methods, PipelineStage implements a protected method to help the implementer of PipelineStage-derived classes. This is
 
   `setOutput(Image imageResult)`
 
-This method is used in the common case where a Push() operation returns a single Image. The implementer of Push() calls setOutput(imageResult) to set the output of the Push operation to imageResult, and then the default implementations of Empty() and Front() will correctly provide the image to the caller.
+This method is used in the common case where a Push() operation returns a single Image. The implementer of push() calls setOutput(imageResult) to set the output of the Push operation to imageResult, and then the default implementations of isEmpty() and getFront() will correctly provide the image to the caller.
 
 A complete example (from jjil.algorithm) of a simple PipelineStage is shown below. It implements a conversion operation, converting a signed byte image (a Gray8Image) into a 32-bit image (a Gray32Image):
 {{{
@@ -64,7 +64,7 @@ A complete example (from jjil.algorithm) of a simple PipelineStage is shown belo
          * @throws IllegalArgumentException if the input is not a
          * Gray8Image
          */
-        public void Push(Image image) throws IllegalArgumentException {
+        public void push(Image image) throws IllegalArgumentException {
             if (!(image instanceof Gray8Image)) {
                 throw new IllegalArgumentException(image.toString() + "" +
                     " should be a Gray8Image, but isn't");
@@ -85,9 +85,9 @@ A complete example (from jjil.algorithm) of a simple PipelineStage is shown belo
         }
     }
 }}}
-This PipelineStage implements only the Push() method. It relies on the default implementations of Empty() and Front().
+This PipelineStage implements only the push() method. It relies on the default implementations of isEmpty() and getFront().
 
-The first step in Push() is to verify that the argument is of the right type. This test has to be done at runtime because all PipelineStage’s take Image parameters:
+The first step in push() is to verify that the argument is of the right type. This test has to be done at runtime because all PipelineStage’s take Image parameters:
 {{{
     if (!(image instanceof Gray8Image)) {
         throw new IllegalArgumentException(image.toString() + "" +
@@ -131,11 +131,11 @@ This class can be used as follows to convert an 8-bit signed image to a 32-bit i
     Gray8Image imGray8 = new Gray8Image(cWidth, cHeight);
     /* ... initialize imGray8... */
     Gray82Gray32 g8232 = new Gray82Gray32();
-    g8232.Push(imGray8);
-    if (g8232.Empty()) {
+    g8232.push(imGray8);
+    if (g8232.isEmpty()) {
         /* error, this should never happen */
     }
-    Image imResult = g8232.Front();
+    Image imResult = g8232.getFront();
     if (!(imResult instanceof Gray32Image)) {
         /* error, Gray82Gray32 returned wrong type */
     }
