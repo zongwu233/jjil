@@ -8,7 +8,7 @@
  * To change this template, choose Tools | Template Manager
  * and open the template in the editor.
  *
- * Copyright 2006 by Jon A. Webb
+ * Copyright 2008 by Jon A. Webb
  *     This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU Lesser General Public License as published by
  *    the Free Software Foundation, either version 3 of the License, or
@@ -123,7 +123,27 @@ public class Gray8MaskedImage extends Gray8Image {
     {
         return this.imMask.getData();
     }
+    
+    /**
+     * Returns true iff the given pixel is masked.
+     * @param nRow row of pixel
+     * @param nCol column of pixel
+     * @return true iff the given pixel is masked.
+     */
+    public boolean isMasked(int nRow, int nCol) {
+        return this.imMask.getData()[nRow*this.imMask.getWidth()+nCol] != Byte.MIN_VALUE;
+    }
 
+    /**
+     * Set the mask at the given pixel.
+     * @param nRow row of pixel
+     * @param nCol column of pixel
+     * @return modified Gray8Image (this)
+     */
+    public Gray8MaskedImage setMask(int nRow, int nCol) {
+        this.imMask.getData()[nRow*this.imMask.getWidth()+nCol] = Byte.MAX_VALUE;
+        return this;
+    }
     
     /** Return a string describing the image.
      *
@@ -133,6 +153,17 @@ public class Gray8MaskedImage extends Gray8Image {
     {
         return super.toString() + " (" + this.getWidth() + "x" +  //$NON-NLS-1$ //$NON-NLS-2$
                 this.getHeight() + "," + this.imMask.toString() + ")"; //$NON-NLS-1$ //$NON-NLS-2$
+    }
+    
+    /**
+     * Clear the mask at the given pixel.
+     * @param nRow row of pixel
+     * @param nCol column of pixel
+     * @return modified Gray8Image (this)
+     */
+    public Gray8MaskedImage unsetMask(int nRow, int nCol) {
+        this.imMask.getData()[nRow*this.imMask.getWidth()+nCol] = Byte.MIN_VALUE;
+        return this;
     }
 
 }
