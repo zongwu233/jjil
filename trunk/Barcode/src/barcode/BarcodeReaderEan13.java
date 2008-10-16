@@ -24,8 +24,8 @@ package barcode;
 */
 import java.util.*;
 
-import jjil.algorithm.Gray2Rgb;
-import jjil.algorithm.GrayVertAvg;
+import jjil.algorithm.Gray8Rgb;
+import jjil.algorithm.Gray8VertAvg;
 import jjil.core.*;
 import jjil.debug.Debug;
 
@@ -500,7 +500,7 @@ public class BarcodeReaderEan13 implements BarcodeReader {
         estimateBarcodes(gray);
         // form the vertical average of the image for verifying
         // the codes
-        byte[] rgbAvg = GrayVertAvg.push(gray);
+        byte[] rgbAvg = Gray8VertAvg.push(gray);
         // take the most common left barcodes and estimate their
         // match with the left side of the average
         /* 
@@ -634,7 +634,7 @@ public class BarcodeReaderEan13 implements BarcodeReader {
     private boolean estimateBarcodes(Gray8Image image) throws jjil.core.Error
     {
     	{
-    		Gray2Rgb g2r = new Gray2Rgb();
+    		Gray8Rgb g2r = new Gray8Rgb();
     		g2r.push(image);
     		Debug debug = new Debug();
     		debug.toFile((RgbImage) g2r.getFront(), "barcode.png"); //$NON-NLS-1$
@@ -770,7 +770,7 @@ public class BarcodeReaderEan13 implements BarcodeReader {
     		int wSlopeRight) throws jjil.core.Error
     {
     	{
-    		Gray2Rgb g2r = new Gray2Rgb();
+    		Gray8Rgb g2r = new Gray8Rgb();
     		g2r.push(image);
     		Debug debug = new Debug();
     		debug.toFile((RgbImage) g2r.getFront(), "barcode.png"); //$NON-NLS-1$

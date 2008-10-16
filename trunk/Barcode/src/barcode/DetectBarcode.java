@@ -2,11 +2,11 @@ package barcode;
 
 
 import jjil.algorithm.Gray16Threshold;
-import jjil.algorithm.Gray2Rgb;
-import jjil.algorithm.GrayConnComp;
-import jjil.algorithm.GrayHistEq;
-import jjil.algorithm.GrayHorizVertContrast;
-import jjil.algorithm.RgbAvg2Gray;
+import jjil.algorithm.Gray8Rgb;
+import jjil.algorithm.Gray8ConnComp;
+import jjil.algorithm.Gray8HistEq;
+import jjil.algorithm.Gray8HorizVertContrast;
+import jjil.algorithm.RgbAvgGray;
 import jjil.algorithm.RgbSubSample;
 import jjil.core.Image;
 import jjil.core.Rect;
@@ -53,26 +53,26 @@ public class DetectBarcode {
      * @throws jjil.core.Error Should not throw this except in the case of coding error.
      */
 	public boolean push(RgbImage rgb) throws jjil.core.Error {
-		final int nReducedHeight = 240;
-		final int nReducedWidth = 320;
+		final int nReducedHeight = 300;
+		final int nReducedWidth = 400;
 		// build pipeline
 		Sequence seq = new Sequence();
 		seq.add(new RgbSubSample(nReducedWidth, nReducedHeight));
-		seq.add(new RgbAvg2Gray());
-		seq.add(new GrayHistEq());
-		seq.add(new GrayHorizVertContrast(4, 2, -8, 3));
-		seq.add(new Gray16Threshold(200));
+		seq.add(new RgbAvgGray());
+		seq.add(new Gray8HistEq());
+		seq.add(new Gray8HorizVertContrast(5, 2, -8, 3));
+		seq.add(new Gray16Threshold(20));
 		seq.push(rgb);
-		GrayConnComp gcc = new GrayConnComp();
+		Gray8ConnComp gcc = new Gray8ConnComp();
 		Image imThresh = seq.getFront();
-		Gray2Rgb g2r = new Gray2Rgb();
+		Gray8Rgb g2r = new Gray8Rgb();
 		g2r.push(imThresh);
 		if (DetectBarcode.bDebug) {
 			Debug debug = new Debug();
 			debug.toFile((RgbImage)g2r.getFront(), "test.jpg");
 		}
 		gcc.push(imThresh);
-		if (gcc.getComponents() == 0) {
+		if (gcc.getComponentCount() == 0) {
 			return false;
 		}
 		// get component which is largest than the minimum size and
@@ -80,7 +80,7 @@ public class DetectBarcode {
 		Rect rReduced;
 		int nBestDiff = Integer.MAX_VALUE;
 		this.rDetected = null;
-		for (int i=0; i<gcc.getComponents(); i++) {
+		for (int i=0; i<gcc.getComponentCount(); i++) {
 			rReduced = gcc.getComponent(0);
 			// we detected the barcode at reduced resolution
 			// for speed. Stretch the rectangle back to its

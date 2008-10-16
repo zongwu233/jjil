@@ -24,17 +24,17 @@ package barcode;
  */
 import java.util.Vector;
 
-import jjil.algorithm.CannyHoriz;
-import jjil.algorithm.Gray2Rgb;
-import jjil.algorithm.GrayCrop;
-import jjil.algorithm.GrayHistEq;
-import jjil.algorithm.GrayRectStretch;
-import jjil.algorithm.GrayReduce;
-import jjil.algorithm.GrayTrapWarp;
-import jjil.algorithm.GrayVertAvg;
+import jjil.algorithm.Gray8CannyHoriz;
+import jjil.algorithm.Gray8Rgb;
+import jjil.algorithm.Gray8Crop;
+import jjil.algorithm.Gray8HistEq;
+import jjil.algorithm.Gray8RectStretch;
+import jjil.algorithm.Gray8Reduce;
+import jjil.algorithm.Gray8TrapWarp;
+import jjil.algorithm.Gray8VertAvg;
 import jjil.algorithm.LinefitHough;
-import jjil.algorithm.RgbSelect2Gray;
-import jjil.algorithm.ZeroCrossingHoriz;
+import jjil.algorithm.RgbSelectGray;
+import jjil.algorithm.Gray8ZeroCrossingHoriz;
 import jjil.core.Gray8Image;
 import jjil.core.Image;
 import jjil.core.Point;
@@ -96,13 +96,13 @@ public class ReadBarcode {
          * resolution channel on the CCDs used in cellphones.
          */
         if (image instanceof RgbImage) {
-            seq.add(new RgbSelect2Gray(RgbSelect2Gray.GREEN));
+            seq.add(new RgbSelectGray(RgbSelectGray.GREEN));
         }
         /* Now crop the gray image.
          */
         int dLeft = Math.max(0, dTopLeftX - cWidth / 12);
         int cWidthExp = Math.min(image.getWidth() - dLeft, cWidth * 7 / 6);
-        seq.add(new GrayCrop(dLeft, dTopLeftY, cWidthExp, cHeight));
+        seq.add(new Gray8Crop(dLeft, dTopLeftY, cWidthExp, cHeight));
         /* Apply the pipeline to get the cropped image.
          */
         seq.push(image);
@@ -117,7 +117,7 @@ public class ReadBarcode {
         }
         this.imageCropped = (Gray8Image) imageResult;
         {   Debug debug = new Debug();
-        	Gray2Rgb g2r = new Gray2Rgb();
+        	Gray8Rgb g2r = new Gray8Rgb();
         	g2r.push(this.imageCropped);
         	RgbImage rgb = (RgbImage) g2r.getFront();
         	debug.toFile(rgb, "cropped.png"); //$NON-NLS-1$
@@ -127,7 +127,7 @@ public class ReadBarcode {
          * barcode cWidth.
          */
         int cCannyWidth = cWidth / 6;
-        CannyHoriz canny = new CannyHoriz(cCannyWidth);
+        Gray8CannyHoriz canny = new Gray8CannyHoriz(cCannyWidth);
         /* Now apply the edge detection to the cropped mage
          */
         canny.push(imageCropped.clone());
@@ -145,7 +145,7 @@ public class ReadBarcode {
         this.imageEdge = (Gray8Image) imageResult;
         {   
         	Debug debug = new Debug();
-	    	Gray2Rgb g2r = new Gray2Rgb();
+	    	Gray8Rgb g2r = new Gray8Rgb();
 	    	g2r.push(this.imageEdge);
 	    	RgbImage rgb = (RgbImage) g2r.getFront();
 	    	debug.toFile(rgb, "edges.png"); //$NON-NLS-1$
@@ -164,23 +164,23 @@ public class ReadBarcode {
         int cCroppedHeight = cHeightReduce * 
                 (imageInput.getHeight() / cHeightReduce); 
         int cTotalWidth = dRight - dLeft;
-        GrayCrop crop = new GrayCrop(dLeft, 0, cTotalWidth, cCroppedHeight);
+        Gray8Crop crop = new Gray8Crop(dLeft, 0, cTotalWidth, cCroppedHeight);
         Sequence seq = new Sequence(crop);
-        seq.add(new GrayReduce(1,cHeightReduce));
+        seq.add(new Gray8Reduce(1,cHeightReduce));
         int cReducedHeight = cCroppedHeight / cHeightReduce;
         // we stretch the cropped image so cInputWidth becomes cTargetWidth. This means
         // cTotalWidth must become cTargetWidth * cTotalWidth / cInputWidth
-        GrayRectStretch stretch = new GrayRectStretch(
+        Gray8RectStretch stretch = new Gray8RectStretch(
                 cTargetWidth * cTotalWidth / cInputWidth, cReducedHeight);
         seq.add(stretch);
-        seq.add(new GrayHistEq());
+        seq.add(new Gray8HistEq());
         seq.push(imageInput);
         return seq.getFront();
     }
     
     private boolean findBarcodeEdges() throws jjil.core.Error
     {
-        ZeroCrossingHoriz zeroesFind = new ZeroCrossingHoriz(8);
+        Gray8ZeroCrossingHoriz zeroesFind = new Gray8ZeroCrossingHoriz(8);
         int[][] wZeroes = zeroesFind.push(this.imageEdge);
         Vector v = getPointsFromZeroes(wZeroes, true);
         if (v.size() < 5) {
@@ -206,7 +206,7 @@ public class ReadBarcode {
         this.wSlopeRight = fit.getSlope();
         {
         	Debug debug = new Debug();
-        	Gray2Rgb g2r = new Gray2Rgb();
+        	Gray8Rgb g2r = new Gray8Rgb();
         	g2r.push(this.imageEdge);
         	debug.toFile((RgbImage) g2r.getFront(), "edges.png"); //$NON-NLS-1$
         }
@@ -218,7 +218,7 @@ public class ReadBarcode {
         int cWidth = this.imageRectified.getWidth();
         int cShortWidth = cWidth / 24, 
             cLongWidth = cWidth / 4;
-        byte[] bAvg = GrayVertAvg.push(this.imageRectified);
+        byte[] bAvg = Gray8VertAvg.push(this.imageRectified);
         int[] wShortSum = new int[bAvg.length], 
                 wLongSum = new int[bAvg.length];
         formShortAndLongSums(bAvg, cShortWidth, cLongWidth, wShortSum, wLongSum);
@@ -358,7 +358,7 @@ public class ReadBarcode {
             cHeight < 0 || dTopLeftY + cHeight > image.getHeight()) {
             throw new jjil.core.Error(
     				jjil.core.Error.PACKAGE.ALGORITHM,
-    				jjil.algorithm.ErrorCodes.BOUNDS_OUTSIDE_IMAGE,
+    				jjil.algorithm.ErrorCodes.PARAMETER_OUT_OF_RANGE,
     				"(" + dTopLeftX + "," + dTopLeftY + "," + cWidth + "," + cHeight + ")",
     				image.toString(),
     				null);
@@ -373,6 +373,7 @@ public class ReadBarcode {
         if (!findBarcodeEdges()) {
             return;
         }
+
         /* Rectify the barcode image so the left and right edges are vertical
          */
         // rectifyBarcode();
@@ -385,7 +386,7 @@ public class ReadBarcode {
         // }
         BarcodeReaderEan13 reader = new BarcodeReaderEan13();
         /*
-        GrayCrop gc = new GrayCrop(dBestLeftPos, 
+        Gray8Crop gc = new Gray8Crop(dBestLeftPos, 
         		0,
         		dBestRightPos - dBestLeftPos,
         		this.imageRectified.getHeight());
@@ -393,7 +394,7 @@ public class ReadBarcode {
         Gray8Image imCropped = (Gray8Image) gc.getFront();
         {
            	Debug debug = new Debug();
-        	Gray2Rgb g2r = new Gray2Rgb();
+        	Gray8Rgb g2r = new Gray8Rgb();
         	g2r.push(this.imageCropped);
         	debug.toFile((RgbImage) g2r.getFront(), "rectCropped.png");
         	
@@ -438,7 +439,7 @@ public class ReadBarcode {
                 (this.imageCropped.getHeight() - 1) * this.wSlopeLeft / 256;
         int cBr = cYRight + 
                 (this.imageCropped.getHeight() - 1) * this.wSlopeRight / 256;
-        GrayTrapWarp warp = new GrayTrapWarp(0,	this.imageCropped.getHeight(), 
+        Gray8TrapWarp warp = new Gray8TrapWarp(0,	this.imageCropped.getHeight(), 
                 cTl, 
                 cTr, 
                 cBl, 
@@ -455,7 +456,7 @@ public class ReadBarcode {
         }
         {
         	Debug debug = new Debug();
-        	Gray2Rgb g2r = new Gray2Rgb();
+        	Gray8Rgb g2r = new Gray8Rgb();
         	g2r.push(imageResult);
         	debug.toFile((RgbImage) g2r.getFront(), "rectified.png"); //$NON-NLS-1$
         }
@@ -489,7 +490,7 @@ public class ReadBarcode {
                     cInputWidth, 
                     cTargetWidth);
         {
-        	Gray2Rgb g2r = new Gray2Rgb();
+        	Gray8Rgb g2r = new Gray8Rgb();
         	g2r.push(imageStretched);
         	new Debug().toFile((RgbImage) g2r.getFront(), "stretched.png"); //$NON-NLS-1$
         }
