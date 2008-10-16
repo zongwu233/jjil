@@ -183,4 +183,13 @@ public class MathPlus {
         } while (Math.abs(nSqrt - nSqrtNew) > 1);
         return nSqrtNew;
     }
+    
+    /**
+     * Compute square.
+     * @param n integer to square
+     * @return n<sup>2</sup>
+     */
+    public static int square(int n) {
+        return n*n;
+    }
 }
