@@ -1,3 +1,19 @@
+/**
+ * Copyright 2008 by Jon A. Webb
+ *     This program is free software: you can redistribute it and/or modify
+ *    it under the terms of the GNU Lesser General Public License as published by
+ *    the Free Software Foundation, either version 3 of the License, or
+ *    (at your option) any later version.
+ *
+ *    This program is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the Lesser GNU General Public License
+ *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 package jjil.algorithm;
 
 /**
@@ -59,7 +75,14 @@ public class EquivalenceClass {
 	public int getLabel() {
 		return this.find().nLabel;
 	}
-	
+        
+        /**
+         * Returns number of labels assigned since reset
+         * @return max number of distinct labels
+         */
+	public static int getLabels() {
+            return EquivalenceClass.nNextLabel;
+        }
 	
 	private EquivalenceClass getParent() {
 		return this.eParent;
@@ -78,21 +101,21 @@ public class EquivalenceClass {
         EquivalenceClass.nNextLabel = 0;
     }
 	
-	/**
-	 * Unifies this class with another class. After this operation
-	 * this and y will be in the same equivalence class.
-	 * @param y the class to unify with.
-	 */
-	public void union(EquivalenceClass y) {
-		EquivalenceClass xRoot = this.find();
-		EquivalenceClass yRoot = y.find();
-		if (xRoot.getRank() > yRoot.getRank()) {
-			yRoot.setParent(xRoot);
-		} else if (xRoot.getRank() < yRoot.getRank()) {
-			xRoot.setParent(yRoot);
-		} else if (xRoot != yRoot) {
-			yRoot.setParent(xRoot);
-			xRoot.incrRank();
-		}
-	}
+    /**
+     * Unifies this class with another class. After this operation
+     * this and y will be in the same equivalence class.
+     * @param y the class to unify with.
+     */
+    public void union(EquivalenceClass y) {
+            EquivalenceClass xRoot = this.find();
+            EquivalenceClass yRoot = y.find();
+            if (xRoot.getRank() > yRoot.getRank()) {
+                    yRoot.setParent(xRoot);
+            } else if (xRoot.getRank() < yRoot.getRank()) {
+                    xRoot.setParent(yRoot);
+            } else if (xRoot != yRoot) {
+                    yRoot.setParent(xRoot);
+                    xRoot.incrRank();
+            }
+    }
 }
