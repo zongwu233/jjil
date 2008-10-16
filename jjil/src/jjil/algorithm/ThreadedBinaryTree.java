@@ -22,8 +22,10 @@ import java.util.Vector;
 /**
  * ThreadedBinaryTree is an implements threaded
  * binary trees, as the name implies. The implementation of
- * threaded binary trees here was guided by the tutorial at
+ * threaded binary trees here was guided by the tutorial at <a 
+ * href="http://www.eternallyconfuzzled.com/tuts/datastructures/jsw_tut_bst1.aspx#thread">
  * http://www.eternallyconfuzzled.com/tuts/datastructures/jsw_tut_bst1.aspx#thread.
+ * </a>
  * <p>
  * Threaded binary trees are like normal (unbalanced) binary
  * trees except that nodes which have no right successor have
