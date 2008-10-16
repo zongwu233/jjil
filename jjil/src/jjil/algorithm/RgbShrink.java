@@ -129,17 +129,17 @@ public class RgbShrink extends PipelineStage {
     
     private void setupPipeline() throws jjil.core.Error
     {
-        RgbSelect2Gray sel = new RgbSelect2Gray(RgbSelect2Gray.RED);
+        RgbSelectGray sel = new RgbSelectGray(RgbSelectGray.RED);
         this.seqR = new Sequence(sel);
-        GrayShrink gs = new GrayShrink(cWidth, cHeight);
+        Gray8Shrink gs = new Gray8Shrink(cWidth, cHeight);
         this.seqR.add(gs);
-        sel = new RgbSelect2Gray(RgbSelect2Gray.GREEN);
+        sel = new RgbSelectGray(RgbSelectGray.GREEN);
         this.seqG = new Sequence(sel);
-        gs = new GrayShrink(cWidth, cHeight);
+        gs = new Gray8Shrink(cWidth, cHeight);
         this.seqG.add(gs);
-        sel = new RgbSelect2Gray(RgbSelect2Gray.BLUE);
+        sel = new RgbSelectGray(RgbSelectGray.BLUE);
         this.seqB = new Sequence(sel);
-        gs = new GrayShrink(cWidth, cHeight);
+        gs = new Gray8Shrink(cWidth, cHeight);
         this.seqB.add(gs);
     }
     
