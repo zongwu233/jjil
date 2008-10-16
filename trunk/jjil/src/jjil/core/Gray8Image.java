@@ -74,7 +74,23 @@ public class Gray8Image extends Image {
         return image;
     }
     
-    /** Return a pointer to the image data.
+    /**
+     * Fill a rectangle in a Gray8Image with a specific value. Rect is filled
+     * up to but not including bottom and right edge
+     * @param r the Rect to fill
+     * @param bVal the value to assign
+     * @return modified Gray8Image (this)
+     */
+    public Gray8Image fill(Rect r, byte bVal) {
+        for (int i=r.getTop(); i<r.getBottom(); i++) {
+            for (int j=r.getLeft(); j<r.getRight(); j++) {
+                this.bImage[i*this.getWidth()+j] = bVal;
+            }
+        }
+        return this;
+    }
+
+    /** Return a pointer to the byte image data.
      *
      * @return the data pointer.
      */
