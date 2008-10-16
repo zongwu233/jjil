@@ -8,9 +8,19 @@ package jjil.core;
  */
 public class ErrorCodes {
     /**
+     * Input bounds outside input image.
+     */
+    public static final int BOUNDS_OUTSIDE_IMAGE = 0;		// 
+    /**
+     * Random parameter value was out of range
+     */
+        public static final int ILLEGAL_PARAMETER_VALUE = 
+                BOUNDS_OUTSIDE_IMAGE + 1;	
+    /**
      * image and mask sizes don't match
      */
-        public static final int IMAGE_MASK_SIZE_MISMATCH = 0;	
+        public static final int IMAGE_MASK_SIZE_MISMATCH = 
+                ILLEGAL_PARAMETER_VALUE + 1;	
     /**
      * attempt to divide by zero
      */
@@ -32,15 +42,15 @@ public class ErrorCodes {
         public static final int MATH_SQUARE_TOO_LARGE = 
         	MATH_PRODUCT_TOO_LARGE + 1;					
     /**
+     * No result was available when it was requested.
+     */
+        public static final int NO_RESULT_AVAILABLE = 
+        	MATH_SQUARE_TOO_LARGE + 1;					
+    /**
      * pipeline empty when image is being pushed
      */
         public static final int PIPELINE_EMPTY_PUSH = 
-        	MATH_SQUARE_TOO_LARGE + 1;					
-    /**
-     * pipeline didn't return an expected result
-     */
-        public static final int PIPELINE_NO_RESULT = 
-        	PIPELINE_EMPTY_PUSH + 1;					
+        	NO_RESULT_AVAILABLE + 1;					
         
     /**
      * Count of error codes.
