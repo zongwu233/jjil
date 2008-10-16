@@ -31,32 +31,6 @@ import jjil.core.Rect;
  * @author webb
  */
 public class RectCollection {
-	private class ComparableInt implements ComparableJ2me {
-		private final int n;
-
-		public ComparableInt(int n) {
-			this.n = n;
-		}
-
-
-		public int compareTo(Object o) throws jjil.core.Error {
-			if (!(o instanceof ComparableInt)) {
-				throw new Error(
-				    	Error.PACKAGE.ALGORITHM,
-				    	ErrorCodes.OBJECT_NOT_EXPECTED_TYPE,
-				    	o.toString(),
-				    	"ComparableInt",
-				    	null);
-			}
-			ComparableInt right = (ComparableInt) o;
-			if (right.n == this.n) {
-				return 0;
-			} else {
-				return this.n > right.n ? 1 : -1;
-			}
-		}
-
-	}
     
     /**
      * Vector of all rectangles in the collection.
@@ -134,7 +108,7 @@ public class RectCollection {
         // get lists of Rectangles enclosing the given rectangle start and end
         ThreadedBinaryTree tbtFind = null;
         if (tbtRoot != null) {
-            tbtFind = tbtRoot.findNearest(new ComparableInt(start));
+            tbtFind = tbtRoot.findNearest(new BinaryHeap.ComparableInt(start));
         }
         Vector vExistingStart = null;
         if (tbtFind != null) {
@@ -142,7 +116,7 @@ public class RectCollection {
         }
         Vector vExistingEnd = null;
         if (tbtRoot != null) {
-            tbtFind = tbtRoot.findNearest(new ComparableInt(end));
+            tbtFind = tbtRoot.findNearest(new BinaryHeap.ComparableInt(end));
         }
         if (tbtFind != null) {
             vExistingEnd = (Vector) tbtFind.getValue();
@@ -152,10 +126,10 @@ public class RectCollection {
         // the ThreadedBinaryTree may not already exist. Create it if necessary
         if (tbtRoot == null) {
             tbtRoot = tbtStart = 
-                    new ThreadedBinaryTree(new ComparableInt(start));
+                    new ThreadedBinaryTree(new BinaryHeap.ComparableInt(start));
         } else {
             // already exists, add or get the start node
-            tbtStart = tbtRoot.add(new ComparableInt(start));
+            tbtStart = tbtRoot.add(new BinaryHeap.ComparableInt(start));
             // add existing enclosing rectangles to this node's list
             // if it doesn't already exist
             if (vExistingStart != null) {
@@ -171,7 +145,7 @@ public class RectCollection {
         }
         // add or get the end node
         ThreadedBinaryTree tbtEnd = 
-                tbtRoot.add(new ComparableInt(end));
+                tbtRoot.add(new BinaryHeap.ComparableInt(end));
         // add existing enclosing rectangles to this node's list
         // if it doesn't already exist
         if (vExistingEnd != null) {
@@ -237,9 +211,9 @@ public class RectCollection {
             return null;
         }
         ThreadedBinaryTree tbtHorizProj =
-                this.treeHoriz.findNearest(new ComparableInt(p.getY()));
+                this.treeHoriz.findNearest(new BinaryHeap.ComparableInt(p.getY()));
         ThreadedBinaryTree tbtVertProj =
-                this.treeVert.findNearest(new ComparableInt(p.getX()));
+                this.treeVert.findNearest(new BinaryHeap.ComparableInt(p.getX()));
         // if no tree node is <= this point the return null
         if (tbtHorizProj == null || tbtVertProj == null) {
             return null;
