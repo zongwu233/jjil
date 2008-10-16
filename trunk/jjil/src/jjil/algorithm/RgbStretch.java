@@ -87,7 +87,7 @@ public class RgbStretch extends PipelineStage {
         			null,
         			null);
         }
-        if (image.getWidth() < this.cWidth || image.getHeight() < this.cHeight) {
+        if (image.getWidth() > this.cWidth || image.getHeight() > this.cHeight) {
             throw new Error(
             			Error.PACKAGE.ALGORITHM,
             			ErrorCodes.STRETCH_OUTPUT_SMALLER_THAN_INPUT,
@@ -129,17 +129,17 @@ public class RgbStretch extends PipelineStage {
     
     private void setupPipeline() throws jjil.core.Error
     {
-        RgbSelect2Gray sel = new RgbSelect2Gray(RgbSelect2Gray.RED);
+        RgbSelectGray sel = new RgbSelectGray(RgbSelectGray.RED);
         this.seqR = new Sequence(sel);
-        GrayRectStretch gs = new GrayRectStretch(cWidth, cHeight);
+        Gray8RectStretch gs = new Gray8RectStretch(cWidth, cHeight);
         this.seqR.add(gs);
-        sel = new RgbSelect2Gray(RgbSelect2Gray.GREEN);
+        sel = new RgbSelectGray(RgbSelectGray.GREEN);
         this.seqG = new Sequence(sel);
-        gs = new GrayRectStretch(cWidth, cHeight);
+        gs = new Gray8RectStretch(cWidth, cHeight);
         this.seqG.add(gs);
-        sel = new RgbSelect2Gray(RgbSelect2Gray.BLUE);
+        sel = new RgbSelectGray(RgbSelectGray.BLUE);
         this.seqB = new Sequence(sel);
-        gs = new GrayRectStretch(cWidth, cHeight);
+        gs = new Gray8RectStretch(cWidth, cHeight);
         this.seqB.add(gs);
     }
     
