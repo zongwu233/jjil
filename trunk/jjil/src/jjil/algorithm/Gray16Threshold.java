@@ -29,9 +29,9 @@ import jjil.core.Image;
 import jjil.core.PipelineStage;
 
 /**
- * Threshold. Output is a Gray16Image with values greater than threshold
+ * Threshold. Output is a Gray8Image with values greater than threshold
  * set to Byte.MAX_VALUE, below threshold set to Byte.MIN_VALUE. Input
- * is a Gray8Image.
+ * is a Gray16Image.
  * @author webb
  */
 public class Gray16Threshold extends PipelineStage {
@@ -50,8 +50,7 @@ public class Gray16Threshold extends PipelineStage {
      * Byte.MIN_VALUE under.
      *
      * @param image the input image
-     * @throws jjil.core.Error if the image is not a gray 16-bit
-     * image.
+     * @throws jjil.core.Error if the image is not a Gray16Image.
      */
     public void push(Image image)
         throws jjil.core.Error
@@ -82,7 +81,7 @@ public class Gray16Threshold extends PipelineStage {
     }
     
     /**
-     * 
+     * Implement toString
      * @return a String describing the class instance.
      */
     public String toString() {
