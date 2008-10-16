@@ -5,17 +5,20 @@ package jjil.j2se;
  * under J2SE. The point is that the J2SE localization support is used so
  * the same approach won't work with J2ME, etc.<br>
  * Ex. usage:<br>
- * <code>
- * 		try {
- * 			...
- *		} catch (Exception ex) {
- *			Throwable t = ex.getCause();
- *			if (t instanceof jjil.core.Error) {
- *				jjil.j2se.Error e = new jjil.j2se.Error((jjil.core.Error) t);
- *				System.out.print(e.toString());
- *			}
+ * <blockquote>
+ * <pre>
+ * 	try {
+ *          ...
+ *	} catch (Exception ex) {
+ *		Throwable t = ex.getCause();
+ *		if (t instanceof jjil.core.Error) {
+ *			jjil.j2se.Error e = 
+ *                              new jjil.j2se.Error((jjil.core.Error) t);
+ *			System.out.print(e.toString());
  *		}
- * </code>
+ *	}
+ * </pre>
+ * </blockquote>
  * @author webb
  *
  */
@@ -25,6 +28,10 @@ public class Error extends jjil.core.Error {
     
     {
         Error.szMessage[jjil.core.Error.PACKAGE.CORE] = new String[jjil.core.ErrorCodes.COUNT];
+        Error.szMessage[jjil.core.Error.PACKAGE.CORE][jjil.core.ErrorCodes.BOUNDS_OUTSIDE_IMAGE] =
+            Messages.getString("BOUNDS_OUTSIDE_IMAGE");
+        Error.szMessage[jjil.core.Error.PACKAGE.CORE][jjil.core.ErrorCodes.ILLEGAL_PARAMETER_VALUE] =
+            Messages.getString("ILLEGAL_PARAMETER_VALUE");
         Error.szMessage[jjil.core.Error.PACKAGE.CORE][jjil.core.ErrorCodes.IMAGE_MASK_SIZE_MISMATCH] =
             Messages.getString("IMAGE_MASK_SIZE_MISMATCH");
         Error.szMessage[jjil.core.Error.PACKAGE.CORE][jjil.core.ErrorCodes.MATH_DIVISION_ZERO] =
@@ -35,14 +42,12 @@ public class Error extends jjil.core.Error {
             Messages.getString("MATH_PRODUCT_TOO_LARGE");
         Error.szMessage[jjil.core.Error.PACKAGE.CORE][jjil.core.ErrorCodes.MATH_SQUARE_TOO_LARGE] =
             Messages.getString("MATH_SQUARE_TOO_LARGE");
+        Error.szMessage[jjil.core.Error.PACKAGE.CORE][jjil.core.ErrorCodes.NO_RESULT_AVAILABLE] =
+            Messages.getString("PIPELINE_NO_RESULT");
         Error.szMessage[jjil.core.Error.PACKAGE.CORE][jjil.core.ErrorCodes.PIPELINE_EMPTY_PUSH] =
             Messages.getString("PIPELINE_EMPTY_PUSH");
-        Error.szMessage[jjil.core.Error.PACKAGE.CORE][jjil.core.ErrorCodes.PIPELINE_NO_RESULT] =
-            Messages.getString("PIPELINE_NO_RESULT");
 
         Error.szMessage[jjil.core.Error.PACKAGE.ALGORITHM] = new String[jjil.algorithm.ErrorCodes.COUNT];
-        Error.szMessage[jjil.core.Error.PACKAGE.ALGORITHM][jjil.algorithm.ErrorCodes.BOUNDS_OUTSIDE_IMAGE] =
-            Messages.getString("BOUNDS_OUTSIDE_IMAGE");
         Error.szMessage[jjil.core.Error.PACKAGE.ALGORITHM][jjil.algorithm.ErrorCodes.CONN_COMP_LABEL_COMPARETO_NULL] =
             Messages.getString("CONN_COMP_LABEL_COMPARETO_NULL");
         Error.szMessage[jjil.core.Error.PACKAGE.ALGORITHM][jjil.algorithm.ErrorCodes.CONN_COMP_LABEL_OUT_OF_BOUNDS] =
@@ -77,6 +82,10 @@ public class Error extends jjil.core.Error {
             Messages.getString("IMAGE_TOO_SMALL");
         Error.szMessage[jjil.core.Error.PACKAGE.ALGORITHM][jjil.algorithm.ErrorCodes.INPUT_IMAGE_SIZE_NEGATIVE] =
             Messages.getString("INPUT_IMAGE_SIZE_NEGATIVE");
+        Error.szMessage[jjil.core.Error.PACKAGE.ALGORITHM][jjil.algorithm.ErrorCodes.INPUT_TERMINATED_EARLY] =
+            Messages.getString("INPUT_TERMINATED_EARLY");
+        Error.szMessage[jjil.core.Error.PACKAGE.ALGORITHM][jjil.algorithm.ErrorCodes.IO_EXCEPTION] =
+            Messages.getString("IO_EXCEPTION");
         Error.szMessage[jjil.core.Error.PACKAGE.ALGORITHM][jjil.algorithm.ErrorCodes.LOOKUP_TABLE_LENGTH_NOT_256] =
             Messages.getString("LOOKUP_TABLE_LENGTH_NOT_256");
         Error.szMessage[jjil.core.Error.PACKAGE.ALGORITHM][jjil.algorithm.ErrorCodes.OBJECT_NOT_EXPECTED_TYPE] =
@@ -113,6 +122,11 @@ public class Error extends jjil.core.Error {
 		super(e);
 	}
 
+        /**
+         * Return a String localized for the current language etc. from this
+         * Error object.
+         * @return String localized for the current language describing the error.
+         */
     public String getLocalizedMessage() {
         String szResult = null;
         switch (this.getPackage()) {
