@@ -26,6 +26,7 @@ package jjil.algorithm;
 import jjil.core.Error;
 import jjil.core.Image;
 import jjil.core.PipelineStage;
+import jjil.core.Rect;
 import jjil.core.RgbImage;
 
 /**
@@ -56,6 +57,17 @@ public class RgbCrop extends PipelineStage {
         setWindow(x, y, width, height);
     }
     
+    /** Creates a new instance of RgbCrop. The cropping window
+     * is specified here.
+     *
+     * @param r the rectangle to crop to
+     * @throws jjil.core.Error if the top left corner of the
+     * window is negative, or the window area is non-positive.
+     */
+    public RgbCrop(Rect r) throws jjil.core.Error {
+        setWindow(r.getLeft(), r.getTop(), r.getWidth(), r.getHeight());
+    }
+    
     /** Crops the input RGB image to the cropping window that was
      * specified in the constructor.
      *
@@ -77,11 +89,11 @@ public class RgbCrop extends PipelineStage {
         if (this.cX + this.cWidth > image.getWidth() ||
             this.cY + this.cHeight > image.getHeight()) {
             throw new Error(
-                			Error.PACKAGE.ALGORITHM,
-                			ErrorCodes.BOUNDS_OUTSIDE_IMAGE,
-                			image.toString(),
-                			this.toString(),
-                			null);
+                            Error.PACKAGE.CORE,
+                            jjil.core.ErrorCodes.BOUNDS_OUTSIDE_IMAGE,
+                            image.toString(),
+                            this.toString(),
+                            null);
         }
         RgbImage imageResult = new RgbImage(this.cWidth,this.cHeight);
         int[] src = imageInput.getData();
@@ -145,11 +157,11 @@ public class RgbCrop extends PipelineStage {
             int height) throws jjil.core.Error {
         if (x<0 || y<0) {
             throw new Error(
-                			Error.PACKAGE.ALGORITHM,
-                			ErrorCodes.BOUNDS_OUTSIDE_IMAGE,
-                			new Integer(x).toString(),
-                			new Integer(y).toString(),
-                			null);
+                            Error.PACKAGE.CORE,
+                            jjil.core.ErrorCodes.BOUNDS_OUTSIDE_IMAGE,
+                            new Integer(x).toString(),
+                            new Integer(y).toString(),
+                            null);
         }
         if (width<=0 || height<=0) {
             throw new Error(
