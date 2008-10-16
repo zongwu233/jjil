@@ -5,8 +5,10 @@ package jjil.j2me;
  * under J2ME. The point is that the J2ME localization support is used so
  * the same approach won't work with Android, J2SE, etc.<br>
  * Usage:<br>
+ * <pre>
  * 		jjil.j2me.Error eJ2me = new jjil.j2me.Error(e);<br>
  * 	 	... eJ2me.toString() ...
+ * </pre>
  * @author webb
  *
  */
@@ -15,6 +17,10 @@ public class Error extends jjil.core.Error {
     
     {
         Error.szMessage[jjil.core.Error.PACKAGE.CORE] = new String[jjil.core.ErrorCodes.COUNT];
+        Error.szMessage[jjil.core.Error.PACKAGE.CORE][jjil.core.ErrorCodes.BOUNDS_OUTSIDE_IMAGE] =
+            LS.getMessage("BOUNDS_OUTSIDE_IMAGE");
+        Error.szMessage[jjil.core.Error.PACKAGE.CORE][jjil.core.ErrorCodes.ILLEGAL_PARAMETER_VALUE] =
+            LS.getMessage("ILLEGAL_PARAMETER_VALUE");
         Error.szMessage[jjil.core.Error.PACKAGE.CORE][jjil.core.ErrorCodes.IMAGE_MASK_SIZE_MISMATCH] =
             LS.getMessage("IMAGE_MASK_SIZE_MISMATCH");
         Error.szMessage[jjil.core.Error.PACKAGE.CORE][jjil.core.ErrorCodes.MATH_DIVISION_ZERO] =
@@ -25,20 +31,16 @@ public class Error extends jjil.core.Error {
             LS.getMessage("MATH_PRODUCT_TOO_LARGE");
         Error.szMessage[jjil.core.Error.PACKAGE.CORE][jjil.core.ErrorCodes.MATH_SQUARE_TOO_LARGE] =
             LS.getMessage("MATH_SQUARE_TOO_LARGE");
+        Error.szMessage[jjil.core.Error.PACKAGE.CORE][jjil.core.ErrorCodes.NO_RESULT_AVAILABLE] =
+            LS.getMessage("PIPELINE_NO_RESULT");
         Error.szMessage[jjil.core.Error.PACKAGE.CORE][jjil.core.ErrorCodes.PIPELINE_EMPTY_PUSH] =
             LS.getMessage("PIPELINE_EMPTY_PUSH");
-        Error.szMessage[jjil.core.Error.PACKAGE.CORE][jjil.core.ErrorCodes.PIPELINE_NO_RESULT] =
-            LS.getMessage("PIPELINE_NO_RESULT");
 
         Error.szMessage[jjil.core.Error.PACKAGE.ALGORITHM] = new String[jjil.algorithm.ErrorCodes.COUNT];
-        Error.szMessage[jjil.core.Error.PACKAGE.ALGORITHM][jjil.algorithm.ErrorCodes.BOUNDS_OUTSIDE_IMAGE] =
-            LS.getMessage("BOUNDS_OUTSIDE_IMAGE");
         Error.szMessage[jjil.core.Error.PACKAGE.ALGORITHM][jjil.algorithm.ErrorCodes.CONN_COMP_LABEL_COMPARETO_NULL] =
             LS.getMessage("CONN_COMP_LABEL_COMPARETO_NULL");
         Error.szMessage[jjil.core.Error.PACKAGE.ALGORITHM][jjil.algorithm.ErrorCodes.CONN_COMP_LABEL_OUT_OF_BOUNDS] =
             LS.getMessage("CONN_COMP_LABEL_OUT_OF_BOUNDS");
-        Error.szMessage[jjil.core.Error.PACKAGE.ALGORITHM][jjil.algorithm.ErrorCodes.INPUT_TERMINATED_EARLY] =
-            LS.getMessage("INPUT_TERMINATED_EARLY");
         Error.szMessage[jjil.core.Error.PACKAGE.ALGORITHM][jjil.algorithm.ErrorCodes.FFT_SIZE_LARGER_THAN_MAX] =
             LS.getMessage("FFT_SIZE_LARGER_THAN_MAX");
         Error.szMessage[jjil.core.Error.PACKAGE.ALGORITHM][jjil.algorithm.ErrorCodes.FFT_SIZE_NOT_POWER_OF_2] =
@@ -67,6 +69,10 @@ public class Error extends jjil.core.Error {
             LS.getMessage("IMAGE_TOO_SMALL");
         Error.szMessage[jjil.core.Error.PACKAGE.ALGORITHM][jjil.algorithm.ErrorCodes.INPUT_IMAGE_SIZE_NEGATIVE] =
             LS.getMessage("INPUT_IMAGE_SIZE_NEGATIVE");
+        Error.szMessage[jjil.core.Error.PACKAGE.ALGORITHM][jjil.algorithm.ErrorCodes.INPUT_TERMINATED_EARLY] =
+            LS.getMessage("INPUT_TERMINATED_EARLY");
+        Error.szMessage[jjil.core.Error.PACKAGE.ALGORITHM][jjil.algorithm.ErrorCodes.IO_EXCEPTION] =
+            LS.getMessage("IO_EXCEPTION");
         Error.szMessage[jjil.core.Error.PACKAGE.ALGORITHM][jjil.algorithm.ErrorCodes.LOOKUP_TABLE_LENGTH_NOT_256] =
             LS.getMessage("LOOKUP_TABLE_LENGTH_NOT_256");
         Error.szMessage[jjil.core.Error.PACKAGE.ALGORITHM][jjil.algorithm.ErrorCodes.OBJECT_NOT_EXPECTED_TYPE] =
@@ -77,6 +83,10 @@ public class Error extends jjil.core.Error {
             LS.getMessage("PARAMETER_OUT_OF_RANGE");
         Error.szMessage[jjil.core.Error.PACKAGE.ALGORITHM][jjil.algorithm.ErrorCodes.PARAMETER_RANGE_NULL_OR_NEGATIVE] =
             LS.getMessage("PARAMETER_RANGE_NULL_OR_NEGATIVE");
+        Error.szMessage[jjil.core.Error.PACKAGE.ALGORITHM][jjil.algorithm.ErrorCodes.PARAMETER_SIZES_DIFFER] =
+            LS.getMessage("PARAMETER_SIZES_DIFFER");
+        Error.szMessage[jjil.core.Error.PACKAGE.ALGORITHM][jjil.algorithm.ErrorCodes.PARAMETER_WRONG_SIZE] =
+            LS.getMessage("PARAMETER_WRONG_SIZE");
         Error.szMessage[jjil.core.Error.PACKAGE.ALGORITHM][jjil.algorithm.ErrorCodes.PARSE_ERROR] =
             LS.getMessage("PARSE_ERROR");
         Error.szMessage[jjil.core.Error.PACKAGE.ALGORITHM][jjil.algorithm.ErrorCodes.REDUCE_INPUT_IMAGE_NOT_MULTIPLE_OF_OUTPUT_SIZE] =
