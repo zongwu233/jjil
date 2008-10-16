@@ -30,9 +30,12 @@ import jjil.core.Image;
 import jjil.core.PipelineStage;
 /**
  * Gray8QmSum forms the cumulative sum of an image.
- * <blockquote> Output(i,j) = Sum(Input(k,l), k &le; i, l &le; j). </blockquote>
+ * <blockquote> Output(i,j) = &sum;<sub>k &le; i, l &le; j</sub> Input(k,l). </blockquote>
  *  Output is a 32-bit gray image.
- *  Input is an 8-bit gray image.
+ *  Input is an 8-bit gray image.<p>
+ * Note that since the output is 32 bits the input image cannot have more than
+ * 2<sup>24</sup> pixels without risking overflow. For example, an image larger than
+ * 4096 &times; 4096 (=2<sup>12</sup> &times; 2<sup>12</sup>) might overflow.
  * @author webb
  */
 public class Gray8QmSum extends PipelineStage {
@@ -44,7 +47,7 @@ public class Gray8QmSum extends PipelineStage {
     }
     
     /** Forms the cumulative sum of an image.
-     *  Output(i,j) = Sum(Input(k,l), k @lte i, l@lte j).
+     *  Output(i,j) = &sum;<sub>k &le; i, l &le; j</sub> Input(k,l)).
      *  Output is 32-bit gray image.
      *  Input is 8-bit gray image.
      *
