@@ -16,7 +16,9 @@ package jjil.algorithm;
 // Throws UnderflowException for findMin and deleteMin when empty
 
 /**
- * PriorityQueue interface.
+ * PriorityQueue interface. A priority queue maintains a sorted list of items,
+ * and makes it possible to add new items or return and remove the least item
+ * in sorted order in O(log n) time, where n is the number of items.<br>
  * Some priority queues may support a decreaseKey operation,
  * but this is considered an advanced operation. If so,
  * a Position is returned by insert.
@@ -53,7 +55,7 @@ public interface PriorityQueue {
     ComparableJ2me findMin( ) throws jjil.core.Error;
     
     /**
-     * Remove the smallest item from the priority queue.
+     * Remove and return the smallest item from the priority queue.
      * @return the smallest item.
      * @throws jjil.core.Error if empty.
      */
