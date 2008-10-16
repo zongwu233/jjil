@@ -24,6 +24,7 @@
 
 package jjil.core;
 
+
 /**
  * Point: an object holding a 2-dimensional point coordinate
  * @author webb
@@ -43,6 +44,15 @@ public class Point {
     }
     
     /**
+     * Offset a point by a 2-dimensional vector Vec2, returning modified point.
+     * @param v Vec2 to offset this point by
+     * @return modified Point
+     */
+    public Point add(Vec2 v) {
+        return v.add(this);
+    }
+    
+    /**
      * Return the point's x-coordinate.
      * @return the horizontal position of the point.
      */
@@ -56,5 +66,27 @@ public class Point {
      */
     public int getY() {
         return this.wY;
+    }
+    
+    /**
+     * Offset a point by a certain x,y
+     * @param x x offset
+     * @param y y offset
+     * @return modified Point
+     */
+    public Point offset(int x, int y) {
+        this.wX += x;
+        this.wY += y;
+        return this;
+    }
+    
+    /**
+     * Implement toString
+     * @return Object address + (x,y)
+     */
+    public String toString() {
+        return super.toString() + "(" +
+                new Integer(this.wX).toString() + "," +
+                new Integer(this.wY).toString() + ")";
     }
 }
