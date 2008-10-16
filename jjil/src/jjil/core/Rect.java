@@ -64,7 +64,7 @@ public class Rect {
      * Add a new point to the Rect, extending it if necessary.
      * @param p the new Point
      */
-    public void add(Point p) {
+    public Rect add(Point p) {
     	if (p.wX < this.nTlx) {
     		this.nTlx = p.wX;
     	}
@@ -73,6 +73,7 @@ public class Rect {
     	}
     	this.nWidth = Math.max(this.nWidth, p.wX - this.nTlx);
     	this.nHeight = Math.max(this.nHeight, p.wY - this.nTly);
+        return this;
     }
     
     /**
@@ -94,6 +95,10 @@ public class Rect {
         return this.nWidth * this.nHeight;
     }
     
+    public int getBottom() {
+        return this.nTly + this.nHeight;
+    }
+    
     /**
      * Return the left (horizontal) position of the rectangle.
      * @return returns the left edge of the rectangle.
@@ -108,6 +113,18 @@ public class Rect {
      */
     public int getHeight() {
         return this.nHeight;
+    }
+    
+    /**
+     * Returns rectangle perimeter
+     * @return rectangle perimeter
+     */
+    public int getPerimeter() {
+        return 2*(this.getWidth() + this.getHeight());
+    }
+    
+    public int getRight() {
+        return this.nTlx + this.nWidth;
     }
     
     /**
@@ -126,4 +143,26 @@ public class Rect {
         return this.nWidth;
     }
     
+    public Rect offset(int nX, int nY) {
+        this.nTlx += nX;
+        this.nTly += nY;
+        return this;
+    }
+    
+    public Rect scale(int nX, int nY) {
+        this.nTlx *= nX;
+        this.nTly *= nY;
+        this.nHeight *= nX;
+        this.nWidth *= nY;
+        return this;
+    }
+    
+    public String toString() {
+        return super.toString() + "(" + 
+                new Integer(this.nTlx).toString() + "," +
+                new Integer(this.nTly).toString() + ";" +
+                new Integer(this.nWidth).toString() + "x" +
+                new Integer(this.nHeight).toString() + ")";
+                
+    }
 }
