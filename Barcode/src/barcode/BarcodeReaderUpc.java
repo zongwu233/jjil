@@ -23,7 +23,7 @@ package barcode;
  *
  */
 import java.util.*;
-import jjil.algorithm.GrayVertAvg;
+import jjil.algorithm.Gray8VertAvg;
 import jjil.core.*;
 
 /**
@@ -457,7 +457,7 @@ public class BarcodeReaderUpc implements BarcodeReader {
         EstimateBarcodes(gray);
         // form the vertical average of the image for verifying
         // the codes
-        byte[] rgbAvg = GrayVertAvg.push(gray);
+        byte[] rgbAvg = Gray8VertAvg.push(gray);
         // take the most common left barcodes and estimate their
         // match with the left side of the average
         /* 
