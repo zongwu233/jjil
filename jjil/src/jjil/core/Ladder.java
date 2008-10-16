@@ -88,7 +88,7 @@ public class Ladder extends PipelineStage {
         if (pipeFirst.isEmpty()) {
             throw new Error(
                             Error.PACKAGE.CORE,
-                            ErrorCodes.PIPELINE_NO_RESULT,
+                            ErrorCodes.NO_RESULT_AVAILABLE,
                             pipeFirst.toString(),
                             null,
                             null);
@@ -96,7 +96,7 @@ public class Ladder extends PipelineStage {
         if (pipeSecond.isEmpty()) {
             throw new Error(
                                 Error.PACKAGE.CORE,
-                                ErrorCodes.PIPELINE_NO_RESULT,
+                                ErrorCodes.NO_RESULT_AVAILABLE,
                                 pipeSecond.toString(),
                                 null,
                                 null);
