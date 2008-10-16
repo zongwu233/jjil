@@ -36,10 +36,6 @@ import jjil.core.RgbImage;
  */
 public class Gray3Bands2Rgb {
     
-    /** Creates a new instance of Gray3Bands2Rgb */
-    public Gray3Bands2Rgb() {
-    }
-    
     /**
      * Converts 3 8-bit gray images into an RGB image by combining the
      * R, G, and B values. Also changes the data range of the bytes
@@ -51,7 +47,7 @@ public class Gray3Bands2Rgb {
      * @return the color image
      * @throws jjil.core.Error if the input sizes do not match
      */
-    public RgbImage push(
+    static public RgbImage push(
             Gray8Image imRed, 
             Gray8Image imGreen, 
             Gray8Image imBlue) throws jjil.core.Error {
