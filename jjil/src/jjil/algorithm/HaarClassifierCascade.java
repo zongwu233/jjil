@@ -82,6 +82,33 @@ public abstract class HaarClassifierCascade {
     public int getHeight() {
         return height;
     }
+    
+   
+    /**
+     * Reads an array of characters, skipping newlines.
+     * @param isr the input stream to read
+     * @param rChars array of characters
+     * @param nStart starting position in array to assign
+     * @param nLength number of characters to read
+     * @throws IOException if InputStreamReader.read() does
+     * @throws Error if input is terminated before all characters are read
+     */
+    protected static void readChars(InputStreamReader isr, char[] rChars, int nStart, int nLength) 
+    	throws IOException, Error
+    	{
+    		for (int i=0; i<nLength; i++) {
+    			int n = isr.read();
+    			if (n == -1) {
+                    throw new Error(
+                            Error.PACKAGE.ALGORITHM,
+                            ErrorCodes.INPUT_TERMINATED_EARLY,
+                            isr.toString(),
+                            null,
+                            null);
+    			}
+    			rChars[i+nStart] = (char) n;
+    		}
+    	}
        
     /**
      * Returns true iff the input image passes all the tests in the Haar cascade, i.e.,
@@ -348,7 +375,7 @@ public abstract class HaarClassifierCascade {
         {
 
             char[] rC = new char[4];
-            isr.read(rC, 0, 4);
+            readChars(isr,rC, 0, 4);
             if ("(hr ".compareTo(new String(rC)) != 0) { //$NON-NLS-1$
                 throw new Error(
                                 Error.PACKAGE.ALGORITHM,
@@ -400,7 +427,7 @@ public abstract class HaarClassifierCascade {
            throws jjil.core.Error, IOException 
         {
             char[] rC = new char[4];
-            isr.read(rC, 0, 4);
+            readChars(isr,rC, 0, 4);
             if ("(hf ".compareTo(new String(rC)) != 0) { //$NON-NLS-1$
                 throw new Error(
                                 Error.PACKAGE.ALGORITHM,
@@ -654,7 +681,7 @@ class  HaarClassifierStumpBase extends HaarClassifierCascade {
            throws jjil.core.Error, IOException 
         {
             char[] rC = new char[6];
-            isr.read(rC, 0, 6);
+            readChars(isr,rC, 0, 6);
             if ("(hwcs ".compareTo(new String(rC)) != 0) { //$NON-NLS-1$
                 throw new Error(
                                 Error.PACKAGE.ALGORITHM,
@@ -723,7 +750,7 @@ class  HaarClassifierStumpBase extends HaarClassifierCascade {
            throws jjil.core.Error, IOException 
         {
             char[] rC = new char[5];
-            isr.read(rC, 0, 5);
+            readChars(isr,rC, 0, 5);
             if ("(hcs ".compareTo(new String(rC)) != 0) { //$NON-NLS-1$
                 throw new Error(
                                 Error.PACKAGE.ALGORITHM,
@@ -812,7 +839,7 @@ class  HaarClassifierStumpBase extends HaarClassifierCascade {
     {
         /*
         char[] rC = new char[6];
-        isr.read(rC, 0, 6);
+        readChars(isr,rC, 0, 6);
         if ("(hcsb ".compareTo(new String(rC)) != 0) {
             throw new ParseException("Error at " + isr.toString() + 
                     "; read '" + new String(rC) + "'; expected '(hcsb '");
