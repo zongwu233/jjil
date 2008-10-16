@@ -48,6 +48,49 @@ public class RgbVal {
     }
     
     /**
+     * Compare two RgbVals in absolute value.
+     * @return sum of absolute differences between pixel values
+     */
+    public static int getAbsDiff(int rgb1, int rgb2) {
+        return Math.abs(RgbVal.getR(rgb1) - RgbVal.getR(rgb2)) +
+                Math.abs(RgbVal.getG(rgb1) - RgbVal.getG(rgb2)) +
+                Math.abs(RgbVal.getB(rgb1) - RgbVal.getB(rgb2));
+    }
+    
+    /**
+     * Compare two RgbVals in maximum difference in any band.
+     * @return maximum difference between pixel values in any band
+     */
+    /**
+     * Computes maximum difference (largest difference in
+     * color, R, G, or B) of two color values.
+     * @param ARGB1 first color
+     * @param ARGB2 second color
+     * @return largest difference. Will always be >= 0,
+     * <= 256.
+     */
+    public static int getMaxDiff(int ARGB1, int ARGB2) {
+        int nR1 = RgbVal.getR(ARGB1);
+        int nG1 = RgbVal.getG(ARGB1);
+        int nB1 = RgbVal.getB(ARGB1);
+        int nR2 = RgbVal.getR(ARGB2);
+        int nG2 = RgbVal.getG(ARGB2);
+        int nB2 = RgbVal.getB(ARGB2);
+        return Math.max(Math.abs(nR1-nR2), 
+                Math.max(Math.abs(nG1-nG2), Math.abs(nB1-nB2)));
+    }
+
+    /**
+     * Compare two RgbVals in sum of squares difference.
+     * @return sum of squares differences between pixel values
+     */
+    public static int getSqrDiff(int rgb1, int rgb2) {
+        return MathPlus.square(RgbVal.getR(rgb1) - RgbVal.getR(rgb2)) +
+                MathPlus.square(RgbVal.getG(rgb1) - RgbVal.getG(rgb2)) +
+                MathPlus.square(RgbVal.getB(rgb1) - RgbVal.getB(rgb2));
+    }
+
+    /**
      * Extracts blue byte from input ARGB word.
      * The bit fields in ARGB word are unsigned, ranging from 0x00 to 0xff.
      * To convert these to the returned signed byte value we must add
@@ -84,6 +127,32 @@ public class RgbVal {
     }
     
     /**
+     * Return "vector" difference of Rgb values. Treating each Rgb value
+     * as a 3-element vector form the value (ARGB-ARGBTarg) . ARGBVec where
+     * . is dot product. Useful for determining whether an Rgb value is
+     * near another weighted the different channels differently.
+     * @param ARGB tested Rgb value
+     * @param ARGBTarg target Rgb value
+     * @param ARGBVec weighting
+     * @return (ARGB-ARGBTarg) . ARGBVec where . is dot product and the
+     * Rgb values are treated as 3-vectors.
+     */
+    public static int getVecDiff(int ARGB, int ARGBTarg, int ARGBVec) {
+        int nR1 = RgbVal.getR(ARGB);
+        int nG1 = RgbVal.getG(ARGB);
+        int nB1 = RgbVal.getB(ARGB);
+        int nR2 = RgbVal.getR(ARGBTarg);
+        int nG2 = RgbVal.getG(ARGBTarg);
+        int nB2 = RgbVal.getB(ARGBTarg);
+        int nR3 = RgbVal.getR(ARGBVec);
+        int nG3 = RgbVal.getG(ARGBVec);
+        int nB3 = RgbVal.getB(ARGBVec);
+        return  (nR1 - nR2) * nR3 +
+                (nG1 - nG2) * nG3 +
+                (nB1 - nB2) * nB3;
+    }
+    
+    /**
      * Converts from an unsigned bit field (as stored in an ARGB word
      * to a signed byte value (that we can do computation on).
      * @return the signed byte value
@@ -92,7 +161,7 @@ public class RgbVal {
     public static byte toSignedByte(byte b) {
         return (byte) (b + Byte.MIN_VALUE);
     }
-    
+
     /**
      * Converts from a signed byte value (which we do computation on)
      * to an unsigned bit field (as stored in an ARGB word). The result
@@ -103,5 +172,16 @@ public class RgbVal {
      */
     public static int toUnsignedInt(byte b) {
         return (b - Byte.MIN_VALUE);
+    }
+    
+    /**
+     * Provide a way to turn color values into strings
+     * @param ARGB the input color value
+     * @return a string describing the color
+     */
+    public static String toString(int ARGB) {
+        return "[" + new Integer(RgbVal.getR(ARGB)).toString() + "," +
+                new Integer(RgbVal.getR(ARGB)).toString() + "," +
+                new Integer(RgbVal.getB(ARGB)).toString() + "]";
     }
 }
