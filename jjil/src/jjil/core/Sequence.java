@@ -33,8 +33,6 @@ package jjil.core;
  * is the head of the list of PipelineStage's starting here, and
  * the Sequence object is the rest of the list. The Sequence object
  * can be non-null only if the PipelineStage object is non-null.
- * <p>
- * Hungarian prefix is 'seq'.
  * @author webb
  */
 public class Sequence extends PipelineStage {
@@ -123,7 +121,7 @@ public class Sequence extends PipelineStage {
         if (pFirst.isEmpty()) {
             throw new Error(
                             Error.PACKAGE.CORE,
-                            ErrorCodes.PIPELINE_NO_RESULT,
+                            ErrorCodes.NO_RESULT_AVAILABLE,
                             pFirst.toString(),
                             null,
                             null);
