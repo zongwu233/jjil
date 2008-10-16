@@ -27,7 +27,7 @@ package jjil.core;
 /**
  * RgbImage is the type used to hold an RGB image, which
  * is stored as an ARGB image type (32-bits) with the
- * A byte always 0. 
+ * A byte ignored. 
  * <p>
  * Implementation-specific libraries define methods that allow the creation
  * of an RgbImage from a native image type. RgbImage is therefore the first and
@@ -81,6 +81,31 @@ public class RgbImage extends Image {
                 0, 
                 getWidth()*getHeight());
         return image;
+    }
+    
+    /**
+     * Fill a rectangle in an RgbImage with a given value
+     * @param r the Rect to fill
+     * @param nRgb the color to assign
+     * @return the modified RgbImage (i.e., this)
+     * @throws Error if the bounds are outside the image
+     */
+    public RgbImage fill(Rect r, int nRgb) throws Error
+    {
+        if (r.getTop() < 0 || r.getBottom() > this.getHeight() ||
+                r.getLeft() < 0 || r.getRight() > this.getWidth()) {
+            throw new Error(Error.PACKAGE.CORE, 
+                    ErrorCodes.BOUNDS_OUTSIDE_IMAGE,
+                    r.toString(),
+                    null,
+                    null);
+        }
+        for (int i=r.getTop(); i<r.getBottom(); i++) {
+            for (int j=r.getLeft(); j<r.getRight(); j++) {
+                this.wImage[i*this.getWidth()+j] = nRgb;
+            }
+        }
+        return this;
     }
     
     /** Get a pointer to the image data.
