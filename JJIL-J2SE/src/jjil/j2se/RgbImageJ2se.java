@@ -19,7 +19,7 @@ import javax.imageio.ImageIO;
 import jjil.core.RgbImage;
 
 /**
- * RgbImageJ2se is the interface between jjil's RgbImage and java.awt.Image
+ * RgbImageJ2se is the interface between JJIL's RgbImage and java.awt.Image
  * objects. It provides an implementation of the Show interface for use
  * with the Debug object, which allows images to be displayed and sent
  * to files without being aware of the underlying architecture.<br>
@@ -162,7 +162,15 @@ public class RgbImageJ2se implements jjil.debug.Show {
 				}
 			}
 			
-			public void setPixels(int x, int y, int w, int h, ColorModel model, byte[] pixels, int off, int scansize) {
+			public void setPixels(
+                                int x, 
+                                int y, 
+                                int w, 
+                                int h, 
+                                ColorModel model, 
+                                byte[] pixels, 
+                                int off, 
+                                int scansize) {
 				// can't just copy. Use color conversion
 				int[] nData = this.rgb.getData();
 				for (int i = 0; i<h; i++) {
