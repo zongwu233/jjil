@@ -49,7 +49,7 @@ public class ReadBarJ extends MIDlet {
             }   else {
                 Alert a = new Alert(
                         "No camera!", 
-                        "This phone doesn't support capture!", 
+                         "This phone doesn't support capture!", 
                         null, 
                         AlertType.ERROR);
                 try {
