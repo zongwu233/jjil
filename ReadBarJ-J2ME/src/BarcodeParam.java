@@ -30,7 +30,6 @@ import barcode.DetectBarcode;
 import barcode.ReadBarcode;
 
 /**
- * Hungarian notation prefix: bcp.
  * @author webb
  */
 public class BarcodeParam {
