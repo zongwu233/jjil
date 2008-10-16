@@ -31,7 +31,7 @@ import jjil.core.RgbImage;
 import jjil.core.RgbVal;
 
 /**
- * Pipeline stage converts an ARGB color image into a Gray8Image. It does
+ * Pipeline stage converts an RgbImage into a Gray8Image. It does
  * this by choosing at each pixel the value that will give the maximum
  * contrast in the resulting image. That is, it computes 
  * the R, G, and B values at each pixel, and chooses the most extreme
@@ -40,18 +40,14 @@ import jjil.core.RgbVal;
  */
 public class RgbMaxContrast2Gray extends PipelineStage {
     
-    /** Creates a new instance of RgbAvg2Gray */
-    public RgbMaxContrast2Gray() {
-    }
-    
     /** Implementation of push operation from PipelineStage.
      * Pipeline stage converts an ARGB color image into a Gray8Image. It does
      * this by choosing at each pixel the value that will give the maximum
      * contrast in the resulting image. That is, it computes 
      * the R, G, and B values at each pixel, and chooses the most extreme
      * value -- the one largest in absolute value. 
-     * Note that the RGB->Gray conversion involves
-     * changing the data range of each pixel from 0->255 to -128->127
+     * Note that the RGB&rarr;Gray conversion involves
+     * changing the data range of each pixel from 0&rarr;255 to -128&rarr;127
      * because byte is a signed type.
      *
      * @param image the input image
