@@ -400,7 +400,7 @@ public class CameraCanvas
                 Command cmd = (Command) cmds.nextElement();
                 if (cmd == c) {
                     oCommandFound = true;
-                    String szOldSource = this.szCurrentSource;
+                     String szOldSource = this.szCurrentSource;
                     String szSource = (String) this.htSourceCmds.get(cmd);
                     discardPlayer();
                     if (!createPlayer(szSource)) {
