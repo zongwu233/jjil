@@ -22,6 +22,55 @@ import jjil.core.Error;
  */
 public class BinaryHeap implements PriorityQueue {
     /**
+     * This class is an example of implementing ComparableJ2me for ints.
+     * It can be used as a model for implementing other objects that you want
+     * to store in BinaryHeaps.
+     */
+	public static class ComparableInt implements ComparableJ2me {
+		private final int n;
+
+                /**
+                 * Initialize ComparableInt
+                 * @param n int stored in this class.
+                 */
+		public ComparableInt(int n) {
+			this.n = n;
+		}
+
+                /**
+                 * Compare one ComparableInt to another
+                 * @param o the object to compare with. Exception thrown if
+                 * not a ComparableInt.
+                 * @return -1 if this &lt; o; 0 if this == o; 1 if this &gt; o
+                 * @throws jjil.core.Error if o is not a ComparableInt
+                 */
+		public int compareTo(Object o) throws jjil.core.Error {
+			if (!(o instanceof ComparableInt)) {
+				throw new Error(
+				    	Error.PACKAGE.ALGORITHM,
+				    	ErrorCodes.OBJECT_NOT_EXPECTED_TYPE,
+				    	o.toString(),
+				    	"ComparableInt",
+				    	null);
+			}
+			ComparableInt right = (ComparableInt) o;
+			if (right.n == this.n) {
+				return 0;
+			} else {
+				return this.n > right.n ? 1 : -1;
+			}
+		}
+                
+                /**
+                 * Integer value stored in this class.
+                 * @return int value stored in this class.
+                 */
+                public int intValue() {
+                    return this.n;
+                }
+
+	}
+    /**
      * Construct the binary heap.
      */
     public BinaryHeap( ) {
