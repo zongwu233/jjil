@@ -124,6 +124,17 @@ public class Gray32MaskedImage extends Gray32Image {
     {
         return this.imMask.getData();
     }
+    
+    /**
+     * Returns true iff the given pixel is masked.
+     * @param nRow row of pixel
+     * @param nCol column of pixel
+     * @return true iff pixel (nRow, nCol) is masked
+     */
+    public boolean isMasked(int nRow, int nCol) {
+        return this.imMask.getData()[nRow*this.imMask.getWidth()+nCol] !=
+                Byte.MIN_VALUE;
+    }
 
     
     /** Return a string describing the image.
