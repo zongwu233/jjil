@@ -54,7 +54,7 @@ public class DisplayCanvas
     
     void setImage(byte[]pngImage)
     {
-        image=Image.createImage(pngImage,0,pngImage.length);
+         image=Image.createImage(pngImage,0,pngImage.length);
     }
     
     void setImage(Image inimg)
