@@ -3,9 +3,6 @@
  *
  * Created on September 9, 2006, 3:17 PM
  *
- * To change this template, choose Tools | Template Manager
- * and open the template in the editor.
- *
  * Copyright 2007 by Jon A. Webb
  *     This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU Lesser General Public License as published by
@@ -27,7 +24,6 @@ import jjil.algorithm.*;
 import jjil.core.Error;
 import jjil.core.Gray8Image;
 import jjil.core.Gray8OffsetImage;
-import jjil.core.RgbOffsetImage;
 import jjil.core.Image;
 import jjil.core.PipelineStage;
 
@@ -42,14 +38,17 @@ public class Gray8AffineWarp extends PipelineStage {
     };
     
     private WarpOrder eWarpOrder;
+    int nMaxX, nMaxY, nMinX, nMinY;
     int nXOffset, nYOffset;
-    double rdWarp[][], rdInvWarp[][];
+    double rdWarp[][];
     double rdWarpX[];
     double rdWarpY[];
     
     /** Creates a new instance of Gray8AffineWarp. Gray8AffineWarp performs
      * an affine warp on an input Gray8Image. The affine transformation is
      * decomposed into two stages, following the work of George Wolberg.
+     * See http://www-cs.ccny.cuny.edu/~wolberg/diw.html for the definitive
+     * work on image warping.
      * <p>
      * @param warp the 2x3 affine warp to be performed.
      * @throws jjil.core.Error if the warp is null or not a 2x3 matrix.
@@ -58,45 +57,12 @@ public class Gray8AffineWarp extends PipelineStage {
         this.setWarp(warp);
     }
     
+    
+
     private Vec2 affineTrans(double a[][], Vec2 p) {
         return new Vec2(
                 a[0][0] * p.getX() + a[0][1] * p.getY() + a[0][2],
                 a[1][0] * p.getX() + a[1][1] * p.getY() + a[1][2]);
-    }
-    
-    private void calculateInverse() {
-        double denom = this.rdWarp[0][0] * this.rdWarp[1][1] -
-                this.rdWarp[0][1] * this.rdWarp[1][0];
-        this.rdInvWarp = new double[2][];
-        this.rdInvWarp[0] = new double[3];
-        this.rdInvWarp[1] = new double[3];
-        this.rdInvWarp[0][0] = this.rdWarp[1][1] / denom;
-        this.rdInvWarp[0][1] = -this.rdWarp[0][1] / denom;
-        this.rdInvWarp[0][2] = -(this.rdInvWarp[0][0] * this.rdWarp[0][2] +
-                this.rdInvWarp[0][1] * this.rdWarp[1][2]);
-        this.rdInvWarp[1][0] = -this.rdWarp[1][0] / denom;
-        this.rdInvWarp[1][1] = this.rdWarp[0][0] / denom;
-        this.rdInvWarp[1][2] = -(this.rdInvWarp[1][0] * this.rdWarp[0][2] +
-                this.rdInvWarp[1][1] * this.rdWarp[1][2]);
-        
-        /* Verify inverse
-        double prod[][] = new  double[3][];
-         for (int i=0; i<2; i++) {
-        prod[i] = new double[3];
-        for (int j=0; j<3; j++) {
-        prod[i][j] = 0.0d;
-        for (int k=0; k<2; k++) {
-        prod[i][j] += rdInvWarp[i][k] * rdWarp[k][j];
-        }
-        if (j == 2) {
-        prod[i][j] += rdInvWarp[i][2];
-        }
-        }
-        }
-        prod[2] = new double[3];
-        prod[2][0] = 0.0d;
-        prod[2][1] = 0.0d;
-        prod[2][2] = 1.0d;*/
     }
 
     /**
@@ -115,57 +81,29 @@ public class Gray8AffineWarp extends PipelineStage {
     				null,
     				null);
         }
-        
-        super.setOutput(
-                new Gray8OffsetImage(doWarp((Gray8Image) image),
-                    this.nXOffset,
-                    this.nYOffset));
-    }
-    
-    public Gray8Image doWarp(Gray8Image grayIn) {
         // first calculate bounds of output image
         Vec2 p00 = affineTrans(this.rdWarp, new Vec2(0.0d, 0.0d));
-        Vec2 p01 = affineTrans(this.rdWarp, new Vec2(0.0d, (double) grayIn.getHeight()));
-        Vec2 p10 = affineTrans(this.rdWarp, new Vec2((double) grayIn.getWidth(), 0.0d));
-        Vec2 p11 = affineTrans(this.rdWarp, new Vec2((double) grayIn.getWidth(), 
-                (double) grayIn.getHeight()));
-        int nMinX = (int) Math.min(p00.getX(), Math.min(p01.getX(), Math.min(p10.getX(), p11.getX())));
-        int nMaxX = (int) Math.max(p00.getX(), Math.max(p01.getX(), Math.max(p10.getX(), p11.getX())));
-        int nMinY = (int) Math.min(p00.getY(), Math.min(p01.getY(), Math.min(p10.getY(), p11.getY())));
-        int nMaxY = (int) Math.max(p00.getY(), Math.max(p01.getY(), Math.max(p10.getY(), p11.getY())));
-        this.nXOffset = -nMinX;
-        this.nYOffset = -nMinY;
-        int nWidth = nMaxX - nMinX;
-        int nHeight = nMaxY - nMinY;
-        Gray8Image grayOut = new Gray8Image(nWidth, nHeight, Byte.MIN_VALUE);
-        byte[] dataIn = grayIn.getData();
-        byte[] dataOut = grayOut.getData();
-        for (int x = nMinX; x<nMaxX; x++) {
-            for (int y=nMinY; y<nMaxY; y++) {
-                Vec2 p = new Vec2((double) x, (double) y);
-                Vec2 pMap = affineTrans(this.rdInvWarp, p);
-                double xFloor = Math.floor(pMap.getX());
-                double yFloor = Math.floor(pMap.getY());
-                int nX = (int) xFloor;
-                int nY = (int) yFloor;
-                if (nX >= 0 && nX < grayIn.getWidth()-1 &&
-                        nY >= 0 && nY < grayIn.getHeight()-1) {
-                    double xFrac = pMap.getX() - xFloor;
-                    double yFrac = pMap.getY() - yFloor;
-                    // interpolate x value
-                    int x1 = (int) (
-                            (1.0d-xFrac) * dataIn[nY*grayIn.getWidth() + nX] +
-                            xFrac * dataIn[nY*grayIn.getWidth() + nX + 1]);
-                    int x2 = (int) (
-                            (1.0d-xFrac) * dataIn[(nY+1)*grayIn.getWidth() + nX] +
-                            xFrac * dataIn[(nY+1)*grayIn.getWidth() + nX + 1]);
-                    // interpolate y
-                    dataOut[(y-nMinY)*grayOut.getWidth()+(x-nMinX)] = (byte) (
-                            (1.0d-yFrac) * x1 + yFrac * x2);
-                }
-            }
+        Vec2 p01 = affineTrans(this.rdWarp, new Vec2(0.0d, (double) image.getHeight()));
+        Vec2 p10 = affineTrans(this.rdWarp, new Vec2((double) image.getWidth(), 0.0d));
+        Vec2 p11 = affineTrans(this.rdWarp, new Vec2((double) image.getWidth(), 
+                (double) image.getHeight()));
+        this.nMinX = (int) Math.min(p00.getX(), Math.min(p01.getX(), Math.min(p10.getX(), p11.getX())));
+        this.nMaxX = (int) Math.max(p00.getX(), Math.max(p01.getX(), Math.max(p10.getX(), p11.getX())));
+        this.nMinY = (int) Math.min(p00.getY(), Math.min(p01.getY(), Math.min(p10.getY(), p11.getY())));
+        this.nMaxY = (int) Math.max(p00.getY(), Math.max(p01.getY(), Math.max(p10.getY(), p11.getY())));
+        this.nXOffset = -this.nMinX;
+        this.nYOffset = -this.nMinY;
+        if (this.eWarpOrder == WarpOrder.WARP_X_FIRST) {
+            Gray8Image grayX = warpX((Gray8Image) image);
+            //super.setOutput(new Gray8OffsetImage(grayX, this.nXOffset, this.nYOffset));
+            Gray8Image grayY = warpY(grayX);
+            super.setOutput(new Gray8OffsetImage(grayY, this.nXOffset, this.nYOffset));
+        } else {
+            Gray8Image grayY = warpY((Gray8Image) image);
+            //super.setOutput(new Gray8OffsetImage(grayY, this.nXOffset, this.nYOffset));
+            Gray8Image grayX = warpX(grayY);
+            super.setOutput(new Gray8OffsetImage(grayX, this.nXOffset, this.nYOffset));
         }
-        return new Gray8OffsetImage(grayOut, this.nXOffset, this.nYOffset);
     }
     
     /** Sets the warp in use and decomposes it into two stages, determining
@@ -183,8 +121,43 @@ public class Gray8AffineWarp extends PipelineStage {
                             null,
                             null);
         }
+        double fDivisorY = warp[0][0] * warp[1][1] - warp[0][1] * warp[1][0];
+        if (warp[0][0] == 0.0d || warp[1][1] == 0.0d || fDivisorY == 0.0d) {
+            throw new Error(
+                            Error.PACKAGE.ALGORITHM,
+                            jjil.algorithm.ErrorCodes.PARAMETER_OUT_OF_RANGE,
+                            warp.toString(),
+                            null,
+                            null);
+        }
         this.rdWarp = warp;
-        calculateInverse();
+        if (Math.abs(warp[0][0]) > Math.abs(warp[1][1])) {
+            // warp in x direction first
+            this.eWarpOrder = WarpOrder.WARP_X_FIRST;
+            // copy x warp
+            this.rdWarpX = new double[3];
+            this.rdWarpX[0] = warp[1][1] / fDivisorY;
+            this.rdWarpX[1] = -warp[0][1] / fDivisorY;
+            this.rdWarpX[2] = (warp[0][1]*warp[1][2] - warp[0][2]*warp[1][1])/fDivisorY;
+            // calculate y warp
+            this.rdWarpY = new double[3];
+            this.rdWarpY[0] = -warp[1][0]/warp[1][1];
+            this.rdWarpY[1] = 1.0d / warp[1][1];
+            this.rdWarpY[2] = -warp[1][2] / warp[1][1];
+        } else {
+            // warp in y direction first
+            this.eWarpOrder = WarpOrder.WARP_Y_FIRST;
+            // copy y warp
+            this.rdWarpY = new double[3];
+            this.rdWarpY[0] = -warp[1][0] / fDivisorY;
+            this.rdWarpY[1] = warp[0][0] / fDivisorY;
+            this.rdWarpY[2] = (warp[0][2]*warp[1][0] - warp[0][0]*warp[1][2])/fDivisorY;
+            // calculate x warp
+            this.rdWarpX = new double[3];
+            this.rdWarpX[0] = 1.0d / warp[0][0];
+            this.rdWarpX[1] = -warp[0][1] / warp[0][0];
+            this.rdWarpX[2] = -warp[0][2] / warp[0][0];
+        }
     }
     
     public Vec2 warpVec(Vec2 p) {
@@ -194,7 +167,70 @@ public class Gray8AffineWarp extends PipelineStage {
                 this.rdWarp[1][2];
         return new Vec2(x,y);
     }
-    
+
+    private Gray8Image warpX(Gray8Image grayIn) {
+        // allocate image. it is implicitly offset by nMinX
+        Gray8Image grayOut = new Gray8Image(
+                nMaxX - nMinX, 
+                grayIn.getHeight(), 
+                Byte.MIN_VALUE);
+        // pointer to input
+        byte[] bDataIn = grayIn.getData();
+        byte[] bDataOut = grayOut.getData();
+        for (int x = nMinX; x<nMaxX; x++) {
+            for (int y = 0; y<grayIn.getHeight(); y++) {
+                // calculate x in original image
+                // y does not change but is offset by nYOffset
+                double fX = x * this.rdWarpX[0] +
+                        this.rdWarpX[1] * (y + this.nYOffset) +
+                        this.rdWarpX[2];
+                double fXfloor = Math.floor(fX);
+                double fXfrac = fX - fXfloor;
+                int nX = (int) fXfloor;
+                // interpolate to get point
+                if (nX >= 0 && nX < grayIn.getWidth()-1) {
+                    int bIn = bDataIn[y*grayIn.getWidth() + nX];
+                    int bInP1 = bDataIn[y*grayIn.getWidth() + nX + 1];
+                    int bOut = (int) ((bIn * (1.0d - fXfrac)) + (bInP1 * fXfrac));
+                    bDataOut[grayOut.getWidth()*y + x-nMinX] = (byte) bOut;
+                }
+            }
+        }
+        this.nXOffset = nMinX;
+        return grayOut;
+    }
+
+    private Gray8Image warpY(Gray8Image grayIn) {
+        // allocate image. it is implicitly offset by nMinY
+        Gray8Image grayOut = new Gray8Image(
+                grayIn.getWidth(), 
+                nMaxY - nMinY, 
+                Byte.MIN_VALUE);
+        // pointer to input
+        byte[] bDataIn = grayIn.getData();
+        byte[] bDataOut = grayOut.getData();
+        for (int y = nMinY; y<nMaxY; y++) {
+            for (int x = 0; x<grayIn.getWidth(); x++) {
+                // calculate y in original image
+                // x does not change
+                double fY = this.rdWarpY[0] * (x + this.nXOffset) +
+                        this.rdWarpY[1] * y +
+                        this.rdWarpY[2];
+                double fYfloor = Math.floor(fY);
+                double fYfrac = fY - fYfloor;
+                int nY = (int) fYfloor;
+                // interpolate to get point
+                if (nY >= 0 && nY < grayIn.getHeight()-1) {
+                    int bIn = bDataIn[nY*grayIn.getWidth() + x];
+                    int bInP1 = bDataIn[(nY+1)*grayIn.getWidth() + x];
+                    int bOut = (int) ((bIn * (1.0d - fYfrac)) + (bInP1 * fYfrac));
+                    bDataOut[grayOut.getWidth()*(y-nMinY) + x] = (byte) bOut;
+                }
+            }
+        }
+        this.nYOffset = nMinY;
+        return grayOut;
+    }
     
     /**
      * Returns a string describing the current instance. All the constructor
