@@ -32,13 +32,13 @@
 package jjil.algorithm;
 import jjil.core.Error;
 import jjil.core.Gray8Image;
-import jjil.core.Gray8SubImage;
+import jjil.core.Gray8OffsetImage;
 import jjil.core.Image;
 import jjil.core.PipelineStage;
 
 /**
  * Generates sub images (cropped images positioned regularly across the input image) 
- * from an input Gray8Image. The subimages are of type Gray8SubImage which makes it
+ * from an input Gray8Image. The subimages are of type Gray8OffsetImage which makes it
  * possible to determine their location in the original input image.
  * @author webb
  */
@@ -69,8 +69,8 @@ public class Gray8SubImageGenerator extends PipelineStage {
         this.nYOffset = nYOffset;
         // create an output image. We'll reuse this
         // image, changing the contents and offset,
-        // for every Gray8SubImage we output.
-        super.imageOutput = new Gray8SubImage( 
+        // for every Gray8OffsetImage we output.
+        super.imageOutput = new Gray8OffsetImage( 
             this.nWidth, 
             this.nHeight, 
             0, 
@@ -91,7 +91,7 @@ public class Gray8SubImageGenerator extends PipelineStage {
     // Return the next subimage and increment the indices
     /**
      * Returns the next subimage.
-     * @return a subimage within the input image, of type Gray8SubImage.
+     * @return a subimage within the input image, of type Gray8OffsetImage.
      * @throws jjil.core.Error when there are no more subimages available (isEmpty() would return
      * true.)
      */
@@ -104,7 +104,7 @@ public class Gray8SubImageGenerator extends PipelineStage {
         byte[] dataIn = this.imageInput.getData();
         // reuse output image
         // check to make sure nobody damaged it somehow
-        if (!(super.imageOutput instanceof Gray8SubImage)) {
+        if (!(super.imageOutput instanceof Gray8OffsetImage)) {
             throw new Error(
                             Error.PACKAGE.ALGORITHM,
                             ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
@@ -112,7 +112,7 @@ public class Gray8SubImageGenerator extends PipelineStage {
                             null,
                             null);
         }
-        Gray8SubImage imageResult = (Gray8SubImage) super.imageOutput;
+        Gray8OffsetImage imageResult = (Gray8OffsetImage) super.imageOutput;
         imageResult.setXOffset(nHOffset);
         imageResult.setYOffset(nVOffset);
         byte[] dataOut = imageResult.getData();
@@ -136,7 +136,7 @@ public class Gray8SubImageGenerator extends PipelineStage {
     
     /**
      * Reinitializes the subimage generator and prepares it to generate the first
-     * Gray8SubImage for the new input.
+     * Gray8OffsetImage for the new input.
      * @param image The new input image (which must be of type Gray8Image).
      * @throws jjil.core.Error if image is not of type Gray8Image, or is too small
      * (less than the size of the subimages we're supposed to

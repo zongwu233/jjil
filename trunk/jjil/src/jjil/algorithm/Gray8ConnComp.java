@@ -23,7 +23,9 @@
  */
 package jjil.algorithm;
 
+import java.util.Enumeration;
 import java.util.Random;
+import java.util.Vector;
 import jjil.core.Error;
 import jjil.core.Gray16Image;
 import jjil.core.Gray8Image;
@@ -206,7 +208,7 @@ public class Gray8ConnComp extends PipelineStage {
         // determine the pixel count and bounding rectangle
         // of all the components in the image
         short sData[] = this.imLabeled.getData();
-        Label vLabels[] = new Label[this.sClasses];
+        Label vLabels[] = new Label[this.sClasses+1];
         int nComponents = 0;
         for (int i = 0; i < this.imLabeled.getHeight(); i++) {
             int nRow = i * this.imLabeled.getWidth();
@@ -242,6 +244,22 @@ public class Gray8ConnComp extends PipelineStage {
         // we're done
         this.bComponents = true;
         return this.pqLabels.size();
+    }
+    
+    public Enumeration getComponentPixels(int n) throws Error {
+        Rect r = getComponent(n);
+        // build a Vector of all points in the component
+        Vector vPoints = new Vector();
+        short[] sData = this.imLabeled.getData();
+        int nLabel = this.rSortedLabels[n].nLabel;
+        for (int i=r.getTop(); i<=r.getBottom(); i++) {
+            for (int j=r.getLeft(); j<=r.getRight(); j++) {
+                if (sData[i*this.imLabeled.getWidth()+j] == nLabel) {
+                    vPoints.addElement(new Point(j, i));
+                }
+            }
+        }
+        return vPoints.elements();
     }
 
     /**

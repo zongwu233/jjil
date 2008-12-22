@@ -17,9 +17,9 @@
 package jjil.algorithm;
 import jjil.core.Error;
 import jjil.core.Gray32Image;
-import jjil.core.Gray32SubImage;
+import jjil.core.Gray32OffsetImage;
 import jjil.core.Gray8Image;
-import jjil.core.Gray8SubImage;
+import jjil.core.Gray8OffsetImage;
 import jjil.core.Image;
 import jjil.core.PipelineStage;
 
@@ -58,10 +58,10 @@ public class Gray8SumGray32 extends PipelineStage {
                 			null);
         }
         Gray32Image imageResult;
-        if (image instanceof Gray8SubImage) {
-            Gray8SubImage sub = (Gray8SubImage) image;
+        if (image instanceof Gray8OffsetImage) {
+            Gray8OffsetImage sub = (Gray8OffsetImage) image;
             imageResult = 
-                    new Gray32SubImage(sub.getWidth(),
+                    new Gray32OffsetImage(sub.getWidth(),
                         sub.getHeight(),
                         sub.getXOffset(),
                         sub.getYOffset());
@@ -71,7 +71,7 @@ public class Gray8SumGray32 extends PipelineStage {
                     new Gray32Image(image.getWidth(), image.getHeight());
         }
         byte[] inData = ((Gray8Image) image).getData();
-        // pointer to output data area, whether Gray32Image or Gray32SubImage
+        // pointer to output data area, whether Gray32Image or Gray32OffsetImage
         int[] outData = imageResult.getData();
         // initialize first row
         int prevPixel = 0;

@@ -25,6 +25,7 @@
 package jjil.algorithm;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 
 import jjil.core.Error;
 import jjil.core.Gray32Image;
@@ -58,8 +59,12 @@ import jjil.core.Image;
  * tested for anything but stump-based Haar classifiers.
  * @author webb
  */
-public abstract class HaarClassifierCascade {
+public abstract class HaarClassifierCascade implements Serializable {
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 3103210998383577218L;
+	/**
      * The width of the image.
      */
     protected int width;
@@ -170,8 +175,13 @@ public abstract class HaarClassifierCascade {
      * by HaarRect) which are convolved with the image. Their sum is the
      * result of applying the HaarFeature to the image.
      */
-    protected class HaarFeature {
-       /*
+    protected class HaarFeature implements Serializable {
+       /**
+		 * 
+		 */
+		private static final long serialVersionUID = 1636121702312072988L;
+
+		/*
         * HaarRect.java
         * HaarRect is an abstract class to make the computation of the rectangular
         * basic component of a Haar feature. It is abstract because the placement
@@ -188,8 +198,12 @@ public abstract class HaarClassifierCascade {
         * or bl because they're off the edge of the image. So we have HaarRectTop,
         * HaarRectTopLeft, etc.
         */
-        abstract class HaarRect {
-            // eval returns the rectangle feature value for the current image.
+        abstract class HaarRect implements Serializable {
+            /**
+			 * 
+			 */
+			private static final long serialVersionUID = -8673919841412300053L;
+			// eval returns the rectangle feature value for the current image.
             // input image is the cumulative sum of the original
             protected abstract int eval(Gray32Image i);
             // We precompute the indices of the features so we have to
@@ -200,9 +214,14 @@ public abstract class HaarClassifierCascade {
         
         // Used for third null rectangle when a HaarFeature only uses 2 
         // rectangles.
-        class HaarRectNone extends HaarRect {
+        class HaarRectNone extends HaarRect implements Serializable {
 
-            /** Creates a new instance of HaarRectNone */
+            /**
+			 * 
+			 */
+			private static final long serialVersionUID = 3419647846408882196L;
+
+			/** Creates a new instance of HaarRectNone */
             public HaarRectNone() {
             }
 
@@ -222,8 +241,12 @@ public abstract class HaarClassifierCascade {
         // at the top or left side of the image or when the area of
         // the rectangle is 0.
         // There are up to 3 rectangles in a feature
-        class HaarRectAny extends HaarRect {
-            private int n1, n2, n3, n4;
+        class HaarRectAny extends HaarRect implements Serializable {
+            /**
+			 * 
+			 */
+			private static final long serialVersionUID = -6033181980691702489L;
+			private int n1, n2, n3, n4;
             private int tlx, tly, w, h; // rectangle coordinates
             private int weight; // convolution weight assigned to rectangle
 
@@ -259,8 +282,12 @@ public abstract class HaarClassifierCascade {
         // HaarRectLeft describes one rectangle in a Haar feature
         // where the rectangle is at the left side of the image (x = 0 and y != 0)
         // There are up to 3 rectangles in a feature.
-        class HaarRectLeft extends HaarRect {
-            private int n2, n3;
+        class HaarRectLeft extends HaarRect implements Serializable {
+            /**
+			 * 
+			 */
+			private static final long serialVersionUID = 3287079704778038972L;
+			private int n2, n3;
             private int tly, w, h; // rectangle coordinates
             private int weight; // convolution weight assigned to rectangle
 
@@ -296,8 +323,12 @@ public abstract class HaarClassifierCascade {
         // HaarRectTop describes one rectangle in a Haar feature
         // where the rectangle is at the top of the image (y = 0 but x != 0)
         // There are up to 3 rectangles in a feature.
-        class HaarRectTop extends HaarRect {
-            private int n2, n4;
+        class HaarRectTop extends HaarRect implements Serializable {
+            /**
+			 * 
+			 */
+			private static final long serialVersionUID = 770007602125395214L;
+			private int n2, n4;
             private int tlx, w, h; // rectangle coordinates
             private int weight; // convolution weight assigned to rectangle
 
@@ -331,8 +362,12 @@ public abstract class HaarClassifierCascade {
         };
         
         // Used when the rectangle is at the top left of the image (x=0 and y=0)
-        class HaarRectTopLeft extends HaarRect {
-            private int n2;
+        class HaarRectTopLeft extends HaarRect implements Serializable {
+            /**
+			 * 
+			 */
+			private static final long serialVersionUID = -2184273133213370871L;
+			private int n2;
             private int w, h; // rectangle coordinates
             private int weight; // convolution weight assigned to rectangle
 
@@ -561,6 +596,7 @@ public abstract class HaarClassifierCascade {
 }
         
 class HaarClassifierTreeBase extends HaarClassifierCascade
+	implements Serializable 
 {
     //////////////////////////////////////////////////////////////////////////
     //
@@ -568,15 +604,26 @@ class HaarClassifierTreeBase extends HaarClassifierCascade
     //
     //////////////////////////////////////////////////////////////////////////
     
-    // A tree-structured Haar classifier consists of a Haar feature and a
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -8507574576144755449L;
+
+	// A tree-structured Haar classifier consists of a Haar feature and a
     // threshold. The Haar feature is evaluated. If it is less than
     // the threshold then we choose the left Haar classifier as the next
     // stage; if it is greater or equal we choose the right Haar classifier.
     // When we reach a leaf (the next node index is null) we return alpha as
     // the result of the classifier.
-    public class HaarWeakClassifierTree implements HaarWeakClassifier {
+    public class HaarWeakClassifierTree 
+    	implements HaarWeakClassifier, Serializable 
+    {
 
-        private HaarFeature feature;   // Haar feature tested by this classifier
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = 1106803066661189899L;
+		private HaarFeature feature;   // Haar feature tested by this classifier
         private int threshold;         // threshold feature compared with
         private HaarWeakClassifier left;   // successor HaarClassifer if <
         private HaarWeakClassifier right;  // successor HaarClassifier if >=
@@ -655,19 +702,29 @@ class HaarClassifierTreeBase extends HaarClassifierCascade
 // A stump-structured Haar classifier consists of a Haar feature and a
 // threshold. The Haar feature is evaluated. 
     
-class  HaarClassifierStumpBase extends HaarClassifierCascade {
+class  HaarClassifierStumpBase extends HaarClassifierCascade 
+	implements Serializable
+	{
     
-    // A stump-structured Haar classifier consists of a Haar feature and a
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -8724165260201623422L;
+	// A stump-structured Haar classifier consists of a Haar feature and a
     // threshold. The Haar feature is evaluated. The result is compared with
     // t = threshold * variance_norm_factor. If < t then it returns a,
     // o/w b.
-    private Gray8Statistics gs = new Gray8Statistics();     // for computing standard deviation
-    private Gray8QmSum gcs = new Gray8QmSum(); // for forming cumulative sum
     private int nWidth = 0;     // for detecting when image width changes
     
-    public class HaarWeakClassifierStump implements HaarWeakClassifier {
+    public class HaarWeakClassifierStump 
+    	implements HaarWeakClassifier, Serializable
+    	{
 
-        private HaarFeature feature;   // Haar feature tested by this classifier
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = -559548922459735861L;
+		private HaarFeature feature;   // Haar feature tested by this classifier
         // threshold, a, and b are scaled by 2**16 = 65536
         private int modThreshold;      // calculated threshold
         private int threshold;         // threshold feature compared with
@@ -738,9 +795,15 @@ class  HaarClassifierStumpBase extends HaarClassifierCascade {
     // A stump-structured Haar classifier consists of a Haar feature and a
     // threshold. The Haar feature is evaluated. 
     
-    public class HaarClassifierStump implements HaarStageClassifier {
+    public class HaarClassifierStump 
+    	implements HaarStageClassifier, Serializable
+    	{
 
-        private HaarWeakClassifierStump[] hwcs;   // Haar feature tested by this classifier
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = 8964434533022477157L;
+		private HaarWeakClassifierStump[] hwcs;   // Haar feature tested by this classifier
         // theshold is scaled by 2**16 = 65536
         private int threshold;         // threshold feature compared with
         
@@ -808,8 +871,9 @@ class  HaarClassifierStumpBase extends HaarClassifierCascade {
                                  null);
             }
             // calculate the standard deviation of the input mage
-            this.gs.push(image);
-            int stdDev = this.gs.getStdDev();
+            Gray8Statistics gs = new Gray8Statistics();     // for computing standard deviation
+            gs.push(image);
+            int stdDev = gs.getStdDev();
             int nWidth = image.getWidth();
             if (this.nWidth != nWidth) {
                 for (int i=0; i<this.hsc.length; i++) {
@@ -818,8 +882,9 @@ class  HaarClassifierStumpBase extends HaarClassifierCascade {
             }
             this.nWidth = nWidth;
             // form the cumulative sum of the image
-            this.gcs.push(image);
-            Gray32Image g32 = (Gray32Image) this.gcs.getFront();
+            Gray8QmSum gcs = new Gray8QmSum(); // for forming cumulative sum
+            gcs.push(image);
+            Gray32Image g32 = (Gray32Image) gcs.getFront();
             for (int i=0; i<this.hsc.length; i++) {
                 this.hsc[i].setStdDev(stdDev);
                 if (!this.hsc[i].eval(g32)) {
