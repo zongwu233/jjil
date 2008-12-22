@@ -75,10 +75,34 @@ public class Gray8MaskedImage extends Gray8Image {
     }
     
     /**
+     * Creates a new instance of Gray8MaskedImage from an existing
+     * image, setting everything unmasked.
+     * @param imData the data image.
+     * @param imMask the mask
+     * @throws jjil.core.Error If either input is not a Gray8Image or the sizes are not the same.
+     */
+    public Gray8MaskedImage(Gray8Image imData) 
+        throws jjil.core.Error
+    {
+        super(imData.getWidth(), imData.getHeight());
+        System.arraycopy(
+                imData.getData(),
+                0,
+                this.getData(),
+                0,
+                getWidth()*getHeight());
+        // initialize mask, setting everything unmasked
+        this.imMask = new Gray8Image(
+                imData.getWidth(), 
+                imData.getHeight(), 
+                Byte.MIN_VALUE);
+    }
+
+    /**
      * Copy this image
      * @return the image copy.
      */
-    public Image clone()
+    public Object clone()
     {
         Gray8MaskedImage image = new Gray8MaskedImage(
         		this.getWidth(), this.getHeight());

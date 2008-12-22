@@ -66,12 +66,25 @@ public class RgbImage extends Image {
         }
     }
     
-    
+    /**
+     * Creates a new instance of RgbImage, assigning a constant value
+     * @param nRgb the packed RGB value to assign
+     * @param cWidth the image width
+     * @param cHeight the image height
+     */
+    public RgbImage(int cWidth, int cHeight, int nRgb) {
+        super(cWidth, cHeight);
+        this.wImage = new int[getWidth()*getHeight()];
+        for (int i=0; i<this.getWidth()*this.getHeight();i++) {
+            this.wImage[i] = nRgb;
+        }
+    }
+        
     /** Creates a shallow copy of this image
      *
      * @return the image copy.
      */
-    public Image clone()
+    public Object clone()
     {
         RgbImage image = new RgbImage(getWidth(), getHeight());
         System.arraycopy(

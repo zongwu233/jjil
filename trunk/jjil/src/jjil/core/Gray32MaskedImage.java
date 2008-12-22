@@ -79,7 +79,7 @@ public class Gray32MaskedImage extends Gray32Image {
      * Copy this image
      * @return the image copy.
      */
-    public Image clone()
+    public Object clone()
     {
         Gray32MaskedImage image = new Gray32MaskedImage(
                 this.getWidth(), this.getHeight());
