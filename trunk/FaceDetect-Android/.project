@@ -3,6 +3,8 @@
 	<name>FaceDetect-Android</name>
 	<comment></comment>
 	<projects>
+		<project>jjil</project>
+		<project>JJIL-Android</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
@@ -27,7 +29,7 @@
 		</buildCommand>
 	</buildSpec>
 	<natures>
-		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>com.android.ide.eclipse.adt.AndroidNature</nature>
+		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
 </projectDescription>
