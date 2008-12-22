@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res/jjil.app.facedetect"
+	android:layout_width="fill_parent"
+    android:layout_height="fill_parent" android:orientation="horizontal">
+<jjil.app.facedetect.FaceView
+	android:descendantFocusability="blocksDescendants" 
+	android:id="@+id/detectedFaces" 
+	android:layout_height="fill_parent" 
+	android:layout_width="fill_parent" android:scaleType="fitXY"/>
+</FrameLayout>
