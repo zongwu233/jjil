@@ -42,7 +42,8 @@ public class RgbVal {
      * @return the color ARGB word.
      */
     public static int toRgb(byte R, byte G, byte B) {
-        return (toUnsignedInt(R)<<16) |
+        return 0xFF000000 | 
+                (toUnsignedInt(R)<<16) |
                 (toUnsignedInt(G)<<8)  |
                 toUnsignedInt(B);
     }
@@ -78,6 +79,31 @@ public class RgbVal {
         int nB2 = RgbVal.getB(ARGB2);
         return Math.max(Math.abs(nR1-nR2), 
                 Math.max(Math.abs(nG1-nG2), Math.abs(nB1-nB2)));
+    }
+    
+    public static int getProportionateDiff(int ARGB1, int ARGB2) {
+        int nR1 = RgbVal.getR(ARGB1) - Byte.MIN_VALUE;
+        int nG1 = RgbVal.getG(ARGB1) - Byte.MIN_VALUE;
+        int nB1 = RgbVal.getB(ARGB1) - Byte.MIN_VALUE;
+        int nR2 = RgbVal.getR(ARGB2) - Byte.MIN_VALUE;
+        int nG2 = RgbVal.getG(ARGB2) - Byte.MIN_VALUE;
+        int nB2 = RgbVal.getB(ARGB2) - Byte.MIN_VALUE;
+        // We're solving the equation
+        // min/r ((r*nR1 - nR2) + (r*nG1 - nG2) + (r*nB1 - nB2))**2
+        // which gives 2*((r*nR1 - nR2)*nR1 + (r*nG1 - nG2)*nG1 + (r*nB1 - nB2)*nB1) = 0
+        // or r = (nR1*nR2 + nG1*nG2 + nB1*nB2) / (nR1*nR1 + nG1*nG1 + nB1*nB1)
+        // we divide r into nNum / nDenom to avoid floating point
+        int nNum = (nR1*nR2 + nG1*nG2 + nB1*nB2);
+        int nDenom = (nR1*nR1 + nG1*nG1 + nB1*nB1);
+        if (nDenom == 0) {
+            return 3*Byte.MAX_VALUE;
+        }
+        // the error is then ((r*nR1 - nR2) + (r*nG1 - nG2) + (r*nB1 - nB2))**2
+        // or (r*(nR1 + nG1 + nB1) - (nR2 + nB2 + nG2))**2
+        // or ((nNum*(nR1 + nG1 + nB1) - nDenom*(nR1 + nG2 + nB2)) / nDenom)**2
+        // or ((nNum*(nR1 + nG1 + nB1) - nDenom*(nR1 + nG2 + nB2))**2 / nDenom**2
+        return MathPlus.square(8*(nNum*(nR1 + nG1 + nB1) - nDenom*(nR1 + nG2 + nB2)))
+                / MathPlus.square(nDenom);
     }
 
     /**

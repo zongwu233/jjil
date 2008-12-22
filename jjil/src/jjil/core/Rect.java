@@ -149,6 +149,34 @@ public class Rect {
         return this;
     }
     
+    public boolean overlaps(Rect r) {
+        if (this.contains(new Point(r.getLeft(), r.getTop()))) {
+            return true;
+        }
+        if (this.contains(new Point(r.getRight(), r.getTop()))) {
+            return true;
+        }
+        if (this.contains(new Point(r.getLeft(), r.getBottom()))) {
+            return true;
+        }
+        if (this.contains(new Point(r.getRight(), r.getBottom()))) {
+            return true;
+        }
+        if (r.contains(new Point(this.getLeft(), this.getTop()))) {
+            return true;
+        }
+        if (r.contains(new Point(this.getRight(), this.getTop()))) {
+            return true;
+        }
+        if (r.contains(new Point(this.getLeft(), this.getBottom()))) {
+            return true;
+        }
+        if (r.contains(new Point(this.getRight(), this.getBottom()))) {
+            return true;
+        }
+        return false;
+    }
+    
     public Rect scale(int nX, int nY) {
         this.nTlx *= nX;
         this.nTly *= nY;

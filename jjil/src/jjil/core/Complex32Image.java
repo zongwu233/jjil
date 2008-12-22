@@ -46,7 +46,7 @@ public class Complex32Image extends Image {
      *
      * @return the image copy.
      */
-    public Image clone()
+    public Object clone()
     {
         Complex32Image image = new Complex32Image(getWidth(),getHeight());
         System.arraycopy(

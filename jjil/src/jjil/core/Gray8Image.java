@@ -62,7 +62,7 @@ public class Gray8Image extends Image {
      * Copy this image
      * @return the image copy.
      */
-    public Image clone()
+    public Object clone()
     {
         Gray8Image image = new Gray8Image(getWidth(),getHeight());
         System.arraycopy(

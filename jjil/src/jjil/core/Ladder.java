@@ -82,7 +82,7 @@ public class Ladder extends PipelineStage {
      * after being supplied with the input.
      */
     public void push(Image image) throws jjil.core.Error {
-        Image imageCopy = image.clone();
+        Image imageCopy = (Image) image.clone();
         pipeFirst.push(image);
         pipeSecond.push(imageCopy);
         if (pipeFirst.isEmpty()) {

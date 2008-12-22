@@ -63,7 +63,7 @@ public final class Gray16Image extends Image {
      *
      * @return the image copy.
      */
-    public Image clone()
+    public Object clone()
     {
         Gray16Image image = new Gray16Image(getWidth(),getHeight());
         System.arraycopy(

@@ -115,6 +115,13 @@ public class Quad {
         return this.getRight() - this.getLeft();
     }
     
+    public Quad offset(int nX, int nY) {
+        for (int i=0; i<4; i++) {
+            this.p[i].offset(nX, nY);
+        }
+        return this;
+    }
+    
     /**
      * Implement toString
      * @return class name followed by (p1,p2,p3,p4)

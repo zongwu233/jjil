@@ -55,7 +55,7 @@ public abstract class Image {
      * Makes a copy of the image
      * @return the image copy
      */
-    public abstract Image clone();
+    public abstract Object clone();
     
     /** Returns the image height 
      *

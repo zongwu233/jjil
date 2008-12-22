@@ -60,7 +60,7 @@ public class Gray32Image extends Image {
      * Copy this image
      * @return the image copy.
      */
-    public Image clone()
+    public Object clone()
     {
         Gray32Image image = new Gray32Image(getWidth(),getHeight());
         System.arraycopy(
