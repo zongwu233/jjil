@@ -23,6 +23,7 @@ import jjil.core.Error;
 import jjil.core.Gray8Image;
 import jjil.core.Image;
 import jjil.core.PipelineStage;
+import jjil.core.RgbImage;
 import jjil.core.RgbMaskedImage;
 import jjil.core.RgbVal;
 
@@ -55,7 +56,7 @@ public class RgbMaskedMaxDiff extends PipelineStage {
      */
     public void push(Image imInput) throws Error {
         {
-        if (!(imInput instanceof RgbMaskedImage)) 
+        if (!(imInput instanceof RgbImage)) 
             throw new Error(
                 			Error.PACKAGE.ALGORITHM,
                 			ErrorCodes.OBJECT_NOT_EXPECTED_TYPE,
@@ -73,7 +74,7 @@ public class RgbMaskedMaxDiff extends PipelineStage {
         				null);
         
         }
-        RgbMaskedImage rgbInput = (RgbMaskedImage)imInput;
+        RgbImage rgbInput = (RgbImage)imInput;
         int wInput[] = rgbInput.getData();
         int wBack[] = this.rgbBack.getData();
         Gray8Image grayOut = new Gray8Image(
@@ -82,7 +83,7 @@ public class RgbMaskedMaxDiff extends PipelineStage {
         byte bGray[] = grayOut.getData();
         for (int i=0; i<imInput.getHeight(); i++) {
             for (int j=0; j<imInput.getWidth(); j++) {
-                if (!rgbInput.isMasked(i, j) && !this.rgbBack.isMasked(i,j)) {
+                if (!this.rgbBack.isMasked(i,j)) {
                     int rIn = RgbVal.getR(wInput[i*grayOut.getWidth()+j]);
                     int gIn = RgbVal.getG(wInput[i*grayOut.getWidth()+j]);
                     int bIn = RgbVal.getB(wInput[i*grayOut.getWidth()+j]);

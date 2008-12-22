@@ -177,6 +177,10 @@ public class RgbCrop extends PipelineStage {
         this.cHeight = height;
     }
     
+    public void setWindow(Rect r) throws Error {
+        this.setWindow(r.getLeft(), r.getTop(), r.getWidth(), r.getHeight());
+    }
+    
     /** Return a string describing the cropping operation.
      *
      * @return the string describing the cropping operation.

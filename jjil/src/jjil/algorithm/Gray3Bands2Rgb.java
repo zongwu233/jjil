@@ -76,6 +76,7 @@ public class Gray3Bands2Rgb {
             int blueUnsigned = (blueData[i]) - Byte.MIN_VALUE;
             /* Create ARGB word */
             rgbData[i] = 
+                    (0xFF000000) |              // mask is off
                     ((redUnsigned)<<16) | 
                     ((greenUnsigned)<<8) | 
                     blueUnsigned;

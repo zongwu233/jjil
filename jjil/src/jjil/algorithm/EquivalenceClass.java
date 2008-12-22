@@ -38,7 +38,7 @@ package jjil.algorithm;
  *
  */
 public class EquivalenceClass {
-	private static int nNextLabel = 0;
+	private static int nNextLabel = 1;
 	private final int nLabel;
 	private int nRank = 0;
 	private EquivalenceClass eParent;
@@ -98,7 +98,7 @@ public class EquivalenceClass {
      *  to be defined.
      */
     public static void reset() {
-        EquivalenceClass.nNextLabel = 0;
+        EquivalenceClass.nNextLabel = 1;
     }
 	
     /**

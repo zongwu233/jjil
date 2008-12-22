@@ -27,6 +27,7 @@ import jjil.core.Error;
 import jjil.core.Gray8Image;
 import jjil.core.Image;
 import jjil.core.PipelineStage;
+import jjil.core.Rect;
 
 /**
  * Pipeline stage crops a Gray8Image to a given rectangular cropping window.
@@ -55,6 +56,17 @@ public class Gray8Crop extends PipelineStage {
             int width,
             int height) throws jjil.core.Error {
     	setWindow(x, y, width, height);
+    }
+    
+    /** Creates a new instance of Gray8Crop. The cropping window
+     * is specified here.
+     *
+     * @param r Rect to crop to.
+     * @throws jjil.core.Error if the top left corner of the
+     * window is negative, or the window area is non-positive.
+     */
+    public Gray8Crop(Rect r) throws jjil.core.Error {
+    	setWindow(r.getLeft(), r.getTop(), r.getWidth(), r.getHeight());
     }
     
     /** Crops the input gray image to the cropping window that was
@@ -164,6 +176,16 @@ public class Gray8Crop extends PipelineStage {
         this.cY = y;
         this.cWidth = width;
         this.cHeight = height;
+    }
+    
+    /**
+     * Change the cropping window.
+     * @param r new Rect to crop to
+     * @throws jjil.core.Error if the top left corner of the
+     * window is negative, or the window area is non-positive.
+     */
+    public void setWindow(Rect r) throws jjil.core.Error {
+    	this.setWindow(r.getLeft(), r.getTop(), r.getWidth(), r.getHeight());
     }
     
     /** Return a string describing the cropping operation.

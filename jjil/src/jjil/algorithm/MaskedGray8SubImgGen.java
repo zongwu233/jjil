@@ -34,7 +34,7 @@
 package jjil.algorithm;
 import jjil.core.Error;
 import jjil.core.Gray8MaskedImage;
-import jjil.core.Gray8SubImage;
+import jjil.core.Gray8OffsetImage;
 import jjil.core.Image;
 import jjil.core.PipelineStage;
 
@@ -73,8 +73,8 @@ public class MaskedGray8SubImgGen extends PipelineStage {
         this.oSubImageReady = false;
         // create an output image. We'll reuse this
         // image, changing the contents and offset,
-        // for every Gray8SubImage we output.
-        super.imageOutput = new Gray8SubImage( 
+        // for every Gray8OffsetImage we output.
+        super.imageOutput = new Gray8OffsetImage( 
             this.nWidth, 
             this.nHeight, 
             0, 
@@ -152,7 +152,7 @@ public class MaskedGray8SubImgGen extends PipelineStage {
     {
         // reuse output image
         // check to make sure nobody damaged it somehow
-        if (!(super.imageOutput instanceof Gray8SubImage)) {
+        if (!(super.imageOutput instanceof Gray8OffsetImage)) {
             throw new Error(
                             Error.PACKAGE.ALGORITHM,
                             ErrorCodes.OBJECT_NOT_EXPECTED_TYPE,
@@ -174,7 +174,7 @@ public class MaskedGray8SubImgGen extends PipelineStage {
         // larget image.
         int nHOffset = this.nXOffset * this.nHorizIndex;
         int nVOffset = this.nYOffset * this.nVertIndex;
-        Gray8SubImage imageResult = (Gray8SubImage) super.imageOutput;
+        Gray8OffsetImage imageResult = (Gray8OffsetImage) super.imageOutput;
         imageResult.setXOffset(nHOffset);
         imageResult.setYOffset(nVOffset);
         byte[] dataOut = imageResult.getData();

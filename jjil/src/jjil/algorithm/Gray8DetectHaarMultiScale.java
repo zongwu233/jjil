@@ -29,7 +29,7 @@ import java.io.InputStreamReader;
 import jjil.core.Error;
 import jjil.core.Gray8Image;
 import jjil.core.Gray8MaskedImage;
-import jjil.core.Gray8SubImage;
+import jjil.core.Gray8OffsetImage;
 import jjil.core.Image;
 import jjil.core.PipelineStage;
 
@@ -146,7 +146,7 @@ public class Gray8DetectHaarMultiScale extends PipelineStage {
             int nxLastFound = -hcc.getWidth();
             int nyLastFound = -hcc.getHeight();
             while (!mgsi.isEmpty()) {
-                Gray8SubImage imSub = (Gray8SubImage) mgsi.getFront();
+                Gray8OffsetImage imSub = (Gray8OffsetImage) mgsi.getFront();
                 // if we've found a feature recently we skip forward until
                 // we're outside the masked region. There's no point rerunning
                 // the detector
