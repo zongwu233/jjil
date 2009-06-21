@@ -1,5 +1,6 @@
 package jjil.android;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -51,14 +52,14 @@ public class RgbImageAndroid  {
     static public void toFile(Context context, RgbImage rgb, int nQuality, String szPath) 
     	throws IOException
     {
-     	OutputStream os = context.openFileOutput(szPath, 0);
+     	OutputStream os = new FileOutputStream(szPath);
      	try {
 	     	Bitmap bmp = toBitmap(rgb);
 	     	Bitmap.CompressFormat format = Bitmap.CompressFormat.JPEG;
 	     	szPath = szPath.toLowerCase();
-	     	if (szPath.endsWith(Messages.getString("RgbImageAndroid.0")) || szPath.endsWith(Messages.getString("RgbImageAndroid.1"))) { //$NON-NLS-1$ //$NON-NLS-2$
+	     	if (szPath.endsWith("jpg") || szPath.endsWith("jpeg")) { //$NON-NLS-1$ //$NON-NLS-2$
      			format = Bitmap.CompressFormat.JPEG;
-	     	} else if (szPath.endsWith(Messages.getString("RgbImageAndroid.2"))) { //$NON-NLS-1$
+	     	} else if (szPath.endsWith("png")) { //$NON-NLS-1$
      			format = Bitmap.CompressFormat.PNG;
      		}
 	     	bmp.compress(format, nQuality, os);
